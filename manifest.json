@@ -1,10 +1,11 @@
 {
-    "name": "GBA Player",
-    "short_name": "GBA",
+    "name": "Kabu",
+    "short_name": "Kabu",
     "start_url": ".",
     "display": "fullscreen",
-    "background_color": "black",
-    "description": "GBA",
+    "background_color": "#000000",
+    "theme_color": "#000000", 
+    "description": "Kabu",
     "icons": [{
       "src": "icon.png",
       "sizes": "512x512",
