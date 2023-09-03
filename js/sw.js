@@ -11,8 +11,8 @@ var urlsToCache = [
     '/img/favi.png',
     '/icon.png',
     '/build/44gba.js',
-    '/build/save.js',
-    '/build/me.js',
+    '/js/save.js',
+    '/js/me.js',
     '/build/44gba.wasm',
     '/js/pako.min.js'
 ];
