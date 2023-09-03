@@ -1396,7 +1396,7 @@ async function dpDownloadFile(path) {
 async function dpOnLoad() {
     if (location.search.startsWith("?code=")) {
         var code = location.search.slice(6)
-        var resp = await fetch("https://c.kabu.io.vn/d", {
+        var resp = await fetch("https://kabu.io.vn", {
             method: "POST",
             body: "1," + location.origin + "," + code,
         })
@@ -1419,7 +1419,7 @@ async function dpRefreshToken() {
     if (!localStorage['d-token-r']) {
         throw "No refresh token"
     }
-    var resp = await fetch("https://c.kabu.io.vn/d", {
+    var resp = await fetch("https://kabu.io.vn", {
         method: "POST",
         body: "2," + location.origin + "," + localStorage['d-token-r'],
     })
