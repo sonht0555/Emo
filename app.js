@@ -785,7 +785,7 @@ function applyCheatCode() {
     }
 }
 
-$id('txt-code').placeholder = 'Code...'
+$id('txt-code').placeholder = 'Cheat code:\nGamesharkAdv: XXXXXXXX YYYYYYYY\nCodeBreaker: XXXXXXXX YYYY'
 
 function filterCheatCode(code) {
     var lines = code.toUpperCase().split('\n')
@@ -843,7 +843,7 @@ if ((lang == 'ja')) {
     $id('div-cht').hidden = true
 }
 
-if (location.origin == 'https://kabu.io.vn') {
+if (location.origin == 'https://gba.44670.org') {
     if (isSaveSupported) {
         // Register Service Worker
         if ('serviceWorker' in navigator) {
