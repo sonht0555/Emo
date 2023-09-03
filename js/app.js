@@ -843,7 +843,7 @@ if ((lang == 'ja')) {
     $id('div-cht').hidden = true
 }
 
-if (location.origin == 'https://gba.44670.org') {
+if (location.origin == 'https://kabu.io.vn') {
     if (isSaveSupported) {
         // Register Service Worker
         if ('serviceWorker' in navigator) {
@@ -1396,7 +1396,7 @@ async function dpDownloadFile(path) {
 async function dpOnLoad() {
     if (location.search.startsWith("?code=")) {
         var code = location.search.slice(6)
-        var resp = await fetch("https://c.44670.org/d", {
+        var resp = await fetch("https://c.kabu.io.vn/d", {
             method: "POST",
             body: "1," + location.origin + "," + code,
         })
@@ -1419,7 +1419,7 @@ async function dpRefreshToken() {
     if (!localStorage['d-token-r']) {
         throw "No refresh token"
     }
-    var resp = await fetch("https://c.44670.org/d", {
+    var resp = await fetch("https://c.kabu.io.vn/d", {
         method: "POST",
         body: "2," + location.origin + "," + localStorage['d-token-r'],
     })
