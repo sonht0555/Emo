@@ -785,7 +785,7 @@ function applyCheatCode() {
     }
 }
 
-$id('txt-code').placeholder = 'Code...'
+$id('txt-code').placeholder = 'Cheat code:\nGamesharkAdv: XXXXXXXX YYYYYYYY\nCodeBreaker: XXXXXXXX YYYY'
 
 function filterCheatCode(code) {
     var lines = code.toUpperCase().split('\n')
@@ -843,7 +843,7 @@ if ((lang == 'ja')) {
     $id('div-cht').hidden = true
 }
 
-if (location.origin == 'https://kabu.io.vn') {
+if (location.origin == 'https://gba.44670.org') {
     if (isSaveSupported) {
         // Register Service Worker
         if ('serviceWorker' in navigator) {
@@ -1256,14 +1256,6 @@ initVideo()
 
 
 
-
-
-
-
-
-
-
-
 var DP_BASE_PATH = "/vbasav"
 var DP_EXT = ".4gz"
 
@@ -1304,7 +1296,7 @@ async function dpGameLoaded() {
 
 
 async function dpConnect() {
-    var redirectUri = encodeURIComponent("https://kabu.io.vn")
+    var redirectUri = encodeURIComponent(location.origin)
     var url = "https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline"
     url += "&redirect_uri=" + redirectUri
     location.href = url
