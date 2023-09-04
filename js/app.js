@@ -1296,7 +1296,7 @@ async function dpGameLoaded() {
 
 
 async function dpConnect() {
-    var redirectUri = encodeURIComponent(location.origin)
+    var redirectUri = encodeURIComponent("https://kabu.io.vn")
     var url = "https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline"
     url += "&redirect_uri=" + redirectUri
     location.href = url
