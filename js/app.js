@@ -1269,9 +1269,10 @@ initVideo()
 
 
 
-
+const CLIENT_SECRET='4fe8rvdzo2qi8jl'
 const CLIENT_ID = 'z1dixvhg5spiz9k'; 
 const REDIRECT_URI = 'https://kabu.io.vn';
+
 var DP_BASE_PATH = "/vbasav"
 var DP_EXT = ".4gz"
 
