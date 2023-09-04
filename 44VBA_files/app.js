@@ -1395,23 +1395,34 @@ async function dpDownloadFile(path) {
 
 async function dpOnLoad() {
     if (location.search.startsWith("?code=")) {
-        var code = location.search.slice(6)
-        var resp = await fetch("https://c.44670.org/d", {
-            method: "POST",
-            body: "1," + location.origin + "," + code,
-        })
-        var obj = await resp.json()
-        if (!obj.error) {
-            localStorage['d-token'] = obj.token
-            localStorage['d-token-r'] = obj.tokenr
-            localStorage['d-id'] = obj.id
-            alert("Dropbox connected.")
-            location.href = location.origin
-        } else {
-            alert(obj.error)
+        var code = location.search.slice(6);
+        
+        // Gửi mã code trực tiếp đến Dropbox để trao đổi lấy token truy cập.
+        try {
+            const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `code=${code}&grant_type=authorization_code&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl&redirect_uri=https://kabu.io.vn`
+            });
+
+            const data = await response.json();
+            if (!data.error) {
+                localStorage['d-token'] = data.access_token;
+                localStorage['d-token-r'] = data.refresh_token;
+                localStorage['d-id'] = data.account_id;
+                alert("Dropbox connected.");
+                location.href = location.origin;
+            } else {
+                alert(data.error_description || "Failed to connect to Dropbox.");
+            }
+        } catch (error) {
+            console.error("Error while exchanging code for access token:", error);
         }
     }
-    document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Disconnect" : "Connect") + " Dropbox"
+
+    document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Disconnect" : "Connect") + " Dropbox";
 }
 
 async function dpRefreshToken() {
