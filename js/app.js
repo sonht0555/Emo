@@ -1402,7 +1402,7 @@ async function dpOnLoad() {
         })
         var obj = await resp.json()
         if (!obj.error) {
-            localStorage['d-token'] = obj.token
+            localStorage['d-token'] = 'sl.BlZuVq-IQ9ZVaNBenAbHgwDOdTAaY6DOUmPejwfQunJAW621ffAij6Rh7LYKtvZM-Xat2Kfl6tK5a8JD6EEkR69_-xgMmsbrMzp-JYKf8fGKC6tuCTjcdRsu59lRzpPTGgYzPyUiGYXf'
             localStorage['d-token-r'] = obj.tokenr
             localStorage['d-id'] = obj.id
             alert("Dropbox connected.")
@@ -1425,7 +1425,7 @@ async function dpRefreshToken() {
     })
     var obj = await resp.json()
     if (!obj.error) {
-        localStorage['d-token'] = obj.token
+        localStorage['d-token'] = 'sl.BlZuVq-IQ9ZVaNBenAbHgwDOdTAaY6DOUmPejwfQunJAW621ffAij6Rh7LYKtvZM-Xat2Kfl6tK5a8JD6EEkR69_-xgMmsbrMzp-JYKf8fGKC6tuCTjcdRsu59lRzpPTGgYzPyUiGYXf'
         return true
     } else {
         alert("Failed to update DropBox token: " + obj.error)
