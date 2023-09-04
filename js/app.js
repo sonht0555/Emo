@@ -1256,6 +1256,22 @@ initVideo()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const CLIENT_ID = 'z1dixvhg5spiz9k'; 
+const REDIRECT_URI = 'https://kabu.io.vn';
 var DP_BASE_PATH = "/vbasav"
 var DP_EXT = ".4gz"
 
@@ -1296,11 +1312,11 @@ async function dpGameLoaded() {
 
 
 async function dpConnect() {
-    var redirectUri = encodeURIComponent(location.origin)
-    var url = "https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline"
-    url += "&redirect_uri=" + redirectUri
-    location.href = url
+    const authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT_URI}`;
+    window.location.href = authUrl;
 }
+
+
 
 
 async function dpCheckUser() {
@@ -1395,23 +1411,28 @@ async function dpDownloadFile(path) {
 
 async function dpOnLoad() {
     if (location.search.startsWith("?code=")) {
-        var code = location.search.slice(6)
-        var resp = await fetch("https://c.44670.org/d", {
-            method: "POST",
-            body: "1," + location.origin + "," + code,
-        })
-        var obj = await resp.json()
-        if (!obj.error) {
-            localStorage['d-token'] = 'sl.BlZuVq-IQ9ZVaNBenAbHgwDOdTAaY6DOUmPejwfQunJAW621ffAij6Rh7LYKtvZM-Xat2Kfl6tK5a8JD6EEkR69_-xgMmsbrMzp-JYKf8fGKC6tuCTjcdRsu59lRzpPTGgYzPyUiGYXf'
-            localStorage['d-token-r'] = obj.tokenr
-            localStorage['d-id'] = obj.id
-            alert("Dropbox connected.")
-            location.href = location.origin
+        const code = location.search.slice(6);
+        // Sử dụng code này để lấy access token từ Dropbox
+        const tokenResponse = await fetch('https://api.dropbox.com/oauth2/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `code=${code}&grant_type=authorization_code&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}`,
+        });
+        
+        if (tokenResponse.ok) {
+            const tokenData = await tokenResponse.json();
+            localStorage['d-token'] = tokenData.access_token;
+            alert("Dropbox connected.");
+            location.href = location.origin;
         } else {
-            alert(obj.error)
+            const errorData = await tokenResponse.json();
+            alert(`Error: ${errorData.error_description}`);
         }
     }
-    document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Disconnect" : "Connect") + " Dropbox"
+
+    document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Disconnect" : "Connect") + " Dropbox";
 }
 
 async function dpRefreshToken() {
@@ -1425,7 +1446,7 @@ async function dpRefreshToken() {
     })
     var obj = await resp.json()
     if (!obj.error) {
-        localStorage['d-token'] = 'sl.BlZuVq-IQ9ZVaNBenAbHgwDOdTAaY6DOUmPejwfQunJAW621ffAij6Rh7LYKtvZM-Xat2Kfl6tK5a8JD6EEkR69_-xgMmsbrMzp-JYKf8fGKC6tuCTjcdRsu59lRzpPTGgYzPyUiGYXf'
+        localStorage['d-token'] = obj.token
         return true
     } else {
         alert("Failed to update DropBox token: " + obj.error)
