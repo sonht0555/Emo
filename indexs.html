@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="apple-mobile-web-app-capable" content="none" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="apple-touch-icon" href="img/icon.png" />
+    <link rel="icon" href="img/favi.png" type="image/png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <title>Kabu</title>
+</head>
+<body class="class">
+<div class="dialog" id="dialog">
+<button onclick="closePopup()">close</button>
+</div>
+<div class="container pb0 bg-menu mr0">
+    <div class="container mb0 invi">
+        <div class="up-down mb0 container" id="button-up">
+            <div class="up-dow-sub m1"></div>
+            <div class="up-dow-sub m2"></div>
+            <div class="up-dow-sub m3"></div>
+        </div>
+        <div class="dpad-1 ml15 invi" id="d-pad-switch"></div>
+    </div>
+    <div class="container mb0">
+        <div class="pkd ml15 invi" onclick="openPopup()"></div>
+        <div class="ms ml15" id="expandingIcon">
+            <div class="ms-1"></div>
+            <div class="ms-2"></div>
+            <div class="ms-3"></div>
+        </div>
+    </div>
+</div>
+<iframe id="myIframe" src="save.html"style="height: 100%; width: 100vw; border: 0px;"></iframe>
+<script src="./js/me.js"></script>
+</body>
+</html> 
