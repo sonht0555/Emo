@@ -532,53 +532,50 @@ window.onorientationchange = adjustSize
 
 
 function handleTouch(event) {
-    tryInitSound()
+    tryInitSound();
     if (!isRunning) {
-        return
+        return;
     }
-    event.preventDefault();
-    event.stopPropagation();
-    document.getElementById('vk-layer').hidden = false
+    // document.getElementById('vk-layer').hidden = false; // Bỏ dòng này để không ẩn vk-layer
     for (var k in keyState) {
-        keyState[k][2] = 0
+        keyState[k][2] = 0;
     }
     for (var i = 0; i < event.touches.length; i++) {
         var t = event.touches[i];
-        var dom = document.elementFromPoint(t.clientX, t.clientY)
+        var dom = document.elementFromPoint(t.clientX, t.clientY);
         if (dom) {
-            var k = dom.getAttribute('data-k')
+            var k = dom.getAttribute('data-k');
             if (k) {
-                keyState[k][2] = 1
+                keyState[k][2] = 1;
                 if (k == 'ul') {
-                    keyState['up'][2] = 1
-                    keyState['left'][2] = 1
+                    keyState['up'][2] = 1;
+                    keyState['left'][2] = 1;
                 } else if (k == 'ur') {
-                    keyState['up'][2] = 1
-                    keyState['right'][2] = 1
+                    keyState['up'][2] = 1;
+                    keyState['right'][2] = 1;
                 } else if (k == 'dl') {
-                    keyState['down'][2] = 1
-                    keyState['left'][2] = 1
+                    keyState['down'][2] = 1;
+                    keyState['left'][2] = 1;
                 } else if (k == 'dr') {
-                    keyState['down'][2] = 1
-                    keyState['right'][2] = 1
+                    keyState['down'][2] = 1;
+                    keyState['right'][2] = 1;
                 }
             }
         }
     }
     if (keyState['menu'][2]) {
-        setPauseMenu(true)
+        setPauseMenu(true);
     }
-    fastForwardMode = keyState['turbo'][2]
+    fastForwardMode = keyState['turbo'][2];
     for (var k in keyState) {
         if (keyState[k][1] != keyState[k][2]) {
-            var dom = keyState[k][0]
-            keyState[k][1] = keyState[k][2]
+            var dom = keyState[k][0];
+            keyState[k][1] = keyState[k][2];
             if (keyState[k][1]) {
-                dom.classList.add('vk-touched')
+                dom.classList.add('vk-touched');
             } else {
-                dom.classList.remove('vk-touched')
+                dom.classList.remove('vk-touched');
             }
-
         }
     }
 }
