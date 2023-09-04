@@ -1426,23 +1426,34 @@ async function dpOnLoad() {
 }
 
 async function dpRefreshToken() {
-    console.log("Refreshing token...")
+    console.log("Refreshing token...");
     if (!localStorage['d-token-r']) {
-        throw "No refresh token"
+        throw "No refresh token";
     }
-    var resp = await fetch("https://c.44670.org/d", {
-        method: "POST",
-        body: "2," + location.origin + "," + localStorage['d-token-r'],
-    })
-    var obj = await resp.json()
-    if (!obj.error) {
-        localStorage['d-token'] = obj.token
-        return true
-    } else {
-        alert("Failed to update DropBox token: " + obj.error)
+
+    try {
+        const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&z1dixvhg5spiz9k=YOUR_CLIENT_ID&client_secret=4fe8rvdzo2qi8jl`
+        });
+
+        const data = await response.json();
+        if (!data.error) {
+            localStorage['d-token'] = data.access_token;
+            return true;
+        } else {
+            alert(data.error_description || "Failed to refresh Dropbox token.");
+        }
+    } catch (error) {
+        console.error("Error while refreshing token:", error);
     }
-    return false
+    
+    return false;
 }
+
 
 async function dpGetPath(gameID, tag) {
     var hash = await dpIDHash(gameID)
