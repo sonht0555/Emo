@@ -56,7 +56,7 @@ body {
     height: calc((100vw - 150px) * 2 / 3) !important;
     padding: 0 60px;
     background-color: #000;
-    opacity: 0.4;
+    opacity: 0.6;
 }
 button {
     border: 2px solid #414141 !important;
@@ -123,6 +123,7 @@ hr {
     vertical-align: middle;
     display: inline-block;
     background-color: #323232;
+    border-radius: 2px;
 }
 .cl {
     background-color: #252525;
@@ -178,7 +179,6 @@ hr {
     margin-bottom: 8px;
 }
 .s1 {
-    background-image: url("../img/f.svg");
     top: 296px !important;
     left: 345px !important;
     width: 45px !important;
@@ -192,23 +192,19 @@ hr {
     height: 26px !important;
 }
 .s3 {
-    background-image: url("../img/sta.svg");
     width: 96px !important;
     height: 26px !important;
     margin-right: 9px;
 }
 .s4 {
-    background-image: url("../img/se.svg");
     width: 96px !important;
     height: 26px !important;
 }
 .ss5 {
-    background-image: url("../img/l1.svg");
     width: 45px !important;
     height: 160px !important;
 }
 .ss6 {
-    background-image: url("../img/r1.svg");
     width: 45px !important;
     height: 160px !important;
 }
@@ -239,7 +235,6 @@ hr {
     height: 52px !important;
 }
 .s11 {
-    background-image: url("../img/a.svg");
     width: 96px !important;
     height: 70px !important;
     margin-bottom: 15px;
@@ -247,7 +242,6 @@ hr {
     border-radius: 2px;
 }
 .s12 {
-    background-image: url("../img/b.svg");
     width: 156px !important;
     height: 71px !important;
     margin-right: 15px;
@@ -280,10 +274,11 @@ hr {
     margin-left: 1px;
 }
 .s18 {
-    background-image: url("../img/set-1.svg");
     width: 45px !important;
     height: 26px !important;
     margin-right: 9px;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0) !important;
 }
 #gba-canvas {
     border-radius: 2px;
@@ -616,7 +611,7 @@ input[type="checkbox"]:checked ~ label::before {
     content: "";
     width: 20%;
     height: 20%;
-    background-image: url("../img/rig2.svg");
+    background-image: url("../img/arrow-right.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -632,7 +627,7 @@ input[type="checkbox"]:checked ~ label::before {
     content: "";
     width: 20%;
     height: 20%;
-    background-image: url("../img/up2.svg");
+    background-image: url("../img/arrow-up.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -648,7 +643,7 @@ input[type="checkbox"]:checked ~ label::before {
     content: "";
     width: 20%;
     height: 20%;
-    background-image: url("../img/lef2.svg");
+    background-image: url("../img/arrow-left.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -664,7 +659,7 @@ input[type="checkbox"]:checked ~ label::before {
     content: "";
     width: 20%;
     height: 20%;
-    background-image: url("../img/dow2.svg");
+    background-image: url("../img/arrow-down.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -774,18 +769,15 @@ input[type="checkbox"]:checked ~ label::before {
     justify-content: center;
     align-items: center;
     border-radius: 2px;
-}
-.up-dow-fi{
-    position: absolute;
-    left: 15px;
-    bottom: 628px;  
+    background-color: #252525;
 }
 .up-dow-sub {
     width: 2px;
     height: 6px;
     background: #fff;
-    margin: 0 3px;
-    transform: rotate(45deg);
+    margin: 0 2px;
+    border-radius: 0.2px;
+    transition: opacity 0.5s ease-in-out, padding-top 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 .dpad-1 {
     width: 45px;

@@ -13,61 +13,45 @@
         <title>Kabu</title>
     </head>
     <body class="class">
-        <div class="container mb0 up-dow-fi">
-        <div class="up-down mb0 container" id="changeButton-1">
-            <div class="up-dow-sub m1"></div>
-            <div class="up-dow-sub m2"></div>
-            <div class="up-dow-sub m3"></div>
-        </div>
-        </div>
-        <!-- Layer GamePad -->
-        <div id="vk-layer">
-            <div class="container">
-                <div class="vk-rect vk flex-item ss5 cl" data-k="l"></div>
-                <canvas width="240" height="160" id="gba-canvas" class="flex-item"></canvas>
-                <div class="img-canvas flex-item"></div>
-                <div class="vk-rect vk flex-item ss6 cl" data-k="r"></div>
-            </div>
-            <div class="container">
-                <div class="justify-content-left">
-                    <div class="vk-rect vk s18 cl" data-k=""></div>
-                    <div class="vk-rect vk s4 cl" data-k="select"></div>
+        <!-- Layer Welcome -->
+        <div id="welcome" class="welcome">
+            <div class="class">
+                <div class="container mb8">
+                    <svg class="flex-item logo" width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" rx="2" fill="#252525"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M78.5597 46.9431C78.7885 46.986 79 46.8105 79 46.5777V34.0128C79 26.826 73.174 21 65.9872 21C58.8004 21 52.9744 26.826 52.9744 34.0128C52.9744 41.1996 58.8004 47.0256 65.9872 47.0256C68.5914 47.0256 71.0169 46.2607 73.0513 44.9432V45.6017C73.0513 45.7806 73.1787 45.9342 73.3546 45.9671L78.5597 46.9431ZM73.0513 34.0128C73.0513 37.9142 69.8886 41.0769 65.9872 41.0769C62.0858 41.0769 58.9231 37.9142 58.9231 34.0128C58.9231 30.1114 62.0858 26.9487 65.9872 26.9487C69.8886 26.9487 73.0513 30.1114 73.0513 34.0128Z" fill="white"/>
+                    <path d="M79 54.3983C79 54.2194 78.8726 54.0659 78.6967 54.0329L73.4916 53.0569C73.2628 53.014 73.0513 53.1895 73.0513 53.4223V65.9872C73.0513 69.8886 69.8886 73.0513 65.9872 73.0513C62.0858 73.0513 58.9231 69.8886 58.9231 65.9872V54.3983C58.9231 54.2194 58.7957 54.0659 58.6198 54.0329L53.4147 53.0569C53.1859 53.014 52.9744 53.1895 52.9744 53.4223V65.9872C52.9744 73.174 58.8004 79 65.9872 79C73.174 79 79 73.174 79 65.9872V54.3983Z" fill="white"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M41.0769 21.448C41.0769 21.2152 41.2884 21.0397 41.5172 21.0826L46.7224 22.0585C46.8982 22.0915 47.0256 22.245 47.0256 22.4239V23.9744C47.0256 28.0153 45.1837 31.6261 42.2936 34.0128C45.1837 36.3996 47.0256 40.0103 47.0256 44.0513V46.5777C47.0256 46.8105 46.8141 46.986 46.5853 46.9431L41.3802 45.9671C41.2044 45.9342 41.0769 45.7806 41.0769 45.6017V44.0513C41.0769 40.1499 37.9142 36.9872 34.0128 36.9872C30.1114 36.9872 26.9487 40.1499 26.9487 44.0513V55.0568C28.9831 53.7393 31.4086 52.9744 34.0128 52.9744C41.1996 52.9744 47.0256 58.8004 47.0256 65.9872C47.0256 73.174 41.1996 79 34.0128 79C26.826 79 21 73.174 21 65.9872V21.4473C21 21.2147 21.2111 21.0393 21.4398 21.0818L26.6449 22.0497C26.821 22.0825 26.9487 22.2361 26.9487 22.4153V33.1209C28.9831 31.8034 31.4086 31.0385 34.0128 31.0385C37.9142 31.0385 41.0769 27.8758 41.0769 23.9744V21.448ZM41.0769 65.9872C41.0769 69.8886 37.9142 73.0513 34.0128 73.0513C30.1114 73.0513 26.9487 69.8886 26.9487 65.9872C26.9487 62.0858 30.1114 58.9231 34.0128 58.9231C37.9142 58.9231 41.0769 62.0858 41.0769 65.9872Z" fill="white"/>
+                    </svg>
                 </div>
-                <div class="justify-content-right">
-                    <div class="vk-rect vk s3 cl" data-k="start"></div>
-                    <div class="vk-rect vk s2 cl" data-k="menu"></div>
-                </div>
-            </div>
-            <div class="container bg-control">
-                <div class="justify-content-left outer-square">
-                    <div class="inner-square">
-                        <div class="container mb0">
-                            <div class="vk flex-item center gpad-ur" href="#" data-k="ur" id="gpad-ur"></div>
+                <div class="container pt">
+                    <div class="flex-item s19" id="additionalDiv">
+                        <div class="container ptl">
+                            <div class="flex-item M1"></div>
+                            <div class="flex-item M2"></div>
+                            <div class="flex-item M3"></div>
                         </div>
-                        <div class="container mb0">
-                            <div class="vk center gpad-ul" href="#" data-k="ul" id="gpad-ul"></div>
-                            <div class="flex-item">
-                                <div class="vk flex-item center gpad-u" href="#" data-k="up"></div>
-                                <div class="vk flex-item center gpad-l" href="#" data-k="left"></div>
-                            </div>
-                            <div class="flex-item">
-                                <div class="vk flex-item center gpad-r" href="#" data-k="right"></div>
-                                <div class="vk flex-item center gpad-d" href="#" data-k="down"></div>
-                            </div>
-                            <div class="vk center gpad-dr" href="#" data-k="dr" id="gpad-dr"></div>
+                        <p id="changeButton">O9</p>
+                        <p class="op4">Pt.</p>
+                    </div>
+                    <div class="flex-item s20" id="select-rom">
+                        <input type="file" id="romFile" onchange="onFileSelected()" hidden="" />
+                        <div class="flex-item" onclick="$id('romFile').click()" id="btn-choose">
+                            <svg width="46" height="100" viewBox="0 0 46 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="46" height="100" rx="2" fill="#252525"/>
+                            <path d="M17 44.6742C17 43.9175 17.8079 43.435 18.4741 43.7937L28.3648 49.1195C29.066 49.4971 29.066 50.5029 28.3648 50.8805L18.4741 56.2063C17.8079 56.565 17 56.0825 17 55.3258V44.6742Z" fill="white"/>
+                            </svg>   
                         </div>
-                        <div class="container mb0">
-                            <div class="vk flex-item center gpad-dl" href="#" data-k="dl" id="gpad-dl"></div>
+                        <div class="flex-item">
+                            
                         </div>
                     </div>
                 </div>
-                <div class="justify-content-right ab">
-                    <div class="vk-rect vk s11 flex-item" data-k="a"></div>
-                    <div class="vk-rect vk s1 flex-item" data-k="turbo"></div>
-                    <div class="vk-rect vk s12 flex-item" data-k="b"></div>
+                <div id="buttonClick" class="container mb8">
                 </div>
+                <div class="mb16" id="wasm-loading" hidden="">Loading, please wait...</div>
+                <div class="container"></div>
             </div>
-            <div class="container"></div>
         </div>
         <!-- Layer Menu -->
         <div id="pause-menu" class="menu" hidden="">
@@ -101,7 +85,11 @@
                         <div class="s27 cl" onclick="dpOnConnectButtonClicked()" id="btn-dp-connect">
                             <span id="span-cloud-id"></span>
                         </div>
-                        <div class="s28 cl ml15"></div>
+                        <div class="s28 cl ml15">
+                            <label class="switch-container" onclick="toggleSwitch()">
+                                <div class="switch" id="switch"></div>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="container bg-control mb0 pb0">
@@ -122,48 +110,106 @@
                     <div class="mb16" id="title"></div>
                     <div class="mb16" id="span-cloud-id"></div>
                 </div>
-            </div>
         </div>
-        <!-- Layer Welcome -->
-        <div id="welcome" class="welcome">
-            <div class="class">
-                <div class="container mb8">
-                    <img class="flex-item logo" src="img/logo.svg" />
+        <!-- Layer GamePad -->
+        <div id="vk-layer">
+            <div class="container">
+                <div class="vk flex-item ss5" data-k="l">
+                    <svg class="vk ss5 cl" data-k="l" width="45" height="160" viewBox="0 0 45 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 74.2C20 74.0895 19.9105 74 19.8 74H18.2C18.0895 74 18 74.0895 18 74.2V87.8C18 87.9105 18.0895 88 18.2 88H27.8C27.9105 88 28 87.9105 28 87.8V86.2C28 86.0895 27.9105 86 27.8 86H20.2C20.0895 86 20 85.9105 20 85.8V74.2Z" fill="white"/>
+                    </svg>
                 </div>
-                <div class="container pt">
-                    <div class="flex-item s19" id="additionalDiv">
-                        <div class="container ptl">
-                            <div class="flex-item M1"></div>
-                            <div class="flex-item M2"></div>
-                            <div class="flex-item M3"></div>
-                        </div>
-                        <p id="changeButton">O9</p>
-                        <p class="op4">Pt.</p>
-                    </div>
-                    <div class="flex-item s20" id="select-rom">
-                        <input type="file" id="romFile" onchange="onFileSelected()" hidden="" />
-                        <div class="flex-item" onclick="$id('romFile').click()" id="btn-choose">
-                            <img src="img/play.svg" />
-                        </div>
-                        <div class="flex-item">
-                            <label class="switch-container" onclick="toggleSwitch()">
-                                <div class="switch" id="switch"></div>
-                            </label>
-                        </div>
-                    </div>
+                <canvas width="240" height="160" id="gba-canvas" class="flex-item"></canvas>
+                <div class="img-canvas flex-item"></div>
+                <div class="vk flex-item ss6" data-k="r">
+                    <svg class="vk ss6 cl" data-k="r" width="45" height="160" viewBox="0 0 45 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M27 74.2C27 74.0895 26.9105 74 26.8 74H17.2C17.0895 74 17 74.0895 17 74.2V87.8C17 87.9105 17.0895 88 17.2 88H18.8C18.9105 88 19 87.9105 19 87.8V76.2C19 76.0895 19.0895 76 19.2 76H24.8C24.9105 76 25 76.0895 25 76.2V79.8C25 79.9105 24.9105 80 24.8 80H22.2C22.0895 80 22 80.0895 22 80.2V81.8C22 81.9105 22.0895 82 22.2 82H24.8C24.9105 82 25 82.0895 25 82.2V87.8C25 87.9105 25.0895 88 25.2 88H26.8C26.9105 88 27 87.9105 27 87.8V74.2Z" fill="white"/>
+                    </svg>                      
                 </div>
-                <div id="buttonClick" class="container mb8">
-                    <img class="flex-item how" src="img/how.svg" />
-                </div>
-                <div class="mb16" id="wasm-loading" hidden="">Loading, please wait...</div>
-                <div class="container"></div>
             </div>
+            <div class="container">
+                <div class="justify-content-left">
+                    <div class="vk-rect vk s18">
+                            <div class="up-down mb0 container" id="changeButton-1" ontouchstart="event.stopPropagation()">
+                                <div class="up-dow-sub m1"></div>
+                                <div class="up-dow-sub m2"></div>
+                                <div class="up-dow-sub m3"></div>
+                        </div>
+                    </div>
+                    <div class="vk s4" data-k="select">
+                        <svg class="vk s4 cl" data-k="select" width="96" height="26" viewBox="0 0 96 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.4">
+                        <path d="M37 8.2C37 8.08954 37.0895 8 37.2 8H44.8C44.9105 8 45 8.08954 45 8.2V9.8C45 9.91046 44.9105 10 44.8 10H39.2C39.0895 10 39 10.0895 39 10.2V11.8C39 11.9105 39.0895 12 39.2 12H44.8C44.9105 12 45 12.0895 45 12.2V17.8C45 17.9105 44.9105 18 44.8 18H37.2C37.0895 18 37 17.9105 37 17.8V16.2C37 16.0895 37.0895 16 37.2 16H42.8C42.9105 16 43 15.9105 43 15.8V14.2C43 14.0895 42.9105 14 42.8 14H37.2C37.0895 14 37 13.9105 37 13.8V8.2Z" fill="white"/>
+                        <path d="M53 17.8C53 17.9105 52.9105 18 52.8 18H47.2C47.0895 18 47 17.9105 47 17.8V12.2C47 12.0895 47.0895 12 47.2 12H52.8C52.9105 12 53 12.0895 53 12.2V13.8C53 13.9105 52.9105 14 52.8 14H49.2C49.0895 14 49 14.0895 49 14.2V15.8C49 15.9105 49.0895 16 49.2 16H52.8C52.9105 16 53 16.0895 53 16.2V17.8Z" fill="white"/>
+                        <path d="M59 17.8C59 17.9105 58.9105 18 58.8 18H55.2C55.0895 18 55 17.9105 55 17.8V10.2C55 10.0895 55.0895 10 55.2 10H56.8C56.9105 10 57 10.0895 57 10.2V11.8C57 11.9105 57.0895 12 57.2 12H58.8C58.9105 12 59 12.0895 59 12.2V13.8C59 13.9105 58.9105 14 58.8 14H57.2C57.0895 14 57 14.0895 57 14.2V15.8C57 15.9105 57.0895 16 57.2 16H58.8C58.9105 16 59 16.0895 59 16.2V17.8Z" fill="white"/>
+                        </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="justify-content-right">
+                    <div class="vk s3" data-k="start">
+                        <svg class="vk s3 cl" data-k="start" width="96" height="26" viewBox="0 0 96 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.4">
+                        <path d="M36 8.2C36 8.08954 36.0895 8 36.2 8H43.8C43.9105 8 44 8.08954 44 8.2V9.8C44 9.91046 43.9105 10 43.8 10H38.2C38.0895 10 38 10.0895 38 10.2V11.8C38 11.9105 38.0895 12 38.2 12H43.8C43.9105 12 44 12.0895 44 12.2V17.8C44 17.9105 43.9105 18 43.8 18H36.2C36.0895 18 36 17.9105 36 17.8V16.2C36 16.0895 36.0895 16 36.2 16H41.8C41.9105 16 42 15.9105 42 15.8V14.2C42 14.0895 41.9105 14 41.8 14H36.2C36.0895 14 36 13.9105 36 13.8V8.2Z" fill="white"/>
+                        <path d="M50 17.8C50 17.9105 49.9105 18 49.8 18H46.2C46.0895 18 46 17.9105 46 17.8V10.2C46 10.0895 46.0895 10 46.2 10H47.8C47.9105 10 48 10.0895 48 10.2V11.8C48 11.9105 48.0895 12 48.2 12H49.8C49.9105 12 50 12.0895 50 12.2V13.8C50 13.9105 49.9105 14 49.8 14H48.2C48.0895 14 48 14.0895 48 14.2V15.8C48 15.9105 48.0895 16 48.2 16H49.8C49.9105 16 50 16.0895 50 16.2V17.8Z" fill="white"/>
+                        <path d="M54 12.2C54 12.0895 54.0895 12 54.2 12H59.8C59.9105 12 60 12.0895 60 12.2V17.8C60 17.9105 59.9105 18 59.8 18H52.2C52.0895 18 52 17.9105 52 17.8V14.2C52 14.0895 52.0895 14 52.2 14H54V15.8C54 15.9105 54.0895 16 54.2 16H57.8C57.9105 16 58 15.9105 58 15.8V14.2C58 14.0895 57.9105 14 57.8 14H54V12.2Z" fill="white"/>
+                        </g>
+                        </svg>  
+                    </div>
+                    <div class="vk-rect vk s2 cl" data-k="menu">
+                       <!-- Sửa nút --> 
+                    </div>
+                </div>
+            </div>
+            <div class="container bg-control">
+                <div class="justify-content-left outer-square">
+                    <div class="inner-square">
+                        <div class="container mb0">
+                            <div class="vk flex-item center gpad-ur" href="#" data-k="ur" id="gpad-ur"></div>
+                        </div>
+                        <div class="container mb0">
+                            <div class="vk center gpad-ul" href="#" data-k="ul" id="gpad-ul"></div>
+                            <div class="flex-item">
+                                <div class="vk flex-item center gpad-u" href="#" data-k="up"></div>
+                                <div class="vk flex-item center gpad-l" href="#" data-k="left"></div>
+                            </div>
+                            <div class="flex-item">
+                                <div class="vk flex-item center gpad-r" href="#" data-k="right"></div>
+                                <div class="vk flex-item center gpad-d" href="#" data-k="down"></div>
+                            </div>
+                            <div class="vk center gpad-dr" href="#" data-k="dr" id="gpad-dr"></div>
+                        </div>
+                        <div class="container mb0">
+                            <div class="vk flex-item center gpad-dl" href="#" data-k="dl" id="gpad-dl"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-content-right ab">
+                    <div class="vk s11 flex-item" data-k="a">
+                        <svg class="vk s11" data-k="a" width="96" height="70" viewBox="0 0 96 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M36.2 28C36.0895 28 36 28.0895 36 28.2V41.8C36 41.9105 36.0895 42 36.2 42H37.8C37.9105 42 38 41.9105 38 41.8V36.2C38 36.0895 38.0895 36 38.2 36H43.8C43.9105 36 44 36.0895 44 36.2V41.8C44 41.9105 44.0895 42 44.2 42H45.8C45.9105 42 46 41.9105 46 41.8V28.2C46 28.0895 45.9105 28 45.8 28H36.2ZM44 30.2C44 30.0895 43.9105 30 43.8 30H38.2C38.0895 30 38 30.0895 38 30.2V33.8C38 33.9105 38.0895 34 38.2 34H43.8C43.9105 34 44 33.9105 44 33.8V30.2Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="vk s1 flex-item" data-k="turbo">
+                        <svg class="vk s1 " data-k="turbo" width="45" height="70" viewBox="0 0 45 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.2 28C22.0895 28 22 28.0895 22 28.2V41.8C22 41.9105 22.0895 42 22.2 42H23.8C23.9105 42 24 41.9105 24 41.8V28.2C24 28.0895 23.9105 28 23.8 28H22.2Z" fill="white"/>
+                        <path d="M28.2 32C28.0895 32 28 32.0895 28 32.2V37.8C28 37.9105 28.0895 38 28.2 38H29.8C29.9105 38 30 37.9105 30 37.8V32.2C30 32.0895 29.9105 32 29.8 32H28.2Z" fill="white"/>
+                        <path d="M16 32.2C16 32.0895 16.0895 32 16.2 32H17.8C17.9105 32 18 32.0895 18 32.2V37.8C18 37.9105 17.9105 38 17.8 38H16.2C16.0895 38 16 37.9105 16 37.8V32.2Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="vk s12 flex-item" data-k="b">
+                        <svg class="vk s12" data-k="b" width="156" height="71" viewBox="0 0 156 71" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M36 29.2C36 29.0895 36.0895 29 36.2 29H45.8C45.9105 29 46 29.0895 46 29.2V42.8C46 42.9105 45.9105 43 45.8 43H36.2C36.0895 43 36 42.9105 36 42.8V29.2ZM43.8 41C43.9105 41 44 40.9105 44 40.8V37.2C44 37.0895 43.9105 37 43.8 37H38.2C38.0895 37 38 37.0895 38 37.2V40.8C38 40.9105 38.0895 41 38.2 41H43.8ZM43.8 35C43.9105 35 44 34.9105 44 34.8V31.2C44 31.0895 43.9105 31 43.8 31H38.2C38.0895 31 38 31.0895 38 31.2V34.8C38 34.9105 38.0895 35 38.2 35H43.8Z" fill="white"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="container"></div>
         </div>
         <!-- Layer Message -->
         <div id="msg-layer" hidden="">
             <p id="msg-text">Gamepad disconnected.</p>
         </div>
-        <script src="js/save.js"></script>
         <script src="js/pako.min.js"></script>
         <script src="js/localforage.js"></script>
         <script src="js/app.js"></script>
