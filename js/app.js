@@ -369,16 +369,20 @@ function emuRunFrame() {
     }
     if (frameCnt % 128 == 0) {
       if (last128FrameTime) {
-        var diff = performance.now() - last128FrameTime;
-        var frameInMs = diff / 128;
-        var fps = -1;
-        if (frameInMs > 0.001) {
-          fps = 1000 / frameInMs;
-        }
-        console.log('fps', fps);
+          var diff = performance.now() - last128FrameTime;
+          var frameInMs = diff / 128;
+          var fps = -1;
+          if (frameInMs > 0.001) {
+              fps = 1000 / frameInMs;
+          }
+          console.log('fps', fps);
+  
+          // Cập nhật nội dung thẻ <div> để hiển thị giá trị FPS
+          var fpsDisplay = document.getElementById("fpsDisplay");
+          fpsDisplay.textContent = 'FPS: ' + fps.toFixed(2); // Làm tròn giá trị FPS và hiển thị 2 chữ số thập phân
       }
       last128FrameTime = performance.now();
-    }
+  }
     lastFrameTime = performance.now();
     Module._emuRunFrame(getVKState());
     if (fastForwardMode) {
