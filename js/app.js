@@ -1445,8 +1445,7 @@ async function dpManualBtn(isUpload) {
             if (await emuRestoreCloudSav(u8Arr)) {
                 alert("Downloaded successfully.")
                 setTimeout(function () {
-                    Module._emuResetCpu()
-                    clearSaveBufState()
+                    location.reload()
                 }, 1000)
             } else {
                 alert("Failed to download.")
