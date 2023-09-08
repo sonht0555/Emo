@@ -1,99 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropbox File Uploader/Downloader</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-    <h1>Dropbox File Uploader/Downloader</h1>
-
-    <!-- Input để tải lên tệp -->
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Tải lên</button>
-
-    <!-- Danh sách các tệp trên Dropbox -->
-    <h2>Danh sách tệp trên Dropbox:</h2>
-    <ul id="fileList"></ul>
-
-    <!-- Kết quả tải tệp -->
-    <h2>Kết quả tải tệp:</h2>
-    <pre id="uploadResult"></pre>
-
-    <!-- Kết quả tải tệp -->
-    <h2>Kết quả tải tệp:</h2>
-    <pre id="downloadResult"></pre>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <button onclick="rewindCanvas()">Rewind</button>
 
     <script>
-        const ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN'; // Thay bằng access token bạn đã tạo trên Dropbox Developer Console
+        var canvas;
+        var context;
+        var canvasStates = []; // Mảng lưu trữ các trạng thái của canvas
 
-        const fileInput = document.getElementById('fileInput');
-        const fileList = document.getElementById('fileList');
-        const uploadResult = document.getElementById('uploadResult');
-        const downloadResult = document.getElementById('downloadResult');
+        // Biến để theo dõi trạng thái vẽ
+        var isDrawing = false;
 
-        // Hàm tải tệp lên Dropbox
-        async function uploadFile() {
-            const file = fileInput.files[0];
-            if (!file) return;
+        // Hàm để lưu trạng thái hiện tại của canvas
+        function saveCanvasState() {
+            var currentState = canvas.toDataURL();
+            canvasStates.push(currentState);
+        }
 
-            try {
-                const response = await fetch(`https://content.dropboxapi.com/2/files/upload`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                        'Content-Type': 'application/octet-stream',
-                        'Dropbox-API-Arg': JSON.stringify({
-                            path: `/${file.name}`,
-                            mode: 'add',
-                            autorename: true,
-                            mute: false
-                        })
-                    },
-                    body: file
-                });
-
-                const data = await response.json();
-                uploadResult.textContent = JSON.stringify(data, null, 2);
-            } catch (error) {
-                console.error(error);
+        // Hàm để lùi lại trạng thái trước đó
+        function rewindCanvas() {
+            if (canvasStates.length > 0) {
+                var previousState = canvasStates.pop();
+                var img = new Image();
+                img.src = previousState;
+                img.onload = function() {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(img, 0, 0);
+                };
             }
         }
 
-        // Hàm lấy danh sách các tệp trên Dropbox
-        async function listFiles() {
-            try {
-                const response = await fetch(`https://api.dropboxapi.com/2/files/list_folder`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        path: '',
-                        recursive: false,
-                        include_media_info: false,
-                        include_deleted: false,
-                        include_has_explicit_shared_members: false,
-                        include_mounted_folders: true
-                    })
-                });
+        // Hàm bắt đầu vẽ
+        function startDrawing() {
+            canvas = document.getElementById("myCanvas");
+            context = canvas.getContext("2d");
 
-                const data = await response.json();
-                const files = data.entries;
-                fileList.innerHTML = '';
+            // Bắt đầu vẽ khi chuột được nhấn xuống
+            canvas.addEventListener("mousedown", function(event) {
+                isDrawing = true;
+                context.beginPath();
+                context.moveTo(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
+            });
 
-                files.forEach(file => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = file.name;
-                    fileList.appendChild(listItem);
-                });
-            } catch (error) {
-                console.error(error);
-            }
+            // Kết thúc vẽ khi chuột được nhả ra
+            canvas.addEventListener("mouseup", function() {
+                isDrawing = false;
+                context.closePath();
+                saveCanvasState(); // Lưu trạng thái sau khi vẽ
+            });
+
+            // Vẽ khi di chuyển chuột (nếu đang vẽ)
+            canvas.addEventListener("mousemove", function(event) {
+                if (isDrawing) {
+                    context.lineTo(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
+                    context.stroke();
+                }
+            });
         }
 
-        listFiles();
+        // Gọi hàm startDrawing để bắt đầu vẽ ngay khi trang được tải
+        startDrawing();
     </script>
 </body>
 </html>

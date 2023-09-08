@@ -413,22 +413,7 @@ function initVK() {
 initVK();
 
 function makeVKStyle(top, left, w, h, fontSize) {
-  return (
-    'top:' +
-    top +
-    'px;left:' +
-    left +
-    'px;width:' +
-    w +
-    'px;height:' +
-    h +
-    'px;' +
-    'font-size:' +
-    fontSize +
-    'px;line-height:' +
-    h +
-    'px;'
-  );
+  return 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;' + 'font-size:' + fontSize + 'px;line-height:' + h + 'px;';
 }
 
 function adjustVKLayout() {}
@@ -533,13 +518,7 @@ var gamePadKeyMap = {
 
 if (isSaveSupported) {
   window.addEventListener('gamepadconnected', function (e) {
-    console.log(
-      'Gamepad connected at index %d: %s. %d buttons, %d axes.',
-      e.gamepad.index,
-      e.gamepad.id,
-      e.gamepad.buttons.length,
-      e.gamepad.axes.length,
-    );
+    console.log('Gamepad connected at index %d: %s. %d buttons, %d axes.', e.gamepad.index, e.gamepad.id, e.gamepad.buttons.length, e.gamepad.axes.length);
     showMsg('Gamepad connected.');
     currentConnectedGamepad = e.gamepad.index;
   });
@@ -1166,309 +1145,320 @@ function gpuInit() {
 }
 initVideo();
 
-var DP_BASE_PATH = '/vbasav';
-var DP_EXT = '.4gz';
+var DP_BASE_PATH = "/vbasav"
+var DP_EXT = ".4gz"
 
 function dpGetCurrentDayInt() {
-  // yyyymmdd
-  var date = new Date();
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
-  var retInt = year * 10000 + month * 100 + day;
-  return retInt;
+    // yyyymmdd
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var retInt = year * 10000 + month * 100 + day;
+    return retInt;
 }
 
+
+
 function dpIsConnected() {
-  return localStorage['d-token'] ? true : false;
+    return localStorage['d-token'] ? true : false
 }
 
 async function dpIDHash(gameID) {
-  if (!localStorage['d-id']) {
-    throw 'Not connected';
-  }
-  // Using SHA256
-  var inputData = localStorage['d-id'] + ',' + gameID;
-  var hash = await window.crypto.subtle.digest('SHA-256', new TextEncoder('utf-8').encode(inputData));
-  var digestHex = Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-  return digestHex.substring(0, 8);
+    if (!localStorage['d-id']) {
+        throw "Not connected"
+    }
+    // Using SHA256
+    var inputData = localStorage['d-id'] + ',' + gameID
+    var hash = await window.crypto.subtle.digest('SHA-256', new TextEncoder("utf-8").encode(inputData))
+    var digestHex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('')
+    return digestHex.substring(0, 8)
 }
+
 
 async function dpGameLoaded() {
-  if (dpIsConnected()) {
-    var hash = await dpIDHash(gameID);
-    $id('span-cloud-id').innerText = hash;
-  }
+    if (dpIsConnected()) {
+        var hash = await dpIDHash(gameID)
+        $id('span-cloud-id').innerText = hash
+    }
 }
+
 
 async function dpConnect() {
-  var redirectUri = encodeURIComponent(location.origin);
-  var url =
-    'https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline';
-  url += '&redirect_uri=' + redirectUri;
-  location.href = url;
+    var redirectUri = encodeURIComponent(location.origin)
+    var url = "https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline"
+    url += "&redirect_uri=" + redirectUri
+    location.href = url
 }
 
+
 async function dpCheckUser() {
-  var resp = await fetch('https://api.dropboxapi.com/2/check/user', {
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer ' + localStorage['d-token'],
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query: 'foo' }),
-  });
-  var obj = await resp.text();
-  console.log(obj);
+    var resp = await fetch('https://api.dropboxapi.com/2/check/user', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage['d-token'],
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: "foo" })
+    })
+    var obj = await resp.text()
+    console.log(obj)
 }
 
 async function dpUploadFile(path, u8Arr, mode) {
-  mode = mode || 'overwrite';
-  var uploadArg = JSON.stringify({
-    autorename: true,
-    mode: mode,
-    mute: true,
-    strict_conflict: false,
-    path: path,
-  });
-  var blob = new Blob([u8Arr], { type: 'application/octet-stream' });
-  for (var retry = 0; retry < 2; retry++) {
-    var resp = await fetch('https://content.dropboxapi.com/2/files/upload', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + localStorage['d-token'],
-        'Dropbox-API-Arg': uploadArg,
-        'Content-Type': 'application/octet-stream',
-      },
-      body: blob,
-    });
-    console.log('status: ', resp.status);
-    // Check http status.
-    if (resp.status != 200) {
-      if (resp.status == 401) {
-        var ret = await dpRefreshToken();
-        if (!ret) {
-          throw 'Unable to refresh token';
+    mode = mode || "overwrite"
+    var uploadArg = JSON.stringify({
+        "autorename": true,
+        "mode": mode,
+        "mute": true,
+        "strict_conflict": false,
+        "path": path,
+    })
+    var blob = new Blob([u8Arr], { type: "application/octet-stream" })
+    for (var retry = 0; retry < 2; retry++) {
+        var resp = await fetch('https://content.dropboxapi.com/2/files/upload', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage['d-token'],
+                'Dropbox-API-Arg': uploadArg,
+                'Content-Type': 'application/octet-stream'
+            },
+            body: blob
+        })
+        console.log("status: ", resp.status)
+        // Check http status.
+        if (resp.status != 200) {
+            if (resp.status == 401) {
+                var ret = await dpRefreshToken()
+                if (!ret) {
+                    throw "Unable to refresh token"
+                }
+                continue
+            }
+            else {
+                throw "Upload failed, unknown http status: " + resp.status
+            }
+        } else {
+            var obj = await resp.json()
+            console.log(obj)
+            return obj
         }
-        continue;
-      } else {
-        throw 'Upload failed, unknown http status: ' + resp.status;
-      }
-    } else {
-      var obj = await resp.json();
-      console.log(obj);
-      return obj;
     }
-  }
-  return false;
+    return false
 }
 
 async function dpDownloadFile(path) {
-  var downloadArg = JSON.stringify({
-    path: path,
-  });
-  for (var retry = 0; retry < 2; retry++) {
-    var resp = await fetch('https://content.dropboxapi.com/2/files/download', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + localStorage['d-token'],
-        'Dropbox-API-Arg': downloadArg,
-      },
-    });
-    console.log('status: ', resp.status);
-    if (resp.status != 200) {
-      if (resp.status == 401) {
-        var ret = await dpRefreshToken();
-        if (!ret) {
-          throw 'Unable to refresh token';
+    var downloadArg = JSON.stringify({
+        "path": path,
+    })
+    for (var retry = 0; retry < 2; retry++) {
+        var resp = await fetch('https://content.dropboxapi.com/2/files/download', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + localStorage['d-token'],
+                "Dropbox-API-Arg": downloadArg,
+            }
+        })
+        console.log("status: ", resp.status)
+        if (resp.status != 200) {
+            if (resp.status == 401) {
+                var ret = await dpRefreshToken()
+                if (!ret) {
+                    throw "Unable to refresh token"
+                }
+                continue
+            }
+            else {
+                throw "Download failed, unknown http status: " + resp.status
+            }
         }
-        continue;
-      } else {
-        throw 'Download failed, unknown http status: ' + resp.status;
-      }
+        // Get result from header
+        var obj = JSON.parse(resp.headers.get("dropbox-api-result"))
+        console.log(obj)
+        // Get result from body
+        var u8Arr = await resp.arrayBuffer()
+        return new Uint8Array(u8Arr)
     }
-    // Get result from header
-    var obj = JSON.parse(resp.headers.get('dropbox-api-result'));
-    console.log(obj);
-    // Get result from body
-    var u8Arr = await resp.arrayBuffer();
-    return new Uint8Array(u8Arr);
-  }
-  return false;
+    return false
 }
 
 async function dpOnLoad() {
-  if (location.search.startsWith('?code=')) {
-    var code = location.search.slice(6);
+    if (location.search.startsWith("?code=")) {
+        var code = location.search.slice(6);        
+        try {
+            const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `code=${code}&grant_type=authorization_code&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl&redirect_uri=https://kabu.io.vn`
+            });
 
-    // Gửi mã code trực tiếp đến Dropbox để trao đổi lấy token truy cập.
-    try {
-      const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `code=${code}&grant_type=authorization_code&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl&redirect_uri=https://kabu.io.vn`,
-      });
-
-      const data = await response.json();
-      if (!data.error) {
-        localStorage['d-token'] = data.access_token;
-        localStorage['d-token-r'] = data.refresh_token;
-        localStorage['d-id'] = data.account_id;
-        alert('Dropbox connected.');
-        location.href = location.origin;
-      } else {
-        alert(data.error_description || 'Failed to connect to Dropbox.');
-      }
-    } catch (error) {
-      console.error('Error while exchanging code for access token:', error);
+            const data = await response.json();
+            if (!data.error) {
+                localStorage['d-token'] = data.access_token;
+                localStorage['d-token-r'] = data.refresh_token;
+                localStorage['d-id'] = data.account_id;
+                alert("Dropbox connected.");
+                location.href = location.origin;
+            } else {
+                alert(data.error_description || "Failed to connect to Dropbox.");
+            }
+        } catch (error) {
+            console.error("Error while exchanging code for access token:", error);
+        }
     }
-  }
 
-  document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? 'Cloud' : 'Cloud') + '';
+    document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Cloud" : "Cloud") + " ";
 }
 
 async function dpRefreshToken() {
-  console.log('Refreshing token...');
-  if (!localStorage['d-token-r']) {
-    throw 'No refresh token';
-  }
-
-  try {
-    const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&z1dixvhg5spiz9k=YOUR_CLIENT_ID&client_secret=4fe8rvdzo2qi8jl`,
-    });
-
-    const data = await response.json();
-    if (!data.error) {
-      localStorage['d-token'] = data.access_token;
-      return true;
-    } else {
-      alert(data.error_description || 'Failed to refresh Dropbox token.');
+    console.log("Refreshing token...");
+    if (!localStorage['d-token-r']) {
+        throw "No refresh token";
     }
-  } catch (error) {
-    console.error('Error while refreshing token:', error);
-  }
 
-  return false;
+    try {
+        const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&z1dixvhg5spiz9k=YOUR_CLIENT_ID&client_secret=4fe8rvdzo2qi8jl`
+        });
+
+        const data = await response.json();
+        if (!data.error) {
+            localStorage['d-token'] = data.access_token;
+            return true;
+        } else {
+            alert(data.error_description || "Failed to refresh Dropbox token.");
+        }
+    } catch (error) {
+        console.error("Error while refreshing token:", error);
+    }
+    
+    return false;
 }
 
+
 async function dpGetPath(gameID, tag) {
-  var hash = await dpIDHash(gameID);
-  var path = DP_BASE_PATH + '/' + hash + '/' + tag + DP_EXT;
-  return path;
+    var hash = await dpIDHash(gameID)
+    var path = DP_BASE_PATH + "/" + hash + "/" + tag + DP_EXT
+    return path
 }
 
 async function dpTryUploadCloudSave(gameID, tag, u8Arr, mode) {
-  if (!dpIsConnected()) {
-    return false;
-  }
-  var path = await dpGetPath(gameID, tag);
-
-  try {
-    var resp = await dpUploadFile(path, u8Arr, mode);
-    return resp;
-  } catch (e) {
-    alert('Failed to upload cloud save: ' + e);
-    return false;
-  }
-  return false;
+    if (!dpIsConnected()) {
+        return false
+    }
+    var path = await dpGetPath(gameID, tag)
+  
+    try {
+        var resp = await dpUploadFile(path, u8Arr, mode)
+        return resp
+    } catch (e) {
+        alert("Failed to upload cloud save: " + e)
+        return false
+    }
+    return false
 }
+
+
+
 
 async function dpTryAutoBackup() {
-  if (!dpIsConnected()) {
-    return false;
-  }
-  var sav = await emuBackupCloudSav();
-  if (sav === false) {
-    return false;
-  }
-  var nowDay = '' + dpGetCurrentDayInt();
-  if (localStorage['d-last-' + gameID] == nowDay) {
-    return false;
-  }
-  var ret = await dpTryUploadCloudSave(gameID, 'auto-' + dpGetCurrentDayInt(), sav, 'add');
-  if (ret) {
-    localStorage['d-last-' + gameID] = nowDay;
-    return true;
-  }
-  return false;
+    if (!dpIsConnected()) {
+        return false
+    }
+    var sav = await emuBackupCloudSav()
+    if (sav === false) {
+        return false
+    }
+    var nowDay = '' + dpGetCurrentDayInt()
+    if (localStorage['d-last-' + gameID] == nowDay) {
+        return false
+    }
+    var ret = await dpTryUploadCloudSave(gameID, "auto-" + dpGetCurrentDayInt(), sav , "add")
+    if (ret) {
+        localStorage['d-last-' + gameID] = nowDay
+        return true
+    }
+    return false
 }
 
+
+
+
 function dpOnConnectButtonClicked() {
-  if (dpIsConnected()) {
-    if (confirm('Are you sure to disconnect from Dropbox?')) {
-      localStorage['d-token'] = '';
-      localStorage['d-token-r'] = '';
-      localStorage['d-id'] = '';
-      alert('Dropbox disconnected.');
-      location.href = location.origin;
+    if (dpIsConnected()) {
+        if (confirm("Are you sure to disconnect from Dropbox?")) {
+            localStorage['d-token'] = ""
+            localStorage['d-token-r'] = ""
+            localStorage['d-id'] = ""
+            alert("Dropbox disconnected.")
+            location.href = location.origin
+        }
+    } else {
+        dpConnect()
     }
-  } else {
-    dpConnect();
-  }
 }
 
 async function dpManualBtn(isUpload) {
-  if (!dpIsConnected()) {
-    alert('Please connect to Dropbox first.');
-    return;
-  }
-  if (!gameID) {
-    alert('Please load a game first.');
-    return;
-  }
-  var choice = window.confirm('Are you sure to ' + (isUpload ? '↑ upload' : '↓ download') + ' cloud save?');
-  if (!choice) {
-    return;
-  }
-  try {
-    if (isUpload) {
-      var sav = await emuBackupCloudSav();
-      if (sav === false) {
-        alert('No save data to upload.');
-        return;
-      }
-      var ret = await dpTryUploadCloudSave(gameID, 'manual', sav, 'overwrite');
-      if (ret) {
-        alert('Uploaded successfully.');
-      } else {
-        alert('Failed to upload.');
-      }
-    } else {
-      var path = await dpGetPath(gameID, 'manual');
-      var u8Arr = await dpDownloadFile(path);
-      if (!u8Arr) {
-        alert('Failed to download.');
-        return;
-      }
-      if (u8Arr.length < 1) {
-        alert('No cloud save found.');
-        return;
-      }
-      if (await emuRestoreCloudSav(u8Arr)) {
-        alert('Downloaded successfully.');
-        setTimeout(function () {
-          location.reload();
-        }, 1000);
-      } else {
-        alert('Failed to download.');
-      }
+
+    if (!dpIsConnected()) {
+        alert("Please connect to Dropbox first.")
+        return
     }
-  } catch (e) {
-    alert('Error:' + e);
-    return;
-  }
+    if (!gameID)  {
+        alert("Please load a game first.")
+        return
+    }
+    var choice = window.confirm("Are you sure to " + (isUpload ? "↑ upload" : "↓ download") + " cloud save?")
+    if (!choice) {
+        return
+    }
+    try {
+        if (isUpload) {
+            var sav = await emuBackupCloudSav()
+            if (sav === false) {
+                alert("No save data to upload.")
+                return
+            }
+            var ret = await dpTryUploadCloudSave(gameID, "manual", sav , "overwrite")
+            if (ret) {
+                alert("Uploaded successfully.")
+            } else {
+                alert("Failed to upload.")
+            }
+        } else {
+            var path = await dpGetPath(gameID, "manual")
+            var u8Arr = await dpDownloadFile(path)
+            if (!u8Arr) {
+                alert("Failed to download.")
+                return
+            }
+            if (u8Arr.length < 1) {
+                alert("No cloud save found.")
+                return
+            }
+            if (await emuRestoreCloudSav(u8Arr)) {
+                alert("Downloaded successfully.")
+                setTimeout(function () {
+                    Module._emuResetCpu()
+                    clearSaveBufState()
+                }, 1000)
+            } else {
+                alert("Failed to download.")
+            }
+        }
+    } catch (e) {
+        alert("Error:" + e)
+        return
+    }
 }
 
-dpOnLoad();
+dpOnLoad()
 
 document.addEventListener('DOMContentLoaded', function () {
   const targetBoxes = document.querySelectorAll('.class');
@@ -1555,3 +1545,29 @@ function toggleMenu() {
   isRunning = !isRunning;
   console.log('isRunning:', isRunning);
 }
+
+const myButton = document.getElementById('myButton');
+        let clickCount = 0;
+        let isFirstTime = true; // Biến để kiểm tra lần đầu tiên
+        
+        myButton.addEventListener('click', function() {
+            clickCount++;
+            
+            // Kiểm tra xem đã click đủ 5 lần chưa
+            if (clickCount % 5 === 0 || isFirstTime) {
+                // Hiển thị thông báo sau mỗi 5 lần click hoặc lần đầu tiên
+                const shouldDismiss = confirm('Bạn có muốn thực hiện thao tác này không?');
+                
+                if (shouldDismiss) {
+                    Module._emuResetCpu();
+                    clearSaveBufState();
+                }
+            } else {
+                // Nếu chưa đủ 5 lần click, thực hiện các hàm mà không hiển thị thông báo
+                Module._emuResetCpu();
+                clearSaveBufState();
+            }
+
+            isFirstTime = false; // Đánh dấu đã qua lần đầu tiên
+        });
+ 
