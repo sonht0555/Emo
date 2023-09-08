@@ -1546,27 +1546,28 @@ function toggleMenu() {
 }
 
 const myButton = document.getElementById('myButton');
-        let clickCount = 0;
-        let isFirstTime = true; // Biến để kiểm tra lần đầu tiên
-        
-        myButton.addEventListener('click', function() {
-            clickCount++;
+let clickCount = 0;
+let lastClickTime = 0; // Thời gian của lần click cuối cùng
+
+myButton.addEventListener('click', function() {
+    const currentTime = new Date().getTime();
+    if (currentTime - lastClickTime <= 1000) {
+        // Nếu khoảng thời gian giữa hai lần click liên tục không quá 1 giây
+        clickCount++;
+        if (clickCount >= 2) {
+            // Thực hiện hành động sau khi click hai lần
+            const shouldDismiss = confirm('Do you want to quickly restart the game?');
             
-            // Kiểm tra xem đã click đủ 5 lần chưa
-            if (clickCount % 5 === 0 || isFirstTime) {
-                // Hiển thị thông báo sau mỗi 5 lần click hoặc lần đầu tiên
-                const shouldDismiss = confirm('Bạn có muốn thực hiện thao tác này không?');
-                
-                if (shouldDismiss) {
-                    Module._emuResetCpu();
-                    clearSaveBufState();
-                }
-            } else {
-                // Nếu chưa đủ 5 lần click, thực hiện các hàm mà không hiển thị thông báo
+            if (shouldDismiss) {
                 Module._emuResetCpu();
                 clearSaveBufState();
             }
+            
+            clickCount = 0; // Đặt lại đếm
+        }
+    } else {
+        clickCount = 1; // Bắt đầu đếm từ lần click đầu tiên
+    }
+    lastClickTime = currentTime; // Cập nhật thời gian của lần click cuối cùng
+});
 
-            isFirstTime = false; // Đánh dấu đã qua lần đầu tiên
-        });
- 

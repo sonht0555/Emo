@@ -1,73 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter Game with Rewind</title>
     <style>
         canvas {
             border: 1px solid black;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="400" height="400"></canvas>
-    <button onclick="rewindCanvas()">Rewind</button>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <button id="rewindButton">Quay lại 3 giây</button>
 
     <script>
-        var canvas;
-        var context;
-        var canvasStates = []; // Mảng lưu trữ các trạng thái của canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // Biến để theo dõi trạng thái vẽ
-        var isDrawing = false;
+        // Tàu vũ trụ
+        const spaceship = {
+            x: canvas.width / 2,
+            y: canvas.height - 50,
+            width: 50,
+            height: 50,
+            speed: 5,
+        };
 
-        // Hàm để lưu trạng thái hiện tại của canvas
-        function saveCanvasState() {
-            var currentState = canvas.toDataURL();
-            canvasStates.push(currentState);
+        // Lịch sử của trò chơi
+        const gameHistory = [];
+        let currentIndex = -1;
+
+        // Xử lý sự kiện nút "Quay lại 3 giây"
+        const rewindButton = document.getElementById('rewindButton');
+        rewindButton.addEventListener('click', () => {
+            // Lấy trạng thái trước đó sau 3 giây
+            const rewindIndex = currentIndex - 180; // 180 frames ≈ 3 giây (nếu mỗi frame là 1/60 giây)
+            if (rewindIndex >= 0) {
+                currentIndex = rewindIndex;
+                loadGameSnapshot(currentIndex);
+            }
+        });
+
+        // Hàm vẽ tàu vũ trụ
+        function drawSpaceship() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
         }
 
-        // Hàm để lùi lại trạng thái trước đó
-        function rewindCanvas() {
-            if (canvasStates.length > 0) {
-                var previousState = canvasStates.pop();
-                var img = new Image();
-                img.src = previousState;
-                img.onload = function() {
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-                    context.drawImage(img, 0, 0);
-                };
+        // Hàm cập nhật trạng thái trò chơi
+        function updateGame() {
+            // Lưu trạng thái trò chơi vào lịch sử
+            saveGameSnapshot();
+
+            // Xử lý di chuyển tàu vũ trụ
+            if (keys.ArrowLeft && spaceship.x > 0) {
+                spaceship.x -= spaceship.speed;
+            }
+            if (keys.ArrowRight && spaceship.x < canvas.width - spaceship.width) {
+                spaceship.x += spaceship.speed;
+            }
+
+            // Xóa màn hình và vẽ lại
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSpaceship();
+
+            // Lặp lại cập nhật trạng thái trò chơi
+            requestAnimationFrame(updateGame);
+        }
+
+        // Sử dụng đối tượng keys để theo dõi phím được nhấn
+        const keys = {};
+        document.addEventListener('keydown', (event) => {
+            keys[event.key] = true;
+        });
+        document.addEventListener('keyup', (event) => {
+            keys[event.key] = false;
+        });
+
+        // Lưu trạng thái trò chơi vào lịch sử
+        function saveGameSnapshot() {
+            const snapshot = {
+                spaceshipX: spaceship.x,
+                spaceshipY: spaceship.y,
+            };
+            gameHistory.push(snapshot);
+            currentIndex = gameHistory.length - 1;
+        }
+
+        // Tải lại trạng thái trò chơi từ lịch sử
+        function loadGameSnapshot(index) {
+            if (index >= 0 && index < gameHistory.length) {
+                const snapshot = gameHistory[index];
+                spaceship.x = snapshot.spaceshipX;
+                spaceship.y = snapshot.spaceshipY;
             }
         }
 
-        // Hàm bắt đầu vẽ
-        function startDrawing() {
-            canvas = document.getElementById("myCanvas");
-            context = canvas.getContext("2d");
-
-            // Bắt đầu vẽ khi chuột được nhấn xuống
-            canvas.addEventListener("mousedown", function(event) {
-                isDrawing = true;
-                context.beginPath();
-                context.moveTo(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
-            });
-
-            // Kết thúc vẽ khi chuột được nhả ra
-            canvas.addEventListener("mouseup", function() {
-                isDrawing = false;
-                context.closePath();
-                saveCanvasState(); // Lưu trạng thái sau khi vẽ
-            });
-
-            // Vẽ khi di chuyển chuột (nếu đang vẽ)
-            canvas.addEventListener("mousemove", function(event) {
-                if (isDrawing) {
-                    context.lineTo(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
-                    context.stroke();
-                }
-            });
-        }
-
-        // Gọi hàm startDrawing để bắt đầu vẽ ngay khi trang được tải
-        startDrawing();
+        // Bắt đầu trò chơi
+        updateGame();
     </script>
 </body>
 </html>

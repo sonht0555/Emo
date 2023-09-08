@@ -167,8 +167,8 @@
             <path d="M20 74.2C20 74.0895 19.9105 74 19.8 74H18.2C18.0895 74 18 74.0895 18 74.2V87.8C18 87.9105 18.0895 88 18.2 88H27.8C27.9105 88 28 87.9105 28 87.8V86.2C28 86.0895 27.9105 86 27.8 86H20.2C20.0895 86 20 85.9105 20 85.8V74.2Z" fill="white" />
           </svg>
         </div>
-        <canvas width="240" height="160" id="gba-canvas" class="flex-item"></canvas>
-        <div class="img-canvas flex-item"></div>
+        <canvas width="240" height="160" id="gba-canvas" class="flex-item canvas"></canvas>
+        <div class="img-canvas flex-item" id="myButton" ontouchstart="event.stopPropagation()"></div>
         <div class="vk flex-item ss6" data-k="r">
           <svg class="vk ss6 cl" data-k="r" width="45" height="160" viewBox="0 0 45 160" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M27 74.2C27 74.0895 26.9105 74 26.8 74H17.2C17.0895 74 17 74.0895 17 74.2V87.8C17 87.9105 17.0895 88 17.2 88H18.8C18.9105 88 19 87.9105 19 87.8V76.2C19 76.0895 19.0895 76 19.2 76H24.8C24.9105 76 25 76.0895 25 76.2V79.8C25 79.9105 24.9105 80 24.8 80H22.2C22.0895 80 22 80.0895 22 80.2V81.8C22 81.9105 22.0895 82 22.2 82H24.8C24.9105 82 25 82.0895 25 82.2V87.8C25 87.9105 25.0895 88 25.2 88H26.8C26.9105 88 27 87.9105 27 87.8V74.2Z" fill="white" />
@@ -257,7 +257,6 @@
         </div>
       </div>
       <div class="container">
-        <button id="myButton" ontouchstart="event.stopPropagation()">Click me</button>
       </div>
     </div>
     <!-- Layer Message -->
