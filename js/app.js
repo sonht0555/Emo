@@ -379,7 +379,7 @@ function emuRunFrame() {
   
           // Cập nhật nội dung thẻ <div> để hiển thị giá trị FPS
           var fpsDisplay = document.getElementById("fpsDisplay");
-          fpsDisplay.textContent = 'FPS: ' + fps.toFixed(2); // Làm tròn giá trị FPS và hiển thị 2 chữ số thập phân
+          fpsDisplay.textContent = fps.toFixed(2); // Làm tròn giá trị FPS và hiển thị 2 chữ số thập phân
       }
       last128FrameTime = performance.now();
   }

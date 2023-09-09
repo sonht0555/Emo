@@ -45,8 +45,7 @@ body {
   width: calc(100vw - 150px) !important;
   height: calc((100vw - 150px) * 2 / 3) !important;
   padding: 0 60px;
-  background-image: url("data:image/svg+xml,%3Csvg width='2' height='2' viewBox='0 0 2 2' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 0H0V2H1V1H2V0Z' fill='black' fill-opacity='0.32'/%3E%3C/svg%3E%0A");
-  opacity: 0.25;
+  background-image: url("data:image/svg+xml,%3Csvg width='2' height='2' viewBox='0 0 2 2' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 0H0V2H1V1H2V0Z' fill='black' fill-opacity='0.08'/%3E%3C/svg%3E%0A");
 }
 .img-layout {
   width: calc(100vw - 150px) !important;
@@ -799,4 +798,13 @@ b {
 .fade.open {
   opacity: 1;
   pointer-events: auto;
+}
+.fps{
+  font-size: 8px;
+  padding: 3px 3px 2px 4px;
+  color: #fff;
+  background-color: rgb(0, 0, 0, 0.16);
+  position: absolute;
+  right: 60px;
+  bottom: 0px;
 }
