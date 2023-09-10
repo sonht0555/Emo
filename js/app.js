@@ -1512,27 +1512,30 @@ function toggleMenu() {
 	console.log('isRunning:', isRunning);
 }
 
-function gameReset() {
-const myButton = document.getElementById('myButton');
-let clickCount = 0;
-let lastClickTime = 0;
-myButton.addEventListener('click', function() {
-	const currentTime = new Date().getTime();
-	if (currentTime - lastClickTime <= 1000) {
+(function resetGame() {
+	const myButton = document.getElementById('myButton');
+	let clickCount = 0;
+	let lastClickTime = 0;
+	
+	myButton.addEventListener('click', handleButtonClick);
+	
+	function handleButtonClick() {
+	  const currentTime = new Date().getTime();
+	  if (currentTime - lastClickTime <= 1000) {
 		clickCount++;
 		if (clickCount >= 2) {
-			const shouldDismiss = confirm('Do you want to quickly restart the game?');
-
-			if (shouldDismiss) {
-				Module._emuResetCpu();
-				clearSaveBufState();
-			}
-
-			clickCount = 0;
+		  const shouldDismiss = confirm('Do you want to quickly restart the game?');
+	
+		  if (shouldDismiss) {
+			Module._emuResetCpu();
+			clearSaveBufState();
+		  }
+	
+		  clickCount = 0;
 		}
-	} else {
+	  } else {
 		clickCount = 1;
+	  }
+	  lastClickTime = currentTime;
 	}
-	lastClickTime = currentTime;
-});
-}
+})();
