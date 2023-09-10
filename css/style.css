@@ -801,10 +801,11 @@ b {
 }
 .fps{
   font-size: 8px;
-  padding: 3px 3px 2px 4px;
+  padding: 1px 1px 0px 2px;
   color: #fff;
-  background-color: rgb(0, 0, 0, 0.16);
+  background-color: rgb(0, 0, 0, 0.4);
   position: absolute;
   right: 60px;
-  bottom: 0px;
+  top: 0px;
+  margin:2px;
 }
