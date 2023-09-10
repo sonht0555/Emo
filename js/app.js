@@ -1,62 +1,64 @@
 function $id(id) {
-  return document.getElementById(id);
+	return document.getElementById(id);
 }
+
 if (!window.WebAssembly) {
-  alert('Sorry, your browser does not support WebAssembly. :(');
+	alert('Sorry, your browser does not support WebAssembly. :(');
 }
 
 var isIOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 var isMacOS = !!navigator.platform && /Mac/.test(navigator.platform);
+
 if (isMacOS) {
-  if (navigator.maxTouchPoints > 2) {
-    // Nah, it is an iPad pretending to be a Mac
-    isIOS = true;
-    isMacOS = false;
-  }
+	if (navigator.maxTouchPoints > 2) {
+		// Nah, it is an iPad pretending to be a Mac
+		isIOS = true;
+		isMacOS = false;
+	}
 }
+
 var isWebApp = navigator.standalone || false;
 
 var isSaveSupported = true;
 if (isIOS) {
-  //document.getElementById('romFile').files = null;
-  if (!isWebApp) {
-    // On iOS Safari, the indexedDB will be cleared after 7 days.
-    // To prevent users from frustration, we don't allow savegaming on iOS unless the we are in the PWA mode.
-    isSaveSupported = false;
-    var divIosHint = document.getElementById('ios-hint');
-    divIosHint.hidden = false;
-    divIosHint.style = 'position: absolute; bottom: ' + divIosHint.clientHeight + 'px;';
-    $id('btn-choose').hidden = true;
-  }
+	//document.getElementById('romFile').files = null;
+	if (!isWebApp) {
+		// On iOS Safari, the indexedDB will be cleared after 7 days.
+		// To prevent users from frustration, we don't allow savegaming on iOS unless the we are in the PWA mode.
+		isSaveSupported = false;
+		var divIosHint = document.getElementById('ios-hint');
+		divIosHint.hidden = false;
+		divIosHint.style = 'position: absolute; bottom: ' + divIosHint.clientHeight + 'px;';
+		$id('btn-choose').hidden = true;
+	}
 }
 
 var muteMode = false;
 
 var config = {
-  scaleMode: 0,
+	scaleMode: 0,
 };
 
 function loadConfig() {
-  var cfg = JSON.parse(window.localStorage['gba-config'] || '{}');
-  for (var k in cfg) {
-    config[k] = cfg[k];
-  }
-  $id('cfg-scale-mode').value = config.scaleMode;
+	var cfg = JSON.parse(window.localStorage['gba-config'] || '{}');
+	for (var k in cfg) {
+		config[k] = cfg[k];
+	}
+	$id('cfg-scale-mode').value = config.scaleMode;
 }
 loadConfig();
 
 function uiSaveConfig() {
-  var newScaleMode = parseInt($id('cfg-scale-mode').value) || 0;
-  if (config.scaleMode != newScaleMode) {
-    config.scaleMode = newScaleMode;
-    initVideo();
-  }
-  window.localStorage['gba-config'] = JSON.stringify(config);
+	var newScaleMode = parseInt($id('cfg-scale-mode').value) || 0;
+	if (config.scaleMode != newScaleMode) {
+		config.scaleMode = newScaleMode;
+		initVideo();
+	}
+	window.localStorage['gba-config'] = JSON.stringify(config);
 }
 
 var keyState = {};
 const keyList = ['a', 'b', 'select', 'start', 'right', 'left', 'up', 'down', 'r', 'l'];
-
 const AUDIO_BLOCK_SIZE = 1024;
 const AUDIO_FIFO_MAXLEN = 4900;
 var audioContext;
@@ -65,7 +67,6 @@ var audioFifo0 = new Int16Array(AUDIO_FIFO_MAXLEN);
 var audioFifo1 = new Int16Array(AUDIO_FIFO_MAXLEN);
 var audioFifoHead = 0;
 var audioFifoCnt = 0;
-
 var fileInput = document.getElementById('romFile');
 var canvas = null;
 var drawContext;
@@ -78,567 +79,575 @@ var wasmAudioBuf;
 var wasmSaveBuf;
 const wasmSaveBufLen = 0x20000 + 0x2000;
 var tmpSaveBuf = new Uint8Array(wasmSaveBufLen);
-
 var frameCnt = 0;
 var last128FrameTime = 0;
 var lastFrameTime = 0;
 var frameSkip = 0;
 var lowLatencyMode = false;
-
 var lastCheckedSaveState = 0;
-
 var gameID;
 var romFileName;
-
 var turboMode = false;
 var turboInterval = -1;
 var fastForwardMode = false;
-
 var gbaWidth;
 var gbaHeight;
-
 var cheatCode;
 
 function processAudio(event) {
-  var outputBuffer = event.outputBuffer;
-  var audioData0 = outputBuffer.getChannelData(0);
-  var audioData1 = outputBuffer.getChannelData(1);
+	var outputBuffer = event.outputBuffer;
+	var audioData0 = outputBuffer.getChannelData(0);
+	var audioData1 = outputBuffer.getChannelData(1);
 
-  if (!isRunning || fastForwardMode || muteMode) {
-    for (var i = 0; i < AUDIO_BLOCK_SIZE; i++) {
-      audioData0[i] = 0;
-      audioData1[i] = 0;
-    }
-    return;
-  }
-  while (audioFifoCnt < AUDIO_BLOCK_SIZE) {
-    //console.log('audio fifo underflow, running a new frame')
-    emuRunFrame();
-  }
+	if (!isRunning || fastForwardMode || muteMode) {
+		for (var i = 0; i < AUDIO_BLOCK_SIZE; i++) {
+			audioData0[i] = 0;
+			audioData1[i] = 0;
+		}
+		return;
+	}
+	while (audioFifoCnt < AUDIO_BLOCK_SIZE) {
+		//console.log('audio fifo underflow, running a new frame')
+		emuRunFrame();
+	}
 
-  var copySize = AUDIO_BLOCK_SIZE;
-  if (audioFifoCnt < copySize) {
-    copySize = audioFifoCnt;
-  }
-  for (var i = 0; i < copySize; i++) {
-    audioData0[i] = audioFifo0[audioFifoHead] / 32768.0;
-    audioData1[i] = audioFifo1[audioFifoHead] / 32768.0;
-    audioFifoHead = (audioFifoHead + 1) % AUDIO_FIFO_MAXLEN;
-    audioFifoCnt--;
-  }
+	var copySize = AUDIO_BLOCK_SIZE;
+	if (audioFifoCnt < copySize) {
+		copySize = audioFifoCnt;
+	}
+	for (var i = 0; i < copySize; i++) {
+		audioData0[i] = audioFifo0[audioFifoHead] / 32768.0;
+		audioData1[i] = audioFifo1[audioFifoHead] / 32768.0;
+		audioFifoHead = (audioFifoHead + 1) % AUDIO_FIFO_MAXLEN;
+		audioFifoCnt--;
+	}
 }
 
-// must be called in user gesture
 function tryInitSound() {
-  if (audioContext) {
-    if (audioContext.state != 'running') {
-      audioContext.resume();
-    }
-    return;
-  }
-  try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 0.0001, sampleRate: 48000 });
-    scriptProcessor = audioContext.createScriptProcessor(AUDIO_BLOCK_SIZE, 0, 2);
-    scriptProcessor.onaudioprocess = processAudio;
-    scriptProcessor.connect(audioContext.destination);
+	if (audioContext) {
+		if (audioContext.state != 'running') {
+			audioContext.resume();
+		}
+		return;
+	}
+	try {
+		audioContext = new(window.AudioContext || window.webkitAudioContext)({
+			latencyHint: 0.0001,
+			sampleRate: 48000
+		});
+		scriptProcessor = audioContext.createScriptProcessor(AUDIO_BLOCK_SIZE, 0, 2);
+		scriptProcessor.onaudioprocess = processAudio;
+		scriptProcessor.connect(audioContext.destination);
 
-    audioContext.resume();
-  } catch (e) {
-    console.log(e);
-    //alert('Cannnot init sound ')
-  }
+		audioContext.resume();
+	} catch (e) {
+		console.log(e);
+		//alert('Cannnot init sound ')
+	}
 }
 
 function writeAudio(ptr, frames) {
-  if (fastForwardMode) {
-    return;
-  }
-  //console.log(ptr, frames)
-  if (!wasmAudioBuf) {
-    wasmAudioBuf = new Int16Array(Module.HEAPU8.buffer).subarray(ptr / 2, ptr / 2 + 2048);
-  }
-  var tail = (audioFifoHead + audioFifoCnt) % AUDIO_FIFO_MAXLEN;
-  if (audioFifoCnt + frames >= AUDIO_FIFO_MAXLEN) {
-    //console.log('o', audioFifoCnt)
-    return;
-  }
-  for (var i = 0; i < frames; i++) {
-    audioFifo0[tail] = wasmAudioBuf[i * 2];
-    audioFifo1[tail] = wasmAudioBuf[i * 2 + 1];
-    tail = (tail + 1) % AUDIO_FIFO_MAXLEN;
-  }
-  audioFifoCnt += frames;
+	if (fastForwardMode) {
+		return;
+	}
+	//console.log(ptr, frames)
+	if (!wasmAudioBuf) {
+		wasmAudioBuf = new Int16Array(Module.HEAPU8.buffer).subarray(ptr / 2, ptr / 2 + 2048);
+	}
+	var tail = (audioFifoHead + audioFifoCnt) % AUDIO_FIFO_MAXLEN;
+	if (audioFifoCnt + frames >= AUDIO_FIFO_MAXLEN) {
+		//console.log('o', audioFifoCnt)
+		return;
+	}
+	for (var i = 0; i < frames; i++) {
+		audioFifo0[tail] = wasmAudioBuf[i * 2];
+		audioFifo1[tail] = wasmAudioBuf[i * 2 + 1];
+		tail = (tail + 1) % AUDIO_FIFO_MAXLEN;
+	}
+	audioFifoCnt += frames;
 }
 
 function wasmReady() {
-  romBuffer = Module._emuGetSymbol(1);
-  var ptr = Module._emuGetSymbol(2);
-  wasmSaveBuf = Module.HEAPU8.subarray(ptr, ptr + wasmSaveBufLen);
-  ptr = Module._emuGetSymbol(3);
-  imgFrameBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer).subarray(ptr, ptr + 240 * 160 * 4);
-  idata = new ImageData(imgFrameBuffer, 240, 160);
-
-  isWasmReady = true;
-  document.getElementById('wasm-loading').hidden = true;
-  document.getElementById('select-rom').hidden = false;
+	romBuffer = Module._emuGetSymbol(1);
+	var ptr = Module._emuGetSymbol(2);
+	wasmSaveBuf = Module.HEAPU8.subarray(ptr, ptr + wasmSaveBufLen);
+	ptr = Module._emuGetSymbol(3);
+	imgFrameBuffer = new Uint8ClampedArray(Module.HEAPU8.buffer).subarray(ptr, ptr + 240 * 160 * 4);
+	idata = new ImageData(imgFrameBuffer, 240, 160);
+	isWasmReady = true;
+	document.getElementById('wasm-loading').hidden = true;
+	document.getElementById('select-rom').hidden = false;
 }
 
 function initVideo() {
-  console.log('init video');
-  if (canvas) {
-    var newCanvas = document.createElement('canvas');
-    newCanvas.id = 'gba-canvas';
-    canvas.replaceWith(newCanvas);
-    canvas = newCanvas;
-  } else {
-    canvas = document.getElementById('gba-canvas');
-  }
-  if (config.scaleMode >= 2) {
-    gpuInit();
-  } else {
-    drawContext = canvas.getContext('2d');
-  }
-  adjustSize();
+	console.log('init video');
+	if (canvas) {
+		var newCanvas = document.createElement('canvas');
+		newCanvas.id = 'gba-canvas';
+		canvas.replaceWith(newCanvas);
+		canvas = newCanvas;
+	} else {
+		canvas = document.getElementById('gba-canvas');
+	}
+	if (config.scaleMode >= 2) {
+		gpuInit();
+	} else {
+		drawContext = canvas.getContext('2d');
+	}
+	adjustSize();
 }
 
 function loadSaveGame(index, cb) {
-  console.log('load', gameID, index);
-  localforage.getItem('gba-' + gameID + '-save-' + index, function (err, data) {
-    //console.log(err, data)
-    if (data) {
-      wasmSaveBuf.set(data);
-      clearSaveBufState();
-      cb(true);
-    } else {
-      clearSaveBufState();
-      cb(false);
-    }
-  });
+	console.log('load', gameID, index);
+	localforage.getItem('gba-' + gameID + '-save-' + index, function(err, data) {
+		//console.log(err, data)
+		if (data) {
+			wasmSaveBuf.set(data);
+			clearSaveBufState();
+			cb(true);
+		} else {
+			clearSaveBufState();
+			cb(false);
+		}
+	});
 }
 
 function saveSaveGame(index, cb) {
-  console.log('save', gameID, index);
-  tmpSaveBuf.set(wasmSaveBuf);
-  localforage.setItem('gba-' + gameID + '-save-' + index, tmpSaveBuf, function (err, data) {
-    cb(true);
-  });
+	console.log('save', gameID, index);
+	tmpSaveBuf.set(wasmSaveBuf);
+	localforage.setItem('gba-' + gameID + '-save-' + index, tmpSaveBuf, function(err, data) {
+		cb(true);
+	});
 }
 
 function savBackupBtn() {
-  var blob = new Blob([wasmSaveBuf], { type: 'application/binary' });
-  var link = document.createElement('a');
-  link.href = window.URL.createObjectURL(blob);
-  link.download = 'save-' + gameID + '.4gs';
-  link.click();
+	var blob = new Blob([wasmSaveBuf], {
+		type: 'application/binary'
+	});
+	var link = document.createElement('a');
+	link.href = window.URL.createObjectURL(blob);
+	link.download = 'save-' + gameID + '.4gs';
+	link.click();
 }
 
 function toyEncrypt(src) {
-  var dst = new Uint8Array(src.length);
-  for (var i = 0; i < src.length; i++) {
-    dst[i] = src[i] ^ 0xfb;
-  }
-  return dst;
+	var dst = new Uint8Array(src.length);
+	for (var i = 0; i < src.length; i++) {
+		dst[i] = src[i] ^ 0xfb;
+	}
+	return dst;
 }
 
 async function emuBackupCloudSav() {
-  var sav = await localforage.getItem('gba-' + gameID + '-save-' + 0);
-  if (!sav) {
-    return false;
-  }
-  return toyEncrypt(pako.gzip(sav));
+	var sav = await localforage.getItem('gba-' + gameID + '-save-' + 0);
+	if (!sav) {
+		return false;
+	}
+	return toyEncrypt(pako.gzip(sav));
 }
 
 async function emuRestoreCloudSav(u8Arr) {
-  var sav = pako.ungzip(toyEncrypt(u8Arr));
-  await localforage.setItem('gba-' + gameID + '-save-' + 0, sav);
-  return true;
+	var sav = pako.ungzip(toyEncrypt(u8Arr));
+	await localforage.setItem('gba-' + gameID + '-save-' + 0, sav);
+	return true;
 }
 
 function savRestoreBtn() {
-  var file = document.getElementById('sav-file').files[0];
-  if (file) {
-    var fileReader = new FileReader();
-    var fileExt = file.name.split('.').pop().toLowerCase();
-    if (!(fileExt == '4gs' || fileExt == '4gz' || fileExt == '44gbasav' || fileExt == 'sav')) {
-      alert('Invalid save file');
-      return;
-    }
-    fileReader.onload = function (event) {
-      var arrayBuffer = event.target.result;
-      var u8 = new Uint8Array(arrayBuffer);
-      if (fileExt == '4gz') {
-        u8 = pako.ungzip(toyEncrypt(u8));
-      }
-      wasmSaveBuf.set(u8);
-      alert('sav file loaded');
-      Module._emuResetCpu();
-      clearSaveBufState();
-    };
-    fileReader.readAsArrayBuffer(file);
-  }
+	var file = document.getElementById('sav-file').files[0];
+	if (file) {
+		var fileReader = new FileReader();
+		var fileExt = file.name.split('.').pop().toLowerCase();
+		if (!(fileExt == '4gs' || fileExt == '4gz' || fileExt == '44gbasav' || fileExt == 'sav')) {
+			alert('Invalid save file');
+			return;
+		}
+		fileReader.onload = function(event) {
+			var arrayBuffer = event.target.result;
+			var u8 = new Uint8Array(arrayBuffer);
+			if (fileExt == '4gz') {
+				u8 = pako.ungzip(toyEncrypt(u8));
+			}
+			wasmSaveBuf.set(u8);
+			alert('sav file loaded');
+			Module._emuResetCpu();
+			clearSaveBufState();
+		};
+		fileReader.readAsArrayBuffer(file);
+	}
 }
 
 function loadRomArrayBuffer(arrayBuffer) {
-  isRunning = false;
-  console.log(arrayBuffer);
-  var u8 = new Uint8Array(arrayBuffer);
-  gameID = '';
-  if (u8[0xb2] != 0x96) {
-    alert('Not a valid GBA ROM!');
-    return;
-  }
-  for (var i = 0xac; i < 0xb2; i++) {
-    console.log(u8[i]);
-    gameID += String.fromCharCode(u8[i]);
-  }
-  if (u8[0xac] == 0 || gameID.substr(0, 4) == '0000') {
-    // a homebrew! use file name as id
-    gameID = romFileName;
-  }
-  console.log('gameID', gameID);
-  Module.HEAPU8.set(u8, romBuffer);
-  var ret = Module._emuLoadROM(u8.length);
-  document.getElementById('welcome').hidden = true;
-  loadSaveGame(0, function () {
-    Module._emuResetCpu();
-    cheatCode = localStorage['cht-' + gameID];
-    if (cheatCode) {
-      $id('txt-code').value = cheatCode;
-      applyCheatCode();
-      alert('cheat code applied');
-    }
-    isRunning = true;
-    dpTryAutoBackup().then(function (ret) {
-      if (ret) {
-        showMsg('Cloud backup done.');
-      }
-    });
-    dpGameLoaded();
-  });
+	isRunning = false;
+	console.log(arrayBuffer);
+	var u8 = new Uint8Array(arrayBuffer);
+	gameID = '';
+	if (u8[0xb2] != 0x96) {
+		alert('Not a valid GBA ROM!');
+		return;
+	}
+	for (var i = 0xac; i < 0xb2; i++) {
+		console.log(u8[i]);
+		gameID += String.fromCharCode(u8[i]);
+	}
+	if (u8[0xac] == 0 || gameID.substr(0, 4) == '0000') {
+		// a homebrew! use file name as id
+		gameID = romFileName;
+	}
+	console.log('gameID', gameID);
+	Module.HEAPU8.set(u8, romBuffer);
+	var ret = Module._emuLoadROM(u8.length);
+	document.getElementById('welcome').hidden = true;
+	loadSaveGame(0, function() {
+		Module._emuResetCpu();
+		cheatCode = localStorage['cht-' + gameID];
+		if (cheatCode) {
+			$id('txt-code').value = cheatCode;
+			applyCheatCode();
+			alert('cheat code applied');
+		}
+		isRunning = true;
+		dpTryAutoBackup().then(function(ret) {
+			if (ret) {
+				showMsg('Cloud backup done.');
+			}
+		});
+		dpGameLoaded();
+	});
 }
 
 function onHomebrewListSelected() {
-  if (!isWasmReady) {
-    alert('WASM not ready!');
-    return;
-  }
-  tryInitSound();
-  var fn = document.getElementById('homebrew-list').value;
-  if (fn == '') {
-    return;
-  }
-  romFileName = fn;
-  document.getElementById('select-rom').innerText = 'Downloading...';
-  fetch('roms/' + fn + '.gba').then(function (resp) {
-    resp.arrayBuffer().then(function (ab) {
-      loadRomArrayBuffer(ab);
-    });
-  });
+	if (!isWasmReady) {
+		alert('WASM not ready!');
+		return;
+	}
+	tryInitSound();
+	var fn = document.getElementById('homebrew-list').value;
+	if (fn == '') {
+		return;
+	}
+	romFileName = fn;
+	document.getElementById('select-rom').innerText = 'Downloading...';
+	fetch('roms/' + fn + '.gba').then(function(resp) {
+		resp.arrayBuffer().then(function(ab) {
+			loadRomArrayBuffer(ab);
+		});
+	});
 }
 
 function onFileSelected() {
-  if (!isWasmReady) {
-    alert('WASM not ready!');
-    return;
-  }
-  tryInitSound();
-  var file = fileInput.files[0];
-  var fileNameLower = file.name.toLowerCase();
-  if (!fileNameLower.endsWith('.gba')) {
-    alert('Please select a .gba file.');
-    return;
-  }
-  if (file) {
-    romFileName = file.name;
-    var arrayBuffer;
-    var fileReader = new FileReader();
-    fileReader.onload = function (event) {
-      var arrayBuffer = event.target.result;
-      loadRomArrayBuffer(arrayBuffer);
-    };
-    fileReader.readAsArrayBuffer(file);
-  }
+	if (!isWasmReady) {
+		alert('WASM not ready!');
+		return;
+	}
+	tryInitSound();
+	var file = fileInput.files[0];
+	var fileNameLower = file.name.toLowerCase();
+	if (!fileNameLower.endsWith('.gba')) {
+		alert('Please select a .gba file.');
+		return;
+	}
+	if (file) {
+		romFileName = file.name;
+		var arrayBuffer;
+		var fileReader = new FileReader();
+		fileReader.onload = function(event) {
+			var arrayBuffer = event.target.result;
+			loadRomArrayBuffer(arrayBuffer);
+		};
+		fileReader.readAsArrayBuffer(file);
+	}
 }
 
 function emuRunFrame() {
-  processGamepadInput();
-  if (isRunning) {
-    frameCnt++;
-    if (frameCnt % 60 == 0) {
-      checkSaveBufState();
-    }
-    if (frameCnt % 128 == 0) {
-      if (last128FrameTime) {
-          var diff = performance.now() - last128FrameTime;
-          var frameInMs = diff / 128;
-          var fps = -1;
-          if (frameInMs > 0.001) {
-              fps = 1000 / frameInMs;
-          }
-          console.log('fps', fps);
-  
-          // Cập nhật nội dung thẻ <div> để hiển thị giá trị FPS
-          var fpsDisplay = document.getElementById("fpsDisplay");
-          fpsDisplay.textContent = fps.toFixed(1); // Làm tròn giá trị FPS và hiển thị 2 chữ số thập phân
-      }
-      last128FrameTime = performance.now();
-  }
-    lastFrameTime = performance.now();
-    Module._emuRunFrame(getVKState());
-    if (fastForwardMode) {
-      Module._emuRunFrame(getVKState());
-      Module._emuRunFrame(getVKState());
-      Module._emuRunFrame(getVKState());
-    } else if (turboMode) {
-      Module._emuRunFrame(getVKState());
-    }
-    if (config.scaleMode >= 2) {
-      gpuDraw();
-    } else {
-      drawContext.putImageData(idata, 0, 0);
-    }
-  }
+	processGamepadInput();
+	if (isRunning) {
+		frameCnt++;
+		if (frameCnt % 60 == 0) {
+			checkSaveBufState();
+		}
+		if (frameCnt % 128 == 0) {
+			if (last128FrameTime) {
+				var diff = performance.now() - last128FrameTime;
+				var frameInMs = diff / 128;
+				var fps = -1;
+				if (frameInMs > 0.001) {
+					fps = 1000 / frameInMs;
+				}
+				console.log('fps', fps);
+				var fpsDisplay = document.getElementById("fpsDisplay");
+				fpsDisplay.textContent = fps.toFixed(1);
+				const fpsdiv = document.getElementById("fps-div");
+				let isButtonClicked = false;
+				fpsdiv.addEventListener("click", function() {
+					if (isButtonClicked) {
+						fpsdiv.style.opacity = "1";
+					} else {
+						fpsdiv.style.opacity = "0";
+					}
+					isButtonClicked = !isButtonClicked;
+				});
+			}
+			last128FrameTime = performance.now();
+		}
+		lastFrameTime = performance.now();
+		Module._emuRunFrame(getVKState());
+		if (fastForwardMode) {
+			Module._emuRunFrame(getVKState());
+			Module._emuRunFrame(getVKState());
+			Module._emuRunFrame(getVKState());
+		} else if (turboMode) {
+			Module._emuRunFrame(getVKState());
+		}
+		if (config.scaleMode >= 2) {
+			gpuDraw();
+		} else {
+			drawContext.putImageData(idata, 0, 0);
+		}
+	}
 }
 
 function emuLoop() {
-  window.requestAnimationFrame(emuLoop);
-  emuRunFrame();
+	window.requestAnimationFrame(emuLoop);
+	emuRunFrame();
 }
 emuLoop();
 
 function initVK() {
-  var vks = document.getElementsByClassName('vk');
-  for (var i = 0; i < vks.length; i++) {
-    var vk = vks[i];
-    var k = vks[i].getAttribute('data-k');
-    keyState[k] = [vk, 0, 0];
-  }
+	var vks = document.getElementsByClassName('vk');
+	for (var i = 0; i < vks.length; i++) {
+		var vk = vks[i];
+		var k = vks[i].getAttribute('data-k');
+		keyState[k] = [vk, 0, 0];
+	}
 }
 initVK();
 
 function makeVKStyle(top, left, w, h, fontSize) {
-  return 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;' + 'font-size:' + fontSize + 'px;line-height:' + h + 'px;';
+	return 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;' + 'font-size:' + fontSize + 'px;line-height:' + h + 'px;';
 }
 
-function adjustVKLayout() {}
+function adjustVKLayout() {
+}
 
 function adjustSize() {
-  var gbaMaxWidth = window.innerWidth;
-  var gbaMaxHeight = window.innerHeight - 20;
-  var l = 0;
-  var w = gbaMaxWidth;
-  var h = (w / 240) * 160;
-  if (h > gbaMaxHeight) {
-    h = gbaMaxHeight;
-    w = (h / 160) * 240;
-  }
-  var scaleFator = w / 240; // | 0
-  gbaWidth = 240 * scaleFator;
-  gbaHeight = 160 * scaleFator;
-  l += (window.innerWidth - gbaWidth) / 2;
-  var sty = '';
-  if (config.scaleMode == 0) {
-    sty += 'image-rendering:pixelated;';
-  }
-  canvas.style = sty;
-  var devicePixelRatio = window.devicePixelRatio || 1;
-  if (config.scaleMode >= 2) {
-    canvas.width = gbaWidth * devicePixelRatio;
-    canvas.height = gbaHeight * devicePixelRatio;
-  } else {
-    canvas.width = 240;
-    canvas.height = 160;
-  }
-  adjustVKLayout();
+	var gbaMaxWidth = window.innerWidth;
+	var gbaMaxHeight = window.innerHeight - 20;
+	var l = 0;
+	var w = gbaMaxWidth;
+	var h = (w / 240) * 160;
+	if (h > gbaMaxHeight) {
+		h = gbaMaxHeight;
+		w = (h / 160) * 240;
+	}
+	var scaleFator = w / 240; // | 0
+	gbaWidth = 240 * scaleFator;
+	gbaHeight = 160 * scaleFator;
+	l += (window.innerWidth - gbaWidth) / 2;
+	var sty = '';
+	if (config.scaleMode == 0) {
+		sty += 'image-rendering:pixelated;';
+	}
+	canvas.style = sty;
+	var devicePixelRatio = window.devicePixelRatio || 1;
+	if (config.scaleMode >= 2) {
+		canvas.width = gbaWidth * devicePixelRatio;
+		canvas.height = gbaHeight * devicePixelRatio;
+	} else {
+		canvas.width = 240;
+		canvas.height = 160;
+	}
+	adjustVKLayout();
 }
 
 window.onresize = adjustSize;
 window.onorientationchange = adjustSize;
 
 function handleTouch(event) {
-  tryInitSound();
-  if (!isRunning) {
-    return;
-  }
-  // document.getElementById('vk-layer').hidden = false; // Bỏ dòng này để không ẩn vk-layer
-  for (var k in keyState) {
-    keyState[k][2] = 0;
-  }
-  for (var i = 0; i < event.touches.length; i++) {
-    var t = event.touches[i];
-    var dom = document.elementFromPoint(t.clientX, t.clientY);
-    if (dom) {
-      var k = dom.getAttribute('data-k');
-      if (k) {
-        keyState[k][2] = 1;
-        if (k == 'ul') {
-          keyState['up'][2] = 1;
-          keyState['left'][2] = 1;
-        } else if (k == 'ur') {
-          keyState['up'][2] = 1;
-          keyState['right'][2] = 1;
-        } else if (k == 'dl') {
-          keyState['down'][2] = 1;
-          keyState['left'][2] = 1;
-        } else if (k == 'dr') {
-          keyState['down'][2] = 1;
-          keyState['right'][2] = 1;
-        }
-      }
-    }
-  }
-  //if (keyState['menu'][2]) {
-  //    setPauseMenu(true);
-  //}
-  fastForwardMode = keyState['turbo'][2];
-  for (var k in keyState) {
-    if (keyState[k][1] != keyState[k][2]) {
-      var dom = keyState[k][0];
-      keyState[k][1] = keyState[k][2];
-      if (keyState[k][1]) {
-        dom.classList.add('vk-touched');
-      } else {
-        dom.classList.remove('vk-touched');
-      }
-    }
-  }
+	tryInitSound();
+	if (!isRunning) {
+		return;
+	}
+	// document.getElementById('vk-layer').hidden = false; // Bỏ dòng này để không ẩn vk-layer
+	for (var k in keyState) {
+		keyState[k][2] = 0;
+	}
+	for (var i = 0; i < event.touches.length; i++) {
+		var t = event.touches[i];
+		var dom = document.elementFromPoint(t.clientX, t.clientY);
+		if (dom) {
+			var k = dom.getAttribute('data-k');
+			if (k) {
+				keyState[k][2] = 1;
+				if (k == 'ul') {
+					keyState['up'][2] = 1;
+					keyState['left'][2] = 1;
+				} else if (k == 'ur') {
+					keyState['up'][2] = 1;
+					keyState['right'][2] = 1;
+				} else if (k == 'dl') {
+					keyState['down'][2] = 1;
+					keyState['left'][2] = 1;
+				} else if (k == 'dr') {
+					keyState['down'][2] = 1;
+					keyState['right'][2] = 1;
+				}
+			}
+		}
+	}
+	//if (keyState['menu'][2]) {
+	//    setPauseMenu(true);
+	//}
+	fastForwardMode = keyState['turbo'][2];
+	for (var k in keyState) {
+		if (keyState[k][1] != keyState[k][2]) {
+			var dom = keyState[k][0];
+			keyState[k][1] = keyState[k][2];
+			if (keyState[k][1]) {
+				dom.classList.add('vk-touched');
+			} else {
+				dom.classList.remove('vk-touched');
+			}
+		}
+	}
 }
 
 var currentConnectedGamepad = -1;
+
 var gamePadKeyMap = {
-  a: 1,
-  b: 0,
-  //x: 3,
-  //y: 2,
-  l: 4,
-  r: 5,
-  select: 8,
-  start: 9,
-  up: 12,
-  down: 13,
-  left: 14,
-  right: 15,
+	a: 1,
+	b: 0,
+	//x: 3,
+	//y: 2,
+	l: 4,
+	r: 5,
+	select: 8,
+	start: 9,
+	up: 12,
+	down: 13,
+	left: 14,
+	right: 15,
 };
 
 if (isSaveSupported) {
-  window.addEventListener('gamepadconnected', function (e) {
-    console.log('Gamepad connected at index %d: %s. %d buttons, %d axes.', e.gamepad.index, e.gamepad.id, e.gamepad.buttons.length, e.gamepad.axes.length);
-    showMsg('Gamepad connected.');
-    currentConnectedGamepad = e.gamepad.index;
-  });
+	window.addEventListener('gamepadconnected', function(e) {
+		console.log('Gamepad connected at index %d: %s. %d buttons, %d axes.', e.gamepad.index, e.gamepad.id, e.gamepad.buttons.length, e.gamepad.axes.length);
+		showMsg('Gamepad connected.');
+		currentConnectedGamepad = e.gamepad.index;
+	});
 }
 
 function processGamepadInput() {
-  if (currentConnectedGamepad < 0) {
-    return;
-  }
-  var gamepad = navigator.getGamepads()[currentConnectedGamepad];
-  if (!gamepad) {
-    showMsg('Gamepad disconnected.');
-    currentConnectedGamepad = -1;
-    return;
-  }
-  for (var k in keyState) {
-    keyState[k][1] = 0;
-  }
-  for (var k in gamePadKeyMap) {
-    var btn = gamePadKeyMap[k];
-    if (gamepad.buttons[btn].pressed) {
-      keyState[k][1] = 1;
-    }
-  }
-  // Axes
-  if (gamepad.axes[0] < -0.5) {
-    keyState['left'][1] = 1;
-  } else if (gamepad.axes[0] > 0.5) {
-    keyState['right'][1] = 1;
-  }
-  if (gamepad.axes[1] < -0.5) {
-    keyState['up'][1] = 1;
-  } else if (gamepad.axes[1] > 0.5) {
-    keyState['down'][1] = 1;
-  }
+	if (currentConnectedGamepad < 0) {
+		return;
+	}
+	var gamepad = navigator.getGamepads()[currentConnectedGamepad];
+	if (!gamepad) {
+		showMsg('Gamepad disconnected.');
+		currentConnectedGamepad = -1;
+		return;
+	}
+	for (var k in keyState) {
+		keyState[k][1] = 0;
+	}
+	for (var k in gamePadKeyMap) {
+		var btn = gamePadKeyMap[k];
+		if (gamepad.buttons[btn].pressed) {
+			keyState[k][1] = 1;
+		}
+	}
+	// Axes
+	if (gamepad.axes[0] < -0.5) {
+		keyState['left'][1] = 1;
+	} else if (gamepad.axes[0] > 0.5) {
+		keyState['right'][1] = 1;
+	}
+	if (gamepad.axes[1] < -0.5) {
+		keyState['up'][1] = 1;
+	} else if (gamepad.axes[1] > 0.5) {
+		keyState['down'][1] = 1;
+	}
 }
+
 ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'touchenter', 'touchleave'].forEach((val) => {
-  window.addEventListener(val, handleTouch);
+	window.addEventListener(val, handleTouch);
 });
 
 document.getElementById('vk-layer').ontouchstart = (e) => {
-  e.preventDefault();
+	e.preventDefault();
 };
 
 function getVKState() {
-  var ret = 0;
-  for (var i = 0; i < 10; i++) {
-    ret = ret | (keyState[keyList[i]][1] << i);
-  }
-  return ret;
+	var ret = 0;
+	for (var i = 0; i < 10; i++) {
+		ret = ret | (keyState[keyList[i]][1] << i);
+	}
+	return ret;
 }
 
 function convertKeyCode(keyCode) {
-  // const keyList = ["a", "b", "select", "start", "right", "left", 'up', 'down', 'r', 'l'];
-  const keymap = [88, 90, 16, 13, 39, 37, 38, 40, 87, 81]; // z x shift enter right left up down w q
-  for (var i = 0; i < 10; i++) {
-    if (keyCode == keymap[i]) {
-      return i;
-    }
-  }
-  return -1;
+	// const keyList = ["a", "b", "select", "start", "right", "left", 'up', 'down', 'r', 'l'];
+	const keymap = [88, 90, 16, 13, 39, 37, 38, 40, 87, 81]; // z x shift enter right left up down w q
+	for (var i = 0; i < 10; i++) {
+		if (keyCode == keymap[i]) {
+			return i;
+		}
+	}
+	return -1;
 }
 
-document.onkeydown = function (e) {
-  tryInitSound();
-  if (!isRunning) {
-    return;
-  }
-  e.preventDefault();
+document.onkeydown = function(e) {
+	tryInitSound();
+	if (!isRunning) {
+		return;
+	}
+	e.preventDefault();
 
-  var k = convertKeyCode(e.keyCode);
-  if (k >= 0) {
-    keyState[keyList[k]][1] = 1;
-  }
+	var k = convertKeyCode(e.keyCode);
+	if (k >= 0) {
+		keyState[keyList[k]][1] = 1;
+	}
 };
 
-document.onkeyup = function (e) {
-  if (!isRunning) {
-    return;
-  }
-  e.preventDefault();
-  var k = convertKeyCode(e.keyCode);
-  if (k >= 0) {
-    keyState[keyList[k]][1] = 0;
-  }
-  //    if (e.keyCode == 27) {
-  //        setPauseMenu(true)
-  //    }
+document.onkeyup = function(e) {
+	if (!isRunning) {
+		return;
+	}
+	e.preventDefault();
+	var k = convertKeyCode(e.keyCode);
+	if (k >= 0) {
+		keyState[keyList[k]][1] = 0;
+	}
+	//    if (e.keyCode == 27) {
+	//        setPauseMenu(true)
+	//    }
 };
 
 function checkSaveBufState() {
-  if (!isRunning) {
-    return;
-  }
-  var state = Module._emuUpdateSavChangeFlag();
-  //console.log(state)
-  if (lastCheckedSaveState == 1 && state == 0 && isSaveSupported) {
-    showMsg('Auto saving, please wait...');
-    saveSaveGame(0, function () {
-      console.log('save done');
-    });
-  }
-  lastCheckedSaveState = state;
+	if (!isRunning) {
+		return;
+	}
+	var state = Module._emuUpdateSavChangeFlag();
+	//console.log(state)
+	if (lastCheckedSaveState == 1 && state == 0 && isSaveSupported) {
+		showMsg('Auto saving, please wait...');
+		saveSaveGame(0, function() {
+			console.log('save done');
+		});
+	}
+	lastCheckedSaveState = state;
 }
 
 function clearSaveBufState() {
-  lastCheckedSaveState = 0;
-  Module._emuUpdateSavChangeFlag();
+	lastCheckedSaveState = 0;
+	Module._emuUpdateSavChangeFlag();
 }
 
 function showMsg(msg) {
-  document.getElementById('msg-text').innerText = msg;
-  document.getElementById('msg-layer').hidden = false;
-  setTimeout(function () {
-    document.getElementById('msg-layer').hidden = true;
-  }, 1000);
+	document.getElementById('msg-text').innerText = msg;
+	document.getElementById('msg-layer').hidden = false;
+	setTimeout(function() {
+		document.getElementById('msg-layer').hidden = true;
+	}, 1000);
 }
 
 //function setPauseMenu(t) {
@@ -652,138 +661,138 @@ function showMsg(msg) {
 //}
 
 function chtSaveBtn() {
-  var inputText = $id('txt-code').value.trim();
-  // Save cheat code
-  var cheatCode = filterCheatCode(inputText);
-  localStorage['cht-' + gameID] = cheatCode;
-  $id('txt-code').value = cheatCode;
-  alert('Cheat code saved.\nRestart the app to apply.');
+	var inputText = $id('txt-code').value.trim();
+	// Save cheat code
+	var cheatCode = filterCheatCode(inputText);
+	localStorage['cht-' + gameID] = cheatCode;
+	$id('txt-code').value = cheatCode;
+	alert('Cheat code saved.\nRestart the app to apply.');
 }
 
 localforage
-  .ready()
-  .then(function () {})
-  .catch(function (err) {
-    alert('Save storage not supported: ' + err);
-  });
+	.ready()
+	.then(function() {})
+	.catch(function(err) {
+		alert('Save storage not supported: ' + err);
+	});
 
 function applyCheatCode() {
-  var ptrGBuf = Module._emuGetSymbol(4);
-  var gbuf = Module.HEAPU8.subarray(ptrGBuf, ptrGBuf + 0x1000);
-  var lines = cheatCode.split('\n');
-  var textEnc = new TextEncoder();
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim();
-    if (line.length == 0) {
-      continue;
-    }
-    if (line.length == 12) {
-      line = line.substr(0, 8) + ' ' + line.substr(8, 4);
-    }
-    var lineBuf = textEnc.encode(line);
-    console.log(lineBuf.length);
-    gbuf.set(lineBuf);
-    gbuf[lineBuf.length] = 0;
-    console.log(Module._emuAddCheat(ptrGBuf));
-  }
+	var ptrGBuf = Module._emuGetSymbol(4);
+	var gbuf = Module.HEAPU8.subarray(ptrGBuf, ptrGBuf + 0x1000);
+	var lines = cheatCode.split('\n');
+	var textEnc = new TextEncoder();
+	for (var i = 0; i < lines.length; i++) {
+		var line = lines[i].trim();
+		if (line.length == 0) {
+			continue;
+		}
+		if (line.length == 12) {
+			line = line.substr(0, 8) + ' ' + line.substr(8, 4);
+		}
+		var lineBuf = textEnc.encode(line);
+		console.log(lineBuf.length);
+		gbuf.set(lineBuf);
+		gbuf[lineBuf.length] = 0;
+		console.log(Module._emuAddCheat(ptrGBuf));
+	}
 }
 
 $id('txt-code').placeholder = 'Cheat code.';
 
 function filterCheatCode(code) {
-  var lines = code.toUpperCase().split('\n');
-  var ret = '';
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim().replace(/ /g, '');
-    if (line.length != 16 && line.length != 12) {
-      continue;
-    }
-    // Check if it's a hex string
-    if (line.match(/[^0-9A-F]/)) {
-      continue;
-    }
-    ret += line + '\n';
-  }
-  return ret.trim();
+	var lines = code.toUpperCase().split('\n');
+	var ret = '';
+	for (var i = 0; i < lines.length; i++) {
+		var line = lines[i].trim().replace(/ /g, '');
+		if (line.length != 16 && line.length != 12) {
+			continue;
+		}
+		// Check if it's a hex string
+		if (line.match(/[^0-9A-F]/)) {
+			continue;
+		}
+		ret += line + '\n';
+	}
+	return ret.trim();
 }
 
 function chtWriteBtn() {
-  var addr = parseInt(document.getElementById('cht-addr').value);
-  if (!addr) {
-    alert('Invalid addr');
-    return;
-  }
-  Module._writeU32(addr, parseInt(document.getElementById('cht-value').value));
+	var addr = parseInt(document.getElementById('cht-addr').value);
+	if (!addr) {
+		alert('Invalid addr');
+		return;
+	}
+	Module._writeU32(addr, parseInt(document.getElementById('cht-value').value));
 }
 
 function chtReadBtn() {
-  var addr = parseInt(document.getElementById('cht-addr').value);
-  if (!addr) {
-    alert('Invalid addr');
-    return;
-  }
-  var val = Module._readU32(addr) >>> 0;
-  document.getElementById('cht-value').value = '0x' + val.toString(16);
+	var addr = parseInt(document.getElementById('cht-addr').value);
+	if (!addr) {
+		alert('Invalid addr');
+		return;
+	}
+	var val = Module._readU32(addr) >>> 0;
+	document.getElementById('cht-value').value = '0x' + val.toString(16);
 }
 
-window.addEventListener('gamepadconnected', function (e) {
-  console.log('Gamepad connected');
+window.addEventListener('gamepadconnected', function(e) {
+	console.log('Gamepad connected');
 });
 
-$id('cfg-turbo').onchange = function () {
-  turboMode = !!this.checked;
+$id('cfg-turbo').onchange = function() {
+	turboMode = !!this.checked;
 };
 
-$id('cfg-mute').onchange = function () {
-  muteMode = !!this.checked;
+$id('cfg-mute').onchange = function() {
+	muteMode = !!this.checked;
 };
 
 var lang = navigator.language || 'unknown';
 
 if (lang == 'ja') {
-  // Hide cheat ui
-  $id('div-cht').hidden = true;
+	// Hide cheat ui
+	$id('div-cht').hidden = true;
 }
 
 if (location.origin == 'https://kabu.io.vn') {
-  if (isSaveSupported) {
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then(function (reg) {
-          // registration worked
-          console.log('Registration succeeded. Scope is ' + reg.scope);
-        })
-        .catch(function (error) {
-          // registration failed
-          console.log('Registration failed with ' + error);
-        });
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        console.log('sw msg', event);
-        if (event.data.msg) {
-          $id('title').innerText = event.data.msg;
-        }
-      });
-    }
-  }
-  (function () {
-    var cnt = 0;
-    // Prompt to install PWA
-    window.onbeforeinstallprompt = function (e) {
-      cnt += 1;
-      if (cnt > 2) {
-        return;
-      }
-      console.log('Before install prompt', e);
-      e.preventDefault();
-      var deferredPrompt = e;
-      window.onclick = function (e) {
-        deferredPrompt.prompt();
-        window.onclick = null;
-      };
-    };
-  })();
+	if (isSaveSupported) {
+		// Register Service Worker
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker
+				.register('/sw.js')
+				.then(function(reg) {
+					// registration worked
+					console.log('Registration succeeded. Scope is ' + reg.scope);
+				})
+				.catch(function(error) {
+					// registration failed
+					console.log('Registration failed with ' + error);
+				});
+			navigator.serviceWorker.addEventListener('message', (event) => {
+				console.log('sw msg', event);
+				if (event.data.msg) {
+					$id('title').innerText = event.data.msg;
+				}
+			});
+		}
+	}
+	(function() {
+		var cnt = 0;
+		// Prompt to install PWA
+		window.onbeforeinstallprompt = function(e) {
+			cnt += 1;
+			if (cnt > 2) {
+				return;
+			}
+			console.log('Before install prompt', e);
+			e.preventDefault();
+			var deferredPrompt = e;
+			window.onclick = function(e) {
+				deferredPrompt.prompt();
+				window.onclick = null;
+			};
+		};
+	})();
 }
 
 /** @type {WebGLRenderingContext} */
@@ -792,7 +801,6 @@ var vertShaderSource = `
     precision mediump float;
     attribute vec2 a_position; //(0,0)-(1,1)
     varying vec2 v_texCoord; //(0,0)-(1,1)
-    
     void main() {
         // Convert a_position to gl_Position
         gl_Position = vec4(a_position.x * 2.0 - 1.0, 1.0 - a_position.y * 2.0, 0, 1);
@@ -800,9 +808,6 @@ var vertShaderSource = `
     }
 `;
 var fragShaderSource = `
-
-
-    
 #ifdef GL_ES
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
@@ -813,7 +818,6 @@ precision mediump float;
 #else
 #define COMPAT_PRECISION
 #endif
-
 #if __VERSION__ >= 130
 #define COMPAT_VARYING in
 #define COMPAT_TEXTURE texture
@@ -823,19 +827,15 @@ out COMPAT_PRECISION vec4 FragColor;
 #define FragColor gl_FragColor
 #define COMPAT_TEXTURE texture2D
 #endif
-
 precision mediump float;
 uniform sampler2D u_image; 
 varying vec2 v_texCoord; 
 uniform vec2 u_outResolution;
 uniform vec2 u_inResolution;
-
 #define Source u_image
 #define vTexCoord v_texCoord
-
 #define SourceSize vec4(u_inResolution, 1.0 / u_inResolution) 
 #define OutSize vec4(u_outResolution, 1.0 / u_outResolution)
-
 #define BLEND_NONE 0
 #define BLEND_NORMAL 1
 #define BLEND_DOMINANT 2
@@ -843,7 +843,6 @@ uniform vec2 u_inResolution;
 #define EQUAL_COLOR_TOLERANCE 30.0/255.0
 #define STEEP_DIRECTION_THRESHOLD 2.2
 #define DOMINANT_DIRECTION_THRESHOLD 3.6
-
 float DistYCbCr(vec3 pixA, vec3 pixB)
 {
   const vec3 w = vec3(0.2627, 0.6780, 0.0593);
@@ -853,15 +852,12 @@ float DistYCbCr(vec3 pixA, vec3 pixB)
   float Y = dot(diff.rgb, w);
   float Cb = scaleB * (diff.b - Y);
   float Cr = scaleR * (diff.r - Y);
-
   return sqrt(((LUMINANCE_WEIGHT * Y) * (LUMINANCE_WEIGHT * Y)) + (Cb * Cb) + (Cr * Cr));
 }
-
 bool IsPixEqual(const vec3 pixA, const vec3 pixB)
 {
   return (DistYCbCr(pixA, pixB) < EQUAL_COLOR_TOLERANCE);
 }
-
 float get_left_ratio(vec2 center, vec2 origin, vec2 direction, vec2 scale)
 {
   vec2 P0 = center - origin;
@@ -874,12 +870,9 @@ float get_left_ratio(vec2 center, vec2 origin, vec2 direction, vec2 scale)
 //  return step(0, v);
   return smoothstep(-sqrt(2.0)/2.0, sqrt(2.0)/2.0, v);
 }
-
 #define eq(a,b)  (a == b)
 #define neq(a,b) (a != b)
-
 #define P(x,y) COMPAT_TEXTURE(Source, coord + SourceSize.zw * vec2(x, y)).rgb
-
 void main()
 {
   //---------------------------------------
@@ -888,11 +881,9 @@ void main()
   //                       x|D|E|F|x
   //                       x|G|H|I|x
   //                       -|x|x|x|-
-
   vec2 scale = OutSize.xy * SourceSize.zw;
   vec2 pos = fract(vTexCoord * SourceSize.xy) - vec2(0.5, 0.5);
   vec2 coord = vTexCoord - pos * SourceSize.zw;
-
   vec3 A = P(-1.,-1.);
   vec3 B = P( 0.,-1.);
   vec3 C = P( 1.,-1.);
@@ -902,11 +893,9 @@ void main()
   vec3 G = P(-1., 1.);
   vec3 H = P( 0., 1.);
   vec3 I = P( 1., 1.);
-
   // blendResult Mapping: x|y|
   //                      w|z|
   ivec4 blendResult = ivec4(BLEND_NONE,BLEND_NONE,BLEND_NONE,BLEND_NONE);
-
   // Preprocess corners
   // Pixel Tap Mapping: -|-|-|-|-
   //                    -|-|B|C|-
@@ -920,8 +909,6 @@ void main()
     bool dominantGradient = (DOMINANT_DIRECTION_THRESHOLD * dist_H_F) < dist_E_I;
     blendResult.z = ((dist_H_F < dist_E_I) && neq(E,F) && neq(E,H)) ? ((dominantGradient) ? BLEND_DOMINANT : BLEND_NORMAL) : BLEND_NONE;
   }
-
-
   // Pixel Tap Mapping: -|-|-|-|-
   //                    -|A|B|-|-
   //                    x|D|E|F|-
@@ -934,7 +921,6 @@ void main()
     bool dominantGradient = (DOMINANT_DIRECTION_THRESHOLD * dist_D_H) < dist_G_E;
     blendResult.w = ((dist_G_E > dist_D_H) && neq(E,D) && neq(E,H)) ? ((dominantGradient) ? BLEND_DOMINANT : BLEND_NORMAL) : BLEND_NONE;
   }
-
   // Pixel Tap Mapping: -|-|x|x|-
   //                    -|A|B|C|x
   //                    -|D|E|F|x
@@ -947,7 +933,6 @@ void main()
     bool dominantGradient = (DOMINANT_DIRECTION_THRESHOLD * dist_B_F) < dist_E_C;
     blendResult.y = ((dist_E_C > dist_B_F) && neq(E,B) && neq(E,F)) ? ((dominantGradient) ? BLEND_DOMINANT : BLEND_NORMAL) : BLEND_NONE;
   }
-
   // Pixel Tap Mapping: -|x|x|-|-
   //                    x|A|B|C|-
   //                    x|D|E|F|-
@@ -960,9 +945,7 @@ void main()
     bool dominantGradient = (DOMINANT_DIRECTION_THRESHOLD * dist_D_B) < dist_A_E;
     blendResult.x = ((dist_D_B < dist_A_E) && neq(E,D) && neq(E,B)) ? ((dominantGradient) ? BLEND_DOMINANT : BLEND_NORMAL) : BLEND_NONE;
   }
-
   vec3 res = E;
-
   // Pixel Tap Mapping: -|-|-|-|-
   //                    -|-|B|C|-
   //                    -|D|E|F|x
@@ -986,11 +969,9 @@ void main()
       direction.x += haveShallowLine? 1.0: 0.0;
       direction.y -= haveSteepLine? 1.0: 0.0;
     }
-
     vec3 blendPix = mix(H,F, step(DistYCbCr(E, F), DistYCbCr(E, H)));
     res = mix(res, blendPix, get_left_ratio(pos, origin, direction, scale));
   }
-
   // Pixel Tap Mapping: -|-|-|-|-
   //                    -|A|B|-|-
   //                    x|D|E|F|-
@@ -1020,7 +1001,6 @@ void main()
     vec3 blendPix = mix(H,D, step(DistYCbCr(E, D), DistYCbCr(E, H)));
     res = mix(res, blendPix, get_left_ratio(pos, origin, direction, scale));
   }
-
   // Pixel Tap Mapping: -|-|x|x|-
   //                    -|A|B|C|x
   //                    -|D|E|F|x
@@ -1033,10 +1013,8 @@ void main()
     bool doLineBlend = (blendResult.y == BLEND_DOMINANT ||
                 !((blendResult.x != BLEND_NONE && !IsPixEqual(E, I)) || (blendResult.z != BLEND_NONE && !IsPixEqual(E, A)) ||
                   (IsPixEqual(I, F) && IsPixEqual(F, C) && IsPixEqual(C, B) && IsPixEqual(B, A) && !IsPixEqual(E, C))));
-
     vec2 origin = vec2(1.0 / sqrt(2.0), 0.0);
     vec2 direction = vec2(-1.0, -1.0);
-
     if(doLineBlend)
     {
       bool haveShallowLine = (STEEP_DIRECTION_THRESHOLD * dist_B_I <= dist_F_A) && neq(E,I) && neq(H,I);
@@ -1045,11 +1023,9 @@ void main()
       direction.y -= haveShallowLine? 1.0: 0.0;
       direction.x -= haveSteepLine? 1.0: 0.0;
     }
-
     vec3 blendPix = mix(F,B, step(DistYCbCr(E, B), DistYCbCr(E, F)));
     res = mix(res, blendPix, get_left_ratio(pos, origin, direction, scale));
   }
-
   // Pixel Tap Mapping: -|x|x|-|-
   //                    x|A|B|C|-
   //                    x|D|E|F|-
@@ -1062,7 +1038,6 @@ void main()
     bool doLineBlend = (blendResult.x == BLEND_DOMINANT ||
                 !((blendResult.w != BLEND_NONE && !IsPixEqual(E, C)) || (blendResult.y != BLEND_NONE && !IsPixEqual(E, G)) ||
                   (IsPixEqual(C, B) && IsPixEqual(B, A) && IsPixEqual(A, D) && IsPixEqual(D, G) && !IsPixEqual(E, A))));
-
     vec2 origin = vec2(0.0, -1.0 / sqrt(2.0));
     vec2 direction = vec2(-1.0, 1.0);
     if(doLineBlend)
@@ -1073,11 +1048,9 @@ void main()
       direction.x -= haveShallowLine? 1.0: 0.0;
       direction.y += haveSteepLine? 1.0: 0.0;
     }
-
     vec3 blendPix = mix(D,B, step(DistYCbCr(E, B), DistYCbCr(E, D)));
     res = mix(res, blendPix, get_left_ratio(pos, origin, direction, scale));
   }
-
  	FragColor = vec4(res, 1.0);
 } `;
 
@@ -1086,66 +1059,66 @@ var program;
 var outResolutionUniformLocation;
 
 function gpuDraw() {
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, idata);
-  gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.uniform2f(outResolutionUniformLocation, canvas.width, canvas.height);
-  gl.drawArrays(gl.TRIANGLES, 0, 6);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, idata);
+	gl.viewport(0, 0, canvas.width, canvas.height);
+	gl.uniform2f(outResolutionUniformLocation, canvas.width, canvas.height);
+	gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 
 function gpuInit() {
-  gl = canvas.getContext('webgl');
-  if (!gl) {
-    alert('Unable to initialize WebGL. Your browser or machine may not support it.');
-    return;
-  }
-  gl.viewport(0, 0, canvas.width, canvas.height);
-  // Create shader.
-  program = gl.createProgram();
-  var vertShader = gl.createShader(gl.VERTEX_SHADER);
-  var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
-  gl.shaderSource(vertShader, vertShaderSource);
-  gl.shaderSource(fragShader, fragShaderSource);
-  gl.compileShader(vertShader);
-  gl.compileShader(fragShader);
-  // Check if compilation succeeded.
-  if (!gl.getShaderParameter(vertShader, gl.COMPILE_STATUS)) {
-    alert('Error in vertex shader: ' + gl.getShaderInfoLog(vertShader));
-    return;
-  }
-  if (!gl.getShaderParameter(fragShader, gl.COMPILE_STATUS)) {
-    alert('Error in fragment shader: ' + gl.getShaderInfoLog(fragShader));
-    return;
-  }
-  gl.attachShader(program, vertShader);
-  gl.attachShader(program, fragShader);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    alert('Error in program: ' + gl.getProgramInfoLog(program));
-    return;
-  }
-  gl.useProgram(program);
-  // Create texture.
-  var texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl = canvas.getContext('webgl');
+	if (!gl) {
+		alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+		return;
+	}
+	gl.viewport(0, 0, canvas.width, canvas.height);
+	// Create shader.
+	program = gl.createProgram();
+	var vertShader = gl.createShader(gl.VERTEX_SHADER);
+	var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+	gl.shaderSource(vertShader, vertShaderSource);
+	gl.shaderSource(fragShader, fragShaderSource);
+	gl.compileShader(vertShader);
+	gl.compileShader(fragShader);
+	// Check if compilation succeeded.
+	if (!gl.getShaderParameter(vertShader, gl.COMPILE_STATUS)) {
+		alert('Error in vertex shader: ' + gl.getShaderInfoLog(vertShader));
+		return;
+	}
+	if (!gl.getShaderParameter(fragShader, gl.COMPILE_STATUS)) {
+		alert('Error in fragment shader: ' + gl.getShaderInfoLog(fragShader));
+		return;
+	}
+	gl.attachShader(program, vertShader);
+	gl.attachShader(program, fragShader);
+	gl.linkProgram(program);
+	if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+		alert('Error in program: ' + gl.getProgramInfoLog(program));
+		return;
+	}
+	gl.useProgram(program);
+	// Create texture.
+	var texture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, texture);
 
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  // Use nearest neighbor interpolation.
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-  // Create vertex buffer, a rectangle to (0,0)-(width,height).
-  var vertices = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
-  var vertexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-  // Create attribute.
-  var positionAttribLocation = gl.getAttribLocation(program, 'a_position');
-  gl.enableVertexAttribArray(positionAttribLocation);
-  gl.vertexAttribPointer(positionAttribLocation, 2, gl.FLOAT, false, 0, 0);
-  // Set uniform.
-  outResolutionUniformLocation = gl.getUniformLocation(program, 'u_outResolution');
-  var inResolutionUniformLocation = gl.getUniformLocation(program, 'u_inResolution');
-  gl.uniform2f(inResolutionUniformLocation, 240, 160);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+	// Use nearest neighbor interpolation.
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	// Create vertex buffer, a rectangle to (0,0)-(width,height).
+	var vertices = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
+	var vertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+	// Create attribute.
+	var positionAttribLocation = gl.getAttribLocation(program, 'a_position');
+	gl.enableVertexAttribArray(positionAttribLocation);
+	gl.vertexAttribPointer(positionAttribLocation, 2, gl.FLOAT, false, 0, 0);
+	// Set uniform.
+	outResolutionUniformLocation = gl.getUniformLocation(program, 'u_outResolution');
+	var inResolutionUniformLocation = gl.getUniformLocation(program, 'u_inResolution');
+	gl.uniform2f(inResolutionUniformLocation, 240, 160);
 }
 initVideo();
 
@@ -1153,425 +1126,413 @@ var DP_BASE_PATH = "/vbasav"
 var DP_EXT = ".4gz"
 
 function dpGetCurrentDayInt() {
-    // yyyymmdd
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var retInt = year * 10000 + month * 100 + day;
-    return retInt;
+	// yyyymmdd
+	var date = new Date();
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var day = date.getDate();
+	var retInt = year * 10000 + month * 100 + day;
+	return retInt;
 }
 
-
-
 function dpIsConnected() {
-    return localStorage['d-token'] ? true : false
+	return localStorage['d-token'] ? true : false
 }
 
 async function dpIDHash(gameID) {
-    if (!localStorage['d-id']) {
-        throw "Not connected"
-    }
-    // Using SHA256
-    var inputData = localStorage['d-id'] + ',' + gameID
-    var hash = await window.crypto.subtle.digest('SHA-256', new TextEncoder("utf-8").encode(inputData))
-    var digestHex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('')
-    return digestHex.substring(0, 8)
+	if (!localStorage['d-id']) {
+		throw "Not connected"
+	}
+	// Using SHA256
+	var inputData = localStorage['d-id'] + ',' + gameID
+	var hash = await window.crypto.subtle.digest('SHA-256', new TextEncoder("utf-8").encode(inputData))
+	var digestHex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('')
+	return digestHex.substring(0, 8)
 }
-
 
 async function dpGameLoaded() {
-    if (dpIsConnected()) {
-        var hash = await dpIDHash(gameID)
-        $id('span-cloud-id').innerText = hash
-    }
+	if (dpIsConnected()) {
+		var hash = await dpIDHash(gameID)
+		$id('span-cloud-id').innerText = hash
+	}
 }
-
 
 async function dpConnect() {
-    var redirectUri = encodeURIComponent(location.origin)
-    var url = "https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline"
-    url += "&redirect_uri=" + redirectUri
-    location.href = url
+	var redirectUri = encodeURIComponent(location.origin)
+	var url = "https://www.dropbox.com/oauth2/authorize?client_id=z1dixvhg5spiz9k&response_type=code&token_access_type=offline"
+	url += "&redirect_uri=" + redirectUri
+	location.href = url
 }
 
-
 async function dpCheckUser() {
-    var resp = await fetch('https://api.dropboxapi.com/2/check/user', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage['d-token'],
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ query: "foo" })
-    })
-    var obj = await resp.text()
-    console.log(obj)
+	var resp = await fetch('https://api.dropboxapi.com/2/check/user', {
+		method: 'POST',
+		headers: {
+			'Authorization': 'Bearer ' + localStorage['d-token'],
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			query: "foo"
+		})
+	})
+	var obj = await resp.text()
+	console.log(obj)
 }
 
 async function dpUploadFile(path, u8Arr, mode) {
-    mode = mode || "overwrite"
-    var uploadArg = JSON.stringify({
-        "autorename": true,
-        "mode": mode,
-        "mute": true,
-        "strict_conflict": false,
-        "path": path,
-    })
-    var blob = new Blob([u8Arr], { type: "application/octet-stream" })
-    for (var retry = 0; retry < 2; retry++) {
-        var resp = await fetch('https://content.dropboxapi.com/2/files/upload', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage['d-token'],
-                'Dropbox-API-Arg': uploadArg,
-                'Content-Type': 'application/octet-stream'
-            },
-            body: blob
-        })
-        console.log("status: ", resp.status)
-        // Check http status.
-        if (resp.status != 200) {
-            if (resp.status == 401) {
-                var ret = await dpRefreshToken()
-                if (!ret) {
-                    throw "Unable to refresh token"
-                }
-                continue
-            }
-            else {
-                throw "Upload failed, unknown http status: " + resp.status
-            }
-        } else {
-            var obj = await resp.json()
-            console.log(obj)
-            return obj
-        }
-    }
-    return false
+	mode = mode || "overwrite"
+	var uploadArg = JSON.stringify({
+		"autorename": true,
+		"mode": mode,
+		"mute": true,
+		"strict_conflict": false,
+		"path": path,
+	})
+	var blob = new Blob([u8Arr], {
+		type: "application/octet-stream"
+	})
+	for (var retry = 0; retry < 2; retry++) {
+		var resp = await fetch('https://content.dropboxapi.com/2/files/upload', {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Bearer ' + localStorage['d-token'],
+				'Dropbox-API-Arg': uploadArg,
+				'Content-Type': 'application/octet-stream'
+			},
+			body: blob
+		})
+		console.log("status: ", resp.status)
+		// Check http status.
+		if (resp.status != 200) {
+			if (resp.status == 401) {
+				var ret = await dpRefreshToken()
+				if (!ret) {
+					throw "Unable to refresh token"
+				}
+				continue
+			} else {
+				throw "Upload failed, unknown http status: " + resp.status
+			}
+		} else {
+			var obj = await resp.json()
+			console.log(obj)
+			return obj
+		}
+	}
+	return false
 }
 
 async function dpDownloadFile(path) {
-    var downloadArg = JSON.stringify({
-        "path": path,
-    })
-    for (var retry = 0; retry < 2; retry++) {
-        var resp = await fetch('https://content.dropboxapi.com/2/files/download', {
-            method: 'POST',
-            headers: {
-                "Authorization": "Bearer " + localStorage['d-token'],
-                "Dropbox-API-Arg": downloadArg,
-            }
-        })
-        console.log("status: ", resp.status)
-        if (resp.status != 200) {
-            if (resp.status == 401) {
-                var ret = await dpRefreshToken()
-                if (!ret) {
-                    throw "Unable to refresh token"
-                }
-                continue
-            }
-            else {
-                throw "Download failed, unknown http status: " + resp.status
-            }
-        }
-        // Get result from header
-        var obj = JSON.parse(resp.headers.get("dropbox-api-result"))
-        console.log(obj)
-        // Get result from body
-        var u8Arr = await resp.arrayBuffer()
-        return new Uint8Array(u8Arr)
-    }
-    return false
+	var downloadArg = JSON.stringify({
+		"path": path,
+	})
+	for (var retry = 0; retry < 2; retry++) {
+		var resp = await fetch('https://content.dropboxapi.com/2/files/download', {
+			method: 'POST',
+			headers: {
+				"Authorization": "Bearer " + localStorage['d-token'],
+				"Dropbox-API-Arg": downloadArg,
+			}
+		})
+		console.log("status: ", resp.status)
+		if (resp.status != 200) {
+			if (resp.status == 401) {
+				var ret = await dpRefreshToken()
+				if (!ret) {
+					throw "Unable to refresh token"
+				}
+				continue
+			} else {
+				throw "Download failed, unknown http status: " + resp.status
+			}
+		}
+		// Get result from header
+		var obj = JSON.parse(resp.headers.get("dropbox-api-result"))
+		console.log(obj)
+		// Get result from body
+		var u8Arr = await resp.arrayBuffer()
+		return new Uint8Array(u8Arr)
+	}
+	return false
 }
 
 async function dpOnLoad() {
-    if (location.search.startsWith("?code=")) {
-        var code = location.search.slice(6);        
-        try {
-            const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `code=${code}&grant_type=authorization_code&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl&redirect_uri=https://kabu.io.vn`
-            });
+	if (location.search.startsWith("?code=")) {
+		var code = location.search.slice(6);
+		try {
+			const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `code=${code}&grant_type=authorization_code&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl&redirect_uri=https://kabu.io.vn`
+			});
 
-            const data = await response.json();
-            if (!data.error) {
-                localStorage['d-token'] = data.access_token;
-                localStorage['d-token-r'] = data.refresh_token;
-                localStorage['d-id'] = data.account_id;
-                alert("Dropbox connected.");
-                location.href = location.origin;
-            } else {
-                alert(data.error_description || "Failed to connect to Dropbox.");
-            }
-        } catch (error) {
-            console.error("Error while exchanging code for access token:", error);
-        }
-    }
+			const data = await response.json();
+			if (!data.error) {
+				localStorage['d-token'] = data.access_token;
+				localStorage['d-token-r'] = data.refresh_token;
+				localStorage['d-id'] = data.account_id;
+				alert("Dropbox connected.");
+				location.href = location.origin;
+			} else {
+				alert(data.error_description || "Failed to connect to Dropbox.");
+			}
+		} catch (error) {
+			console.error("Error while exchanging code for access token:", error);
+		}
+	}
 
-    document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Cloud" : "Cloud") + " ";
+	document.getElementById('btn-dp-connect').innerText = (dpIsConnected() ? "Cloud" : "Cloud") + " ";
 }
 
 async function dpRefreshToken() {
-    console.log("Refreshing token...");
-    if (!localStorage['d-token-r']) {
-        throw "No refresh token";
-    }
+	console.log("Refreshing token...");
+	if (!localStorage['d-token-r']) {
+		throw "No refresh token";
+	}
 
-    try {
-        const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl`
-          });
+	try {
+		const response = await fetch('https://api.dropboxapi.com/oauth2/token', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl`
+		});
 
-        const data = await response.json();
-        if (!data.error) {
-            localStorage['d-token'] = data.access_token;
-            return true;
-        } else {
-            alert(data.error_description || "Failed to refresh Dropbox token.");
-        }
-    } catch (error) {
-        console.error("Error while refreshing token:", error);
-    }
-    
-    return false;
+		const data = await response.json();
+		if (!data.error) {
+			localStorage['d-token'] = data.access_token;
+			return true;
+		} else {
+			alert(data.error_description || "Failed to refresh Dropbox token.");
+		}
+	} catch (error) {
+		console.error("Error while refreshing token:", error);
+	}
+
+	return false;
 }
 
-
 async function dpGetPath(gameID, tag) {
-    var hash = await dpIDHash(gameID)
-    var path = DP_BASE_PATH + "/" + hash + "/" + tag + DP_EXT
-    return path
+	var hash = await dpIDHash(gameID)
+	var path = DP_BASE_PATH + "/" + hash + "/" + tag + DP_EXT
+	return path
 }
 
 async function dpTryUploadCloudSave(gameID, tag, u8Arr, mode) {
-    if (!dpIsConnected()) {
-        return false
-    }
-    var path = await dpGetPath(gameID, tag)
-  
-    try {
-        var resp = await dpUploadFile(path, u8Arr, mode)
-        return resp
-    } catch (e) {
-        alert("Failed to upload cloud save: " + e)
-        return false
-    }
-    return false
+	if (!dpIsConnected()) {
+		return false
+	}
+	var path = await dpGetPath(gameID, tag)
+
+	try {
+		var resp = await dpUploadFile(path, u8Arr, mode)
+		return resp
+	} catch (e) {
+		alert("Failed to upload cloud save: " + e)
+		return false
+	}
+	return false
 }
-
-
-
 
 async function dpTryAutoBackup() {
-    if (!dpIsConnected()) {
-        return false
-    }
-    var sav = await emuBackupCloudSav()
-    if (sav === false) {
-        return false
-    }
-    var nowDay = '' + dpGetCurrentDayInt()
-    if (localStorage['d-last-' + gameID] == nowDay) {
-        return false
-    }
-    var ret = await dpTryUploadCloudSave(gameID, "auto-" + dpGetCurrentDayInt(), sav , "add")
-    if (ret) {
-        localStorage['d-last-' + gameID] = nowDay
-        return true
-    }
-    return false
+	if (!dpIsConnected()) {
+		return false
+	}
+	var sav = await emuBackupCloudSav()
+	if (sav === false) {
+		return false
+	}
+	var nowDay = '' + dpGetCurrentDayInt()
+	if (localStorage['d-last-' + gameID] == nowDay) {
+		return false
+	}
+	var ret = await dpTryUploadCloudSave(gameID, "auto-" + dpGetCurrentDayInt(), sav, "add")
+	if (ret) {
+		localStorage['d-last-' + gameID] = nowDay
+		return true
+	}
+	return false
 }
 
-
-
-
 function dpOnConnectButtonClicked() {
-    if (dpIsConnected()) {
-        if (confirm("Are you sure to disconnect from Dropbox?")) {
-            localStorage['d-token'] = ""
-            localStorage['d-token-r'] = ""
-            localStorage['d-id'] = ""
-            alert("Dropbox disconnected.")
-            location.href = location.origin
-        }
-    } else {
-        dpConnect()
-    }
+	if (dpIsConnected()) {
+		if (confirm("Are you sure to disconnect from Dropbox?")) {
+			localStorage['d-token'] = ""
+			localStorage['d-token-r'] = ""
+			localStorage['d-id'] = ""
+			alert("Dropbox disconnected.")
+			location.href = location.origin
+		}
+	} else {
+		dpConnect()
+	}
 }
 
 async function dpManualBtn(isUpload) {
 
-    if (!dpIsConnected()) {
-        alert("Please connect to Dropbox first.")
-        return
-    }
-    if (!gameID)  {
-        alert("Please load a game first.")
-        return
-    }
-    var choice = window.confirm("Are you sure to " + (isUpload ? "↑ upload" : "↓ download") + " cloud save?")
-    if (!choice) {
-        return
-    }
-    try {
-        if (isUpload) {
-            var sav = await emuBackupCloudSav()
-            if (sav === false) {
-                alert("No save data to upload.")
-                return
-            }
-            var ret = await dpTryUploadCloudSave(gameID, "manual", sav , "overwrite")
-            if (ret) {
-                alert("Uploaded successfully.")
-            } else {
-                alert("Failed to upload.")
-            }
-        } else {
-            var path = await dpGetPath(gameID, "manual")
-            var u8Arr = await dpDownloadFile(path)
-            if (!u8Arr) {
-                alert("Failed to download.")
-                return
-            }
-            if (u8Arr.length < 1) {
-                alert("No cloud save found.")
-                return
-            }
-            if (await emuRestoreCloudSav(u8Arr)) {
-                alert("Downloaded successfully.")
-                setTimeout(function () {
-                    location.reload()
-                }, 1000)
-            } else {
-                alert("Failed to download.")
-            }
-        }
-    } catch (e) {
-        alert("Error:" + e)
-        return
-    }
+	if (!dpIsConnected()) {
+		alert("Please connect to Dropbox first.")
+		return
+	}
+	if (!gameID) {
+		alert("Please load a game first.")
+		return
+	}
+	var choice = window.confirm("Are you sure to " + (isUpload ? "↑ upload" : "↓ download") + " cloud save?")
+	if (!choice) {
+		return
+	}
+	try {
+		if (isUpload) {
+			var sav = await emuBackupCloudSav()
+			if (sav === false) {
+				alert("No save data to upload.")
+				return
+			}
+			var ret = await dpTryUploadCloudSave(gameID, "manual", sav, "overwrite")
+			if (ret) {
+				alert("Uploaded successfully.")
+			} else {
+				alert("Failed to upload.")
+			}
+		} else {
+			var path = await dpGetPath(gameID, "manual")
+			var u8Arr = await dpDownloadFile(path)
+			if (!u8Arr) {
+				alert("Failed to download.")
+				return
+			}
+			if (u8Arr.length < 1) {
+				alert("No cloud save found.")
+				return
+			}
+			if (await emuRestoreCloudSav(u8Arr)) {
+				alert("Downloaded successfully.")
+				setTimeout(function() {
+					location.reload()
+				}, 1000)
+			} else {
+				alert("Failed to download.")
+			}
+		}
+	} catch (e) {
+		alert("Error:" + e)
+		return
+	}
 }
 
 dpOnLoad()
 
-document.addEventListener('DOMContentLoaded', function () {
-  const targetBoxes = document.querySelectorAll('.class');
-  const opacityDivs = document.querySelectorAll('m1', 'm2', 'm3');
-  const changeButton = document.getElementById('changeButton');
-  const additionalDiv = document.getElementById('additionalDiv');
+document.addEventListener('DOMContentLoaded', function() {
+	const targetBoxes = document.querySelectorAll('.class');
+	const opacityDivs = document.querySelectorAll('m1', 'm2', 'm3');
+	const changeButton = document.getElementById('changeButton');
+	const additionalDiv = document.getElementById('additionalDiv');
 
-  const classes = ['O6', 'O3', 'OO', 'O9'];
-  const opacityClasses = ['m1', 'm2', 'm3'];
-  let currentIndex = 0;
+	const classes = ['O6', 'O3', 'OO', 'O9'];
+	const opacityClasses = ['m1', 'm2', 'm3'];
+	let currentIndex = 0;
 
-  changeButton.addEventListener('click', function () {
-    targetBoxes.forEach((box) => {
-      box.className = classes[currentIndex];
-    });
-    changeButton.innerText = classes[currentIndex];
+	changeButton.addEventListener('click', function() {
+		targetBoxes.forEach((box) => {
+			box.className = classes[currentIndex];
+		});
+		changeButton.innerText = classes[currentIndex];
 
-    opacityDivs.forEach((div, index) => {
-      if (classes[currentIndex] === 'OO' && index < 3) {
-        div.style.opacity = 0.4;
-      } else if (classes[currentIndex] === 'O3' && index < 2) {
-        div.style.opacity = 0.4;
-      } else if (classes[currentIndex] === 'O6' && index < 1) {
-        div.style.opacity = 0.4;
-      } else {
-        div.style.opacity = 1;
-      }
-    });
-    if (classes[currentIndex] === 'O9') {
-      additionalDiv.style.backgroundColor = 'rgba(37, 37, 37, 1)';
-    } else {
-      additionalDiv.style.backgroundColor = `rgba(37, 37, 37, ${(80 - 20 * currentIndex) / 100})`;
-    }
+		opacityDivs.forEach((div, index) => {
+			if (classes[currentIndex] === 'OO' && index < 3) {
+				div.style.opacity = 0.4;
+			} else if (classes[currentIndex] === 'O3' && index < 2) {
+				div.style.opacity = 0.4;
+			} else if (classes[currentIndex] === 'O6' && index < 1) {
+				div.style.opacity = 0.4;
+			} else {
+				div.style.opacity = 1;
+			}
+		});
+		if (classes[currentIndex] === 'O9') {
+			additionalDiv.style.backgroundColor = 'rgba(37, 37, 37, 1)';
+		} else {
+			additionalDiv.style.backgroundColor = `rgba(37, 37, 37, ${(80 - 20 * currentIndex) / 100})`;
+		}
 
-    currentIndex = (currentIndex + 1) % classes.length;
-  });
+		currentIndex = (currentIndex + 1) % classes.length;
+	});
 });
 
 function toggleSwitch() {
-  var switchElement = document.getElementById('switch');
-  switchElement.classList.toggle('on');
+	var switchElement = document.getElementById('switch');
+	switchElement.classList.toggle('on');
 
-  var contentElement = document.getElementById('gpad-ur');
-  contentElement.classList.toggle('joy-ud');
-  var contentElement = document.getElementById('gpad-dl');
-  contentElement.classList.toggle('joy-ud');
-  var contentElement = document.getElementById('gpad-ul');
-  contentElement.classList.toggle('joy-rl');
-  var contentElement = document.getElementById('gpad-dr');
-  contentElement.classList.toggle('joy-rl');
+	var contentElement = document.getElementById('gpad-ur');
+	contentElement.classList.toggle('joy-ud');
+	var contentElement = document.getElementById('gpad-dl');
+	contentElement.classList.toggle('joy-ud');
+	var contentElement = document.getElementById('gpad-ul');
+	contentElement.classList.toggle('joy-rl');
+	var contentElement = document.getElementById('gpad-dr');
+	contentElement.classList.toggle('joy-rl');
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const targetBoxes = document.querySelectorAll('.class');
-  const opacityDivs = document.querySelectorAll('.m1,.m2,.m3');
-  const changeButton1 = document.getElementById('changeButton-1');
+document.addEventListener('DOMContentLoaded', function() {
+	const targetBoxes = document.querySelectorAll('.class');
+	const opacityDivs = document.querySelectorAll('.m1,.m2,.m3');
+	const changeButton1 = document.getElementById('changeButton-1');
 
-  const classes = ['O6', 'O3', 'OO', 'O9'];
-  const opacityClasses = ['m1', 'm2', 'm3'];
-  let currentIndex = 0;
+	const classes = ['O6', 'O3', 'OO', 'O9'];
+	const opacityClasses = ['m1', 'm2', 'm3'];
+	let currentIndex = 0;
 
-  changeButton1.addEventListener('click', function () {
-    targetBoxes.forEach((box) => {
-      box.className = classes[currentIndex];
-    });
-    opacityDivs.forEach((div, index) => {
-      if (classes[currentIndex] === 'OO' && index < 3) {
-        div.style.opacity = 0.4;
-      } else if (classes[currentIndex] === 'O3' && index < 2) {
-        div.style.opacity = 0.4;
-      } else if (classes[currentIndex] === 'O6' && index < 1) {
-        div.style.opacity = 0.4;
-      } else {
-        div.style.opacity = 1;
-      }
-    });
-    currentIndex = (currentIndex + 1) % classes.length;
-  });
+	changeButton1.addEventListener('click', function() {
+		targetBoxes.forEach((box) => {
+			box.className = classes[currentIndex];
+		});
+		opacityDivs.forEach((div, index) => {
+			if (classes[currentIndex] === 'OO' && index < 3) {
+				div.style.opacity = 0.4;
+			} else if (classes[currentIndex] === 'O3' && index < 2) {
+				div.style.opacity = 0.4;
+			} else if (classes[currentIndex] === 'O6' && index < 1) {
+				div.style.opacity = 0.4;
+			} else {
+				div.style.opacity = 1;
+			}
+		});
+		currentIndex = (currentIndex + 1) % classes.length;
+	});
 });
 
 function toggleMenu() {
-  const menu = document.querySelector('.fade.menu');
-  menu.classList.toggle('open');
-  isRunning = !isRunning;
-  console.log('isRunning:', isRunning);
+	const menu = document.querySelector('.fade.menu');
+	menu.classList.toggle('open');
+	isRunning = !isRunning;
+	console.log('isRunning:', isRunning);
 }
 
+function gameReset() {
 const myButton = document.getElementById('myButton');
 let clickCount = 0;
-let lastClickTime = 0; // Thời gian của lần click cuối cùng
-
+let lastClickTime = 0;
 myButton.addEventListener('click', function() {
-    const currentTime = new Date().getTime();
-    if (currentTime - lastClickTime <= 1000) {
-        // Nếu khoảng thời gian giữa hai lần click liên tục không quá 1 giây
-        clickCount++;
-        if (clickCount >= 2) {
-            // Thực hiện hành động sau khi click hai lần
-            const shouldDismiss = confirm('Do you want to quickly restart the game?');
-            
-            if (shouldDismiss) {
-                Module._emuResetCpu();
-                clearSaveBufState();
-            }
-            
-            clickCount = 0; // Đặt lại đếm
-        }
-    } else {
-        clickCount = 1; // Bắt đầu đếm từ lần click đầu tiên
-    }
-    lastClickTime = currentTime; // Cập nhật thời gian của lần click cuối cùng
-});
+	const currentTime = new Date().getTime();
+	if (currentTime - lastClickTime <= 1000) {
+		clickCount++;
+		if (clickCount >= 2) {
+			const shouldDismiss = confirm('Do you want to quickly restart the game?');
 
+			if (shouldDismiss) {
+				Module._emuResetCpu();
+				clearSaveBufState();
+			}
+
+			clickCount = 0;
+		}
+	} else {
+		clickCount = 1;
+	}
+	lastClickTime = currentTime;
+});
+}

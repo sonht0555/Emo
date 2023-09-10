@@ -125,7 +125,7 @@
         </div>
         <div class="container bg-control mb0 pb0">
           <div class="container mb0">
-            <div class="s30 cl" id="span-cloud-id">00000000</div>
+            <div class="s30 cl" id="span-cloud-id">id_xxxxxxx</div>
             <div class="s31 cl" onclick="dpOnConnectButtonClicked()" id="btn-dp-connect"></div>
           </div>
           <div class="container mb0">
@@ -167,11 +167,12 @@
             <path d="M20 74.2C20 74.0895 19.9105 74 19.8 74H18.2C18.0895 74 18 74.0895 18 74.2V87.8C18 87.9105 18.0895 88 18.2 88H27.8C27.9105 88 28 87.9105 28 87.8V86.2C28 86.0895 27.9105 86 27.8 86H20.2C20.0895 86 20 85.9105 20 85.8V74.2Z" fill="white" />
           </svg>
         </div>
-
         <canvas width="240" height="160" id="gba-canvas" class="flex-item canvas"></canvas>
         <div class="img-canvas flex-item" id="myButton" ontouchstart="event.stopPropagation()">
-          <div class="fps-1"></div>
-          <div class="fps" id="fpsDisplay" ontouchstart="event.stopPropagation()"></div>
+          <div id="fps-div" ontouchstart="event.stopPropagation()">
+            <div class="fps-1"></div>
+            <div class="fps" id="fpsDisplay" ontouchstart="event.stopPropagation()"></div>
+          </div>
         </div>
         <div class="vk flex-item ss6" data-k="r">
           <svg class="vk ss6 cl" data-k="r" width="45" height="160" viewBox="0 0 45 160" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -268,6 +269,7 @@
     <div id="msg-layer" hidden="">
       <p id="msg-text">Gamepad disconnected.</p>
     </div>
+    <!-- Js File -->
     <script src="js/pako.min.js"></script>
     <script src="js/localforage.js"></script>
     <script src="js/app.js"></script>

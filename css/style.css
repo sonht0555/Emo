@@ -616,7 +616,6 @@ b {
   background-repeat: no-repeat;
   background-position: center;
 }
-
 .gpad-l::before {
   content: '';
   width: 100%;
@@ -632,7 +631,6 @@ b {
   background-repeat: no-repeat;
   background-position: center;
 }
-
 .gpad-d::before {
   content: '';
   width: 100%;
