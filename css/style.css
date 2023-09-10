@@ -803,9 +803,18 @@ b {
   font-size: 8px;
   padding: 1px 1px 0px 2px;
   color: #fff;
-  background-color: rgb(0, 0, 0, 0.4);
+  background-color: rgb(0, 0, 0, 0.6);
   position: absolute;
   right: 60px;
   top: 0px;
-  margin:2px;
+  margin:1px 1px 1px 1px;
+}
+.fps-1{
+  width:1px;
+  height:9px;
+  background-image: url("data:image/svg+xml,%3Csvg width='1' height='9' viewBox='0 0 1 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='black' fill-opacity='0.08'/%3E%3Crect y='2' width='1' height='1' fill='black' fill-opacity='0.08'/%3E%3Crect y='4' width='1' height='1' fill='black' fill-opacity='0.08'/%3E%3Crect y='6' width='1' height='1' fill='black' fill-opacity='0.08'/%3E%3Crect y='8' width='1' height='1' fill='black' fill-opacity='0.08'/%3E%3C/svg%3E%0A");  position: absolute;
+  color: #fff;
+  right: 60px;
+  top: 0px;
+  margin:1px 0px 1px 1px;
 }

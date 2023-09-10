@@ -379,7 +379,7 @@ function emuRunFrame() {
   
           // Cập nhật nội dung thẻ <div> để hiển thị giá trị FPS
           var fpsDisplay = document.getElementById("fpsDisplay");
-          fpsDisplay.textContent = fps.toFixed(2); // Làm tròn giá trị FPS và hiển thị 2 chữ số thập phân
+          fpsDisplay.textContent = fps.toFixed(1); // Làm tròn giá trị FPS và hiển thị 2 chữ số thập phân
       }
       last128FrameTime = performance.now();
   }
@@ -1328,8 +1328,8 @@ async function dpRefreshToken() {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&z1dixvhg5spiz9k=YOUR_CLIENT_ID&client_secret=4fe8rvdzo2qi8jl`
-        });
+            body: `refresh_token=${localStorage['d-token-r']}&grant_type=refresh_token&client_id=z1dixvhg5spiz9k&client_secret=4fe8rvdzo2qi8jl`
+          });
 
         const data = await response.json();
         if (!data.error) {
