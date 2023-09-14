@@ -257,7 +257,7 @@ function savRestoreBtn() {
 	if (file) {
 		var fileReader = new FileReader();
 		var fileExt = file.name.split('.').pop().toLowerCase();
-		if (!(fileExt == '4gs' || fileExt == '4gz' || fileExt == '44gbasav' || fileExt == 'sav')) {
+		if (!(fileExt == '4gs' || fileExt == '4gz' || fileExt == '44gbasav' || fileExt == 'sav' || fileExt == 'srm')) {
 			alert('Invalid save file');
 			return;
 		}
