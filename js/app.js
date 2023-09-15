@@ -226,7 +226,7 @@ function savBackupBtn() {
 	});
 	var link = document.createElement('a');
 	link.href = window.URL.createObjectURL(blob);
-	link.download = 'save-' + gameID + '.4gs';
+	link.download = 'save-' + gameID + '.sav';
 	link.click();
 }
 
