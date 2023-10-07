@@ -391,19 +391,28 @@ export default class MgbaControls extends HTMLElement {
 		});
 
 		const shader = document.getElementById('shader');
-  		const imgshader = document.getElementById('img-shader');
-
-		  shader.addEventListener('change', function() {
+		const imgshader = document.getElementById('img-shader');
+		const savedValue = localStorage.getItem('selectedShader');
+		if (savedValue) {
+			shader.value = savedValue;
+			applyShaderClass(savedValue);
+		}
+		shader.addEventListener('change', function() {
 			const selectedValue = shader.value;
-			imgshader.classList.remove('s1', 's2', 's3'); 
-			if (selectedValue === 'option1') {
-				imgshader.classList.add('s1');
-			} else if (selectedValue === 'option2') {
-				imgshader.classList.add('s2');
-			} else if (selectedValue === 'option3') {
-				imgshader.classList.add('s3');
-			}
+			localStorage.setItem('selectedShader', selectedValue);
+			applyShaderClass(selectedValue);
 		});
+		function applyShaderClass(selectedValue) {
+			imgshader.classList.remove('sd-1', 'sd-2', 'sd-3');
+			if (selectedValue === 'option1') {
+				imgshader.classList.add('sd-1');
+			} else if (selectedValue === 'option2') {
+				imgshader.classList.add('sd-2');
+			} else if (selectedValue === 'option3') {
+				imgshader.classList.add('sd-3');
+			}
+		}
+		
 
 
 
