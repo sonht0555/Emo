@@ -192,14 +192,6 @@
         currentIndex = (currentIndex + 1) % classes.length;
     });
 });
-     document.addEventListener("visibilitychange", function() {
-    if (document.hidden) {
-        alert("Kabu stopped suddenly because of switching apps.");
-        setTimeout(function() {
-            alert("Audio activation is interrupted.");
-        }, 200);
-    }
-});
 
  </script>
   <script src="build/mgba.js"></script>

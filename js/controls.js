@@ -413,9 +413,14 @@ export default class MgbaControls extends HTMLElement {
 			}
 		}
 		
-
-
-
+		document.addEventListener("visibilitychange", function() {
+			if (document.hidden) {
+				alert("Kabu stopped suddenly because of switching apps.");
+				setTimeout(function() {
+					alert("Audio activation is interrupted.");
+				}, 200);
+			}
+		});
 
 	}
 }
