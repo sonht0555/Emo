@@ -1,5 +1,4 @@
 import * as FileLoader from './fileloader.js';
-import MgbaGameLoader from './gamemenu.js';
 import MgbaControls from './controls.js';
 import MgbaInit from './init.js';
 

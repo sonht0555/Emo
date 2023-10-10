@@ -30,7 +30,6 @@ self.addEventListener('install', event => {
       '/js/controls.js',
       '/js/fileloader.js',
       '/js/game.js',
-      '/js/gamemenu.js',
       '/js/init.js',
       '/js/menu.js',
       '/js/nipplejs.js',
