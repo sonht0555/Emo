@@ -48,14 +48,14 @@ export default class MgbaInit extends HTMLElement {
   }
 
   async connectedCallback() {
-    const loading = document.createElement('h2');
-    loading.textContent = 'Loading mGBA...';
-    this.appendChild(loading);
+   // const loading = document.createElement('h2');
+   //loading.textContent = 'Loading mGBA...';
+   // this.appendChild(loading);
 
-    const canvas = document.createElement('canvas');
-    canvas.id = 'canvas';
-    canvas.classList.add('disabled');
-    document.body.appendChild(canvas);
+   // const canvas = document.createElement('canvas');
+   //  canvas.id = 'canvas';
+   // canvas.classList.add('disabled');
+   // document.body.appendChild(canvas);
 
     if (!await MgbaInit.initMgba()) {
       loading.textContent = 'mGBA initialization failed!';
