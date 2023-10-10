@@ -37,7 +37,7 @@ export default class MgbaMenu extends HTMLElement {
 
     for (const gameName of games) {
       const div = document.createElement('div');
-      div.className = 'flex-item rom-list';
+      div.className = 'flex-1';
       div.textContent = gameName;
       romlist.appendChild(div);
     

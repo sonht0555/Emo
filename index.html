@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <!-- Required meta tags -->
     <meta name="apple-mobile-web-app-capable" content="none" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
@@ -10,191 +9,115 @@
     <link rel="icon" href="img/favi.png" type="image/png" />
     <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel=stylesheet href="css/game.css">
-    <script src="https://yoannmoinet.github.io/nipplejs/javascripts/nipplejs.js"></script>
+    <script src="js/nipplejs.js"></script>
     <title>Kabu</title>
   </head>
-  <body class="body">
-    <div class="class">
-      <!-- Layer Welcome -->
-      <div class="welcome" id="welcome">
-        <div class="class">
-          <div class="pt">
-            <div class="container mb8 logo" id="logo"></div>
-            <div class="container">
-              <div class="flex-item s19" id="additionalDiv">
-                <div class="container ptl">
-                  <div class="m1"></div>
-                  <div class="m2"></div>
-                  <div class="m3"></div>
-                </div>
-                <p id="changeButton">O9</p>
-                <p class="op4">Pt.</p>
-              </div>
-              <div class="flex-item s20">
-                <div class="flex-item" id="rom-input"></div>
-              </div>
+  <body>
+    <!-- Layer Intro -->
+    <div class="between column intro" id="welcome">
+      <div class="class"></div>
+      <div class="flex-1 ch column gap-8">
+        <div class="logo" id="logo"></div>
+        <div class="gap-8 file-section">
+          <div class="flex-1 bc column" id="additionalDiv">
+            <div class="flex-1 column gap-4 select-lv">
+              <div class="flex-1 bc3 m1"></div>
+              <div class="flex-1 bc3 m2"></div>
+              <div class="flex-1 bc3 m3"></div>
+            </div>
+            <div class="column select-position">
+              <div class="flex-1 pt-num" id="changeButton">O9</div>
+              <div class="flex-1 pt-tex">Pt.</div>
             </div>
           </div>
-        </div>
-        <div class="container rom-l" id="rom-list"></div>
-      </div>
-      <!-- Layer GamePad -->
-      <div id="gamepad">
-        <div class="container">
-          <div class="vk ss5 cl" id="l-pad">
-            <div class="load-state" id="load-state" ontouchstart="event.stopPropagation()"></div>
-          </div>
-          <canvas width="240" height="160" id="canvas" class="flex-item canvas"></canvas>
-          <div class="img-canvas flex-item sd-1" id="img-shader">
-            <div class="message"></div>
-          </div>
-          <div class="vk ss6 cl" id="r-pad">
-            <div class="save-state" id="save-state" ontouchstart="event.stopPropagation()"></div>
-          </div>
-        </div>
-        <div id="control-pad">
-          <div class="container">
-            <div class="justify-content-left">
-              <div class="vk save-game cl"id="save-game" ontouchstart="event.stopPropagation()"></div>
-              <div class="vk s4 cl" id="select-pad"></div>
-            </div>
-            <div class="justify-content-right">
-              <div class="vk s3 cl" id="start-pad"></div>
-              <div class="vk s2 cl" id="menu-pad" ontouchstart="event.stopPropagation()"></div>
-            </div>
-          </div>
-          <div class="container bg-control">
-            <div class="container mb0">
-              <div class="justify-content-left outer-square">
-                <div class="inner-square">
-                  <div class="container mb0">
-                    <div class="vk flex-item center gpad-ur" id="up-right"></div>
-                  </div>
-                  <div class="container mb0">
-                    <div class="vk center gpad-ul" id="up-left"></div>
-                    <div class="flex-item">
-                      <div class="vk flex-item center gpad-u"  id="Up"></div>
-                      <div class="vk flex-item center gpad-l"  id="Left"></div>
-                    </div>
-                    <div class="flex-item">
-                      <div class="vk flex-item center gpad-r"  id="Right"></div>
-                      <div class="vk flex-item center gpad-d"  id="Down"></div>
-                    </div>
-                    <div class="vk center gpad-dr"  id="down-right"></div>
-                  </div>
-                  <div class="container mb0">
-                    <div class="vk flex-item center gpad-dl" id="down-left"></div>
-                  </div>
-                </div>      
-              </div>
-              <div class="justify-content-right ab">
-                <div class="vk s11 flex-item" id="A-pad"></div>
-                <div class="vk s1  flex-item" id="turbo" ontouchstart="event.stopPropagation()"></div>
-                <div class="vk s12 flex-item" id="B-pad"></div>
-              </div>
-            </div>
-            <div class="container mb0" id="menu-list-pad">
-              <div class="justify-content-left mt15">
-                <div class="vk mute-button" id="mute-button" ontouchstart="event.stopPropagation()"></div>
-                <div class="vk range-in" >
-                  <input type="range" id="range-in" ontouchstart="event.stopPropagation()">
-                </div>
-              </div>
-              <div class="justify-content-right mt15">
-                <select class="shader" id="shader" ontouchstart="event.stopPropagation()">
-                  <option value="option1">Lcd</option>
-                  <option value="option2">Crt</option>
-                  <option value="option3">Pixel</option>
-                </select>
-                <div class="vk restart-game" id="restart-game" ontouchstart="event.stopPropagation()"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="" style="height: 300px; width:100%; position: relative;" id="dynamic">
+          <div class="flex-1 bc select-file" id="rom-input"></div>
         </div>
       </div>
+      <div class="column rom-list flex-disable" id="rom-list"></div>
+    </div>
+    <!-- Layer Ingame -->
+    <div class="gap-15 column in-game" id="gamepad">
+      <div class="class"></div>
+      <div class="gap-15 emu-display">
+        <div class="flex-1 bc dpad-l" id="l-pad">
+          <div class="load-state" id="load-state" ontouchstart="event.stopPropagation()"></div>
+        </div>
+        <canvas width="240" height="160" class="canvas" id="canvas"></canvas>
+        <div class="shader sd-1" id="img-shader">
+          <div class="flex-1 ch cw message"></div>
+        </div>
+        <div class="flex-1 bc dpad-r" id="r-pad">
+          <div class="save-state" id="save-state" ontouchstart="event.stopPropagation()"></div>
+        </div>
+      </div>
+      <div class="gap-15 between emu-menu" id="control-pad">
+        <div class="flex-1 gap-15">
+          <div class="bc dpad-save" id="save-game" ontouchstart="event.stopPropagation()"></div>
+          <div class="flex-1 bc dpad-select" id="select-pad"></div>
+        </div>
+        <div class="flex-1 gap-15">
+          <div class="flex-1 bc dpad-start" id="start-pad"></div>
+          <div class="bc dpad-menu" id="menu-pad" ontouchstart="event.stopPropagation()"></div>
+        </div>
+      </div>
+      <div class="gap-15 between column bc emu-control">
+        <div class="flex-1 gap-15">
+          <div class="flex-1">
+            <div class="flex-1 bc1 ch cw dpad">
+              <div class="d-pad">
+                <div class="ch">
+                  <div class="pad-ul" id="up-left"></div>
+                </div>
+                <div class="flex-1 column">
+                  <div class="pad-ur" id="up-right"></div>
+                  <div class="flex-1 column">
+                    <div class="flex-1">
+                      <div class="flex-1 ch cw pad-u" id="Up"></div>
+                      <div class="flex-1 ch cw pad-r" id="Right"></div>
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex-1 ch cw pad-l" id="Left"></div>
+                      <div class="flex-1 ch cw pad-d" id="Down"></div>
+                    </div>
+                  </div>
+                  <div class="pad-dl" id="down-left"></div>
+                </div>
+                <div class="ch">
+                  <div class="pad-dr" id="down-right"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-1 column gap-15">
+            <div class="flex-1 gap-15">
+              <div class="flex-1 bc1 dpad-a" id="A-pad"></div>
+              <div class="bc1 dpad-turbo" id="turbo" ontouchstart="event.stopPropagation()"></div>
+            </div>
+            <div class="flex-1 bc1 dpad-b" id="B-pad"></div>
+          </div>
+        </div>
+        <div class="gap-15 between setting" id="menu-list-pad">
+          <div class="flex-1 gap-15">
+            <div class="bc1 set-volume" id="mute-button" ontouchstart="event.stopPropagation()"></div>
+            <div class="flex-1 bc1 ch cw set-volume-range">
+              <input type="range" id="range-in" ontouchstart="event.stopPropagation()" />
+            </div>
+          </div>
+          <div class="flex-1 gap-15">
+            <select class="flex-1 bc1 ch cw set-shader" id="shader" ontouchstart="event.stopPropagation()">
+              <option value="option1">Lcd</option>
+              <option value="option2">Crt</option>
+              <option value="option3">Pixel</option>
+            </select>
+            <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
+          </div>
+        </div>
+      </div>
+      <div class="" style="height: 200px; width: 100%; position: relative;" id="dynamic"></div>
     </div>
     <mgba-init />
-</body>
-  <script>
-    if (navigator.serviceWorker) {
-      navigator.serviceWorker.register('serviceworker.js');
-    }
-    var dynamic = nipplejs.create({
-        zone: document.getElementById('dynamic'),
-        color: '#323232',
-        size:'120'
-       
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-    const targetBoxes = document.querySelectorAll('.class');
-    const opacityDivs = document.querySelectorAll('.m1, .m2, .m3');
-    const changeButton = document.getElementById('changeButton');
-    const additionalDiv = document.getElementById('additionalDiv');
-
-    const classes = ['O6', 'O3', 'OO', 'O9'];
-    const opacityClasses = ['m1', 'm2', 'm3'];
-    let currentIndex = 0;
-
-    const savedIndex = localStorage.getItem('currentIndex');
-    if (savedIndex !== null) {
-        currentIndex = parseInt(savedIndex);
-        changeButton.innerText = classes[currentIndex];
-        targetBoxes.forEach((box) => {
-            box.className = classes[currentIndex];
-        });
-
-        opacityDivs.forEach((div, index) => {
-            if (classes[currentIndex] === 'OO' && index < 3) {
-                div.style.opacity = 0.4;
-            } else if (classes[currentIndex] === 'O3' && index < 2) {
-                div.style.opacity = 0.4;
-            } else if (classes[currentIndex] === 'O6' && index < 1) {
-                div.style.opacity = 0.4;
-            } else {
-                div.style.opacity = 1;
-            }
-        });
-
-        if (classes[currentIndex] === 'O9') {
-            additionalDiv.style.backgroundColor = 'rgba(37, 37, 37, 1)';
-        } else {
-            additionalDiv.style.backgroundColor = `rgba(37, 37, 37, ${(80 - 20 * currentIndex) / 100})`;
-        }
-    }
-
-    changeButton.addEventListener('click', function() {
-        targetBoxes.forEach((box) => {
-            box.className = classes[currentIndex];
-        });
-        changeButton.innerText = classes[currentIndex];
-
-        opacityDivs.forEach((div, index) => {
-            if (classes[currentIndex] === 'OO' && index < 3) {
-                div.style.opacity = 0.4;
-            } else if (classes[currentIndex] === 'O3' && index < 2) {
-                div.style.opacity = 0.4;
-            } else if (classes[currentIndex] === 'O6' && index < 1) {
-                div.style.opacity = 0.4;
-            } else {
-                div.style.opacity = 1;
-            }
-        });
-        if (classes[currentIndex] === 'O9') {
-            additionalDiv.style.backgroundColor = 'rgba(37, 37, 37, 1)';
-        } else {
-            additionalDiv.style.backgroundColor = `rgba(37, 37, 37, ${(80 - 20 * currentIndex) / 100})`;
-        }
-        localStorage.setItem('currentIndex', currentIndex.toString());
-        
-        currentIndex = (currentIndex + 1) % classes.length;
-    });
-});
-
- </script>
+  </body>
+  <script src="js/app.js"></script>
   <script src="build/mgba.js"></script>
-  <script type=module src="js/init.js"></script>
-
+  <script type="module" src="js/init.js"></script>
 </html>

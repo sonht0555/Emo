@@ -2,6 +2,7 @@ import MgbaSettingsDialog from './settings.js';
 import MgbaGame from './game.js';
 import * as FileLoader from './fileloader.js';
 
+
 const buttonNameToId = new Map();
 buttonNameToId.set('a', 0);
 buttonNameToId.set('b', 1);
@@ -29,7 +30,7 @@ export default class MgbaControls extends HTMLElement {
 
 		this.addShoulderRow(buttonContainer);
 
-
+		gamepad.classList.add("active");
 		const A = this.querySelector('.A');
 		const B = this.querySelector('.B');
 		const L = this.querySelector('.L');
@@ -74,7 +75,7 @@ export default class MgbaControls extends HTMLElement {
 					} else {
 						this.buttonPress(buttonName);
 					}
-					element.classList.add('vk-touched');
+					element.classList.add('touched');
 				});
 			});
 
@@ -89,7 +90,7 @@ export default class MgbaControls extends HTMLElement {
 						} else {
 							this.buttonUnpress(buttonName);
 						}
-						currentButton.classList.remove('vk-touched');
+						currentButton.classList.remove('touched');
 						currentButton = null;
 					}
 				});
