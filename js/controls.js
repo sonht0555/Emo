@@ -320,30 +320,41 @@ export default class MgbaControls extends HTMLElement {
 		});
 
 		const speedToggleButton = document.getElementById('turbo');
-		let isTurboOn = false;
-
+		let turboState = 1; // 1: Chế độ bình thường, 2: Chế độ trung bình, 3: Chế độ turbo
+		
 		speedToggleButton.addEventListener('click', () => {
 			const timing = window.Module._getMainLoopTiming();
 			console.log('timing: ' + timing);
-
+		
 			const turboElement = document.getElementById('turbo');
-
-			if (!isTurboOn) {
-				turboElement.classList.add('turbo-on');
+		
+			// Loại bỏ các class cũ
+			turboElement.classList.remove('turbo-medium', 'turbo-fast');
+		
+			if (turboState === 1) {
+				turboElement.classList.add('turbo-medium');
+				turboState = 2; // Chuyển sang chế độ trung bình
+			} else if (turboState === 2) {
+				turboElement.classList.add('turbo-fast');
+				turboState = 3; // Chuyển sang chế độ turbo
+			} else if (turboState === 3) {
+				turboElement.classList.remove('turbo-fast');
+				turboState = 1; // Chuyển về chế độ bình thường
 			} else {
-				turboElement.classList.remove('turbo-on');
+				console.log('unrecognized turbo state: ' + turboState);
 			}
-
-			if (timing === MgbaGame.mainLoopTiming) {
-				window.Module._setMainLoopTiming(0, MgbaGame.fastLoopTiming);
-				isTurboOn = true;
-			} else if (timing === MgbaGame.fastLoopTiming) {
+		
+			// Sử dụng turboState để đặt giá trị mới cho _setMainLoopTiming
+			if (turboState === 1) {
 				window.Module._setMainLoopTiming(0, MgbaGame.mainLoopTiming);
-				isTurboOn = false;
-			} else {
-				console.log('unrecognized timing: ' + timing);
+			} else if (turboState === 2) {
+				window.Module._setMainLoopTiming(0, MgbaGame.mediumLoopTiming);
+			} else if (turboState === 3) {
+				window.Module._setMainLoopTiming(0, MgbaGame.fastLoopTiming);
 			}
 		});
+		
+		
 
 		function reloadPage() {
 			location.reload();
