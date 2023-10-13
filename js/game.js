@@ -71,10 +71,10 @@ export default class MgbaGame extends HTMLElement {
       // FS.stat() will throw if the file doesn't exist.
     }
 
-    // auto save state every 6 seconds
+    // auto save state every 10 seconds
     // TODO tweak this interval
     // TODO make this a setting in case people dont like autosaves
-    const autosaveMs = 6000;
+    const autosaveMs = 10000;
     const scheduleAutosave = () => {
       this.timeout = setTimeout(async () => {
         window.Module._saveState(autosaveSlot);

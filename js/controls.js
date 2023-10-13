@@ -320,31 +320,26 @@ export default class MgbaControls extends HTMLElement {
 		});
 
 		const speedToggleButton = document.getElementById('turbo');
-		let turboState = 1; // 1: Chế độ bình thường, 2: Chế độ trung bình, 3: Chế độ turbo
+		let turboState = 1; 
 		
 		speedToggleButton.addEventListener('click', () => {
 			const timing = window.Module._getMainLoopTiming();
 			console.log('timing: ' + timing);
 		
 			const turboElement = document.getElementById('turbo');
-		
-			// Loại bỏ các class cũ
 			turboElement.classList.remove('turbo-medium', 'turbo-fast');
-		
 			if (turboState === 1) {
 				turboElement.classList.add('turbo-medium');
-				turboState = 2; // Chuyển sang chế độ trung bình
+				turboState = 2; 
 			} else if (turboState === 2) {
 				turboElement.classList.add('turbo-fast');
-				turboState = 3; // Chuyển sang chế độ turbo
+				turboState = 3; 
 			} else if (turboState === 3) {
 				turboElement.classList.remove('turbo-fast');
-				turboState = 1; // Chuyển về chế độ bình thường
+				turboState = 1; 
 			} else {
 				console.log('unrecognized turbo state: ' + turboState);
 			}
-		
-			// Sử dụng turboState để đặt giá trị mới cho _setMainLoopTiming
 			if (turboState === 1) {
 				window.Module._setMainLoopTiming(0, MgbaGame.mainLoopTiming);
 			} else if (turboState === 2) {
@@ -353,8 +348,6 @@ export default class MgbaControls extends HTMLElement {
 				window.Module._setMainLoopTiming(0, MgbaGame.fastLoopTiming);
 			}
 		});
-		
-		
 
 		function reloadPage() {
 			location.reload();
