@@ -64,7 +64,7 @@ export default class MgbaGame extends HTMLElement {
     filepath = `/data/states/${filepath}.ss${autosaveSlot}`;
     try {
       await FileLoader.writefs();
-      if (window.Module.FS.stat(filepath) && window.confirm('Load save state?')) {
+      if (window.Module.FS.stat(filepath) && window.confirm('Do you want to load save state?')) {
         window.Module._loadState(autosaveSlot);
       }
     } catch (e) {
@@ -75,7 +75,6 @@ export default class MgbaGame extends HTMLElement {
     // TODO tweak this interval
     // TODO make this a setting in case people dont like autosaves
     const autosaveMs = 10000;
-
     const scheduleAutosave = () => {
       this.timeout = setTimeout(async () => {
         window.Module._saveState(autosaveSlot);
@@ -90,7 +89,6 @@ export default class MgbaGame extends HTMLElement {
         scheduleAutosave();
       }, autosaveMs);
     };
-    
     scheduleAutosave();
     
   }

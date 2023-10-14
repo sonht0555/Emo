@@ -295,7 +295,7 @@ export default class MgbaControls extends HTMLElement {
 				window.Module._saveState(1);
 				FileLoader.writefs().then(() => {
 					saveStateButton.disabled = false;
-					messageDiv.textContent = 'save state';
+					messageDiv.textContent = 'state done';
 					setTimeout(() => {
 						messageDiv.textContent = '';
 					}, 2000);

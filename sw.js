@@ -5,7 +5,7 @@ let revision = '1';
 revision = (parseInt(revision) + 1).toString();
 
 workbox.precaching.precacheAndRoute([
-  { url: '/', revision: '1' },
+  { url: '/', revision: 'revision' },
   { url: '/build/mgba.js', revision: revision },
   { url: '/build/mgba.wasm', revision: revision },
   { url: '/css/style.css', revision: revision },
@@ -24,7 +24,6 @@ workbox.precaching.precacheAndRoute([
   { url: '/index.html', revision: revision },
   { url: '/manifest.json', revision: revision },
   { url: '/sw.js', revision: revision },
-  
 ]);
 
 workbox.routing.registerRoute(
