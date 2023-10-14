@@ -1,6 +1,3 @@
-if (navigator.serviceWorker) {
-    navigator.serviceWorker.register("serviceworker.js");
-  }
   var dynamic = nipplejs.create({
     zone: document.getElementById("dynamic"),
     color: "#323232",

@@ -75,14 +75,24 @@ export default class MgbaGame extends HTMLElement {
     // TODO tweak this interval
     // TODO make this a setting in case people dont like autosaves
     const autosaveMs = 10000;
+
     const scheduleAutosave = () => {
       this.timeout = setTimeout(async () => {
         window.Module._saveState(autosaveSlot);
         await FileLoader.writefs();
+        const dlsElement = document.getElementById('save-game');
+        if (dlsElement) {
+          dlsElement.classList.add('auto-save');
+          setTimeout(() => {
+            dlsElement.classList.remove('auto-save');
+          }, 2000);
+        }
         scheduleAutosave();
       }, autosaveMs);
     };
+    
     scheduleAutosave();
+    
   }
 
   disconnectedCallback() {
