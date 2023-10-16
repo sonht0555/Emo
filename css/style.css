@@ -300,7 +300,7 @@ input[type="range"]::-webkit-slider-thumb {
 .dpad-save {
   width: 45px;
   background-repeat: no-repeat;
-  background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.4' d='M17 8.2C17 8.08954 17.0895 8 17.2 8H22.8C22.9105 8 23 8.08954 23 8.2V9.8C23 9.91046 22.9105 10 22.8 10H19.2C19.0895 10 19 10.0895 19 10.2V15.8C19 15.9105 19.0895 16 19.2 16H28.8C28.9105 16 29 16.0895 29 16.2V17.8C29 17.9105 28.9105 18 28.8 18H17.2C17.0895 18 17 17.9105 17 17.8V8.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M25 8.2C25 8.08954 25.0895 8 25.2 8H28.8C28.9105 8 29 8.08954 29 8.2V13.8C29 13.9105 28.9105 14 28.8 14H25.2C25.0895 14 25 13.9105 25 13.8V12.2C25 12.0895 25.0895 12 25.2 12H26.8C26.9105 12 27 11.9105 27 11.8V10.2C27 10.0895 26.9105 10 26.8 10H25.2C25.0895 10 25 9.91046 25 9.8V8.2Z' fill='%23FFFFF5'/%3E%3C/svg%3E%0A");
+  background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 14H20V16H16V10H22V12H18V14Z' fill='%23D9D9D9'/%3E%3Cpath opacity='0.4' d='M28 12H26V10H30V16H24V14H28V12Z' fill='%23D9D9D9'/%3E%3C/svg%3E%0A");  
   transition: background-image 0.3s ease-in-out;
 }
 .dpad-select {
@@ -477,7 +477,7 @@ input[type="range"]::-webkit-slider-thumb {
   visibility: visible;
 }
 .auto-save{
-  background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.4' d='M17 8.2C17 8.08954 17.0895 8 17.2 8H22.8C22.9105 8 23 8.08954 23 8.2V9.8C23 9.91046 22.9105 10 22.8 10H19.2C19.0895 10 19 10.0895 19 10.2V15.8C19 15.9105 19.0895 16 19.2 16H28.8C28.9105 16 29 16.0895 29 16.2V17.8C29 17.9105 28.9105 18 28.8 18H17.2C17.0895 18 17 17.9105 17 17.8V8.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M25 8.2C25 8.08954 25.0895 8 25.2 8H28.8C28.9105 8 29 8.08954 29 8.2V13.8C29 13.9105 28.9105 14 28.8 14H25.2C25.0895 14 25 13.9105 25 13.8V12.2C25 12.0895 25.0895 12 25.2 12H26.8C26.9105 12 27 11.9105 27 11.8V10.2C27 10.0895 26.9105 10 26.8 10H25.2C25.0895 10 25 9.91046 25 9.8V8.2Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
+  background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 14H20V16H16V10H22V12H18V14Z' fill='%23D9D9D9'/%3E%3Cpath d='M28 12H26V10H30V16H24V14H28V12Z' fill='%2300FF00'/%3E%3C/svg%3E%0A");
 }
 /*in-game-close*/
 
