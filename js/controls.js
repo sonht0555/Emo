@@ -280,30 +280,34 @@ export default class MgbaControls extends HTMLElement {
 		const downleft = document.getElementById('down-left');
 		downleft.classList.add('down-left');
 
+		const dropdown = document.getElementById('slot-state');
 		const saveStateButton = document.getElementById('save-state');
 		const messageDiv = document.querySelector('.message');
 		let clickCount = 0;
 		let clickTimer = null;
+
 		saveStateButton.addEventListener('click', () => {
-			clickCount++;
-			if (clickCount === 1) {
-				clickTimer = setTimeout(() => {
-					clickCount = 0;
-				}, 300);
-			} else if (clickCount === 2) {
-				saveStateButton.disabled = true;
-				window.Module._saveState(1);
-				FileLoader.writefs().then(() => {
-					saveStateButton.disabled = false;
-					messageDiv.textContent = 'state done';
-					setTimeout(() => {
-						messageDiv.textContent = '';
-					}, 2000);
-				});
-				clickCount = 0;
-				clearTimeout(clickTimer);
-			}
+		clickCount++;
+		if (clickCount === 1) {
+			clickTimer = setTimeout(() => {
+			clickCount = 0;
+			}, 300);
+		} else if (clickCount === 2) {
+			const selectedValue = dropdown.value; 
+			saveStateButton.disabled = true;
+			window.Module._saveState(selectedValue);
+			FileLoader.writefs().then(() => {
+			saveStateButton.disabled = false;
+			messageDiv.textContent = 'State ' + selectedValue + ' saved'; // Hiển thị thông báo với giá trị được chọn
+			setTimeout(() => {
+				messageDiv.textContent = '';
+			}, 2000);
+			});
+			clickCount = 0;
+			clearTimeout(clickTimer);
+		}
 		});
+
 		const loadStateButton = document.getElementById('load-state');
 		loadStateButton.addEventListener('click', () => {
 			clickCount++;
@@ -313,7 +317,8 @@ export default class MgbaControls extends HTMLElement {
 					clickCount = 0;
 				}, 300);
 			} else if (clickCount === 2) {
-				window.Module._loadState(1);
+				const selectedValue = dropdown.value;
+				window.Module._loadState(selectedValue);
 				clickCount = 0;
 				clearTimeout(clickTimer);
 			}
@@ -382,11 +387,15 @@ export default class MgbaControls extends HTMLElement {
 		const saveButton = document.getElementById('save-game');
 		saveButton.onclick = async () => {
 			saveButton.disabled = true;
-			await FileLoader.writefs();
-			saveButton.disabled = false;
-
-			alert('The game has been saved successfully!');
+			const confirmed = window.confirm('Do you want to save the game?');
+			if (confirmed) {
+				saveButton.disabled = false;
+				await FileLoader.writefs();
+			} else {
+				saveButton.disabled = false;
+			}
 		};
+		
 		const button = document.getElementById('menu-pad');
 		const div = document.getElementById('menu-list-pad');
 
