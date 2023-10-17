@@ -298,7 +298,7 @@ export default class MgbaControls extends HTMLElement {
 			window.Module._saveState(selectedValue);
 			FileLoader.writefs().then(() => {
 			saveStateButton.disabled = false;
-			messageDiv.textContent = 'State ' + selectedValue + ' saved'; // Hiển thị thông báo với giá trị được chọn
+			messageDiv.textContent = 'saved to .ss' + selectedValue; // Hiển thị thông báo với giá trị được chọn
 			setTimeout(() => {
 				messageDiv.textContent = '';
 			}, 2000);
