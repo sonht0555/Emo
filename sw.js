@@ -1,7 +1,7 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
 workbox.setConfig({ debug: false });
-let revision = '8';
+let revision = '11';
 revision = (parseInt(revision) + 1).toString();
 
 workbox.precaching.precacheAndRoute([
@@ -41,7 +41,7 @@ workbox.routing.registerRoute(
 
 // Đăng ký chiến lược StaleWhileRevalidate cho các tệp JS và CSS
 workbox.routing.registerRoute(
-  /\.(?:js|css)$/,
+  /\.(?:js|css|html)$/,
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'static-resources',
   })

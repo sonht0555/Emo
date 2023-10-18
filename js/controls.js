@@ -377,11 +377,21 @@ export default class MgbaControls extends HTMLElement {
 			localStorage.setItem('volume', volumeInput.value);
 			window.Module._setVolume(volumeInput.value);
 		};
-		const muteButton = document.getElementById('mute-button');
-		muteButton.onclick = () => {
-			window.Module._setVolume(0);
-			volumeInput.value = 0;
-			localStorage.setItem('volume', 0);
+		const setButton = document.getElementById('set-volume-range');
+		let volumeLevel = 0;
+		
+		setButton.onclick = () => {
+			if (volumeLevel === 0) {
+				volumeLevel = 128;
+			} else if (volumeLevel === 128) {
+				volumeLevel = 256;
+			} else {
+				volumeLevel = 0;
+			}
+		
+			window.Module._setVolume(volumeLevel);
+			volumeInput.value = volumeLevel;
+			localStorage.setItem('volume', volumeLevel);
 		};
 
 		const saveButton = document.getElementById('save-game');
