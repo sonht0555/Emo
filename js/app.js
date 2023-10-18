@@ -57,13 +57,6 @@
           div.style.opacity = 1;
         }
       });
-      if (classes[currentIndex] === "O9") {
-        additionalDiv.style.backgroundColor = "rgba(37, 37, 37, 1)";
-      } else {
-        additionalDiv.style.backgroundColor = `rgba(37, 37, 37, ${(80 - 20 * currentIndex) / 100})`;
-      }
-      localStorage.setItem("currentIndex", currentIndex.toString());
-  
       currentIndex = (currentIndex + 1) % classes.length;
     });
   });
