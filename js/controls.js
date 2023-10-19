@@ -298,7 +298,7 @@ export default class MgbaControls extends HTMLElement {
 			window.Module._saveState(selectedValue);
 			FileLoader.writefs().then(() => {
 			saveStateButton.disabled = false;
-			messageDiv.textContent = 'saved to .ss' + selectedValue; // Hiển thị thông báo với giá trị được chọn
+			messageDiv.textContent = 'saved to .ss' + selectedValue; 
 			setTimeout(() => {
 				messageDiv.textContent = '';
 			}, 2000);
@@ -445,6 +445,37 @@ export default class MgbaControls extends HTMLElement {
 		//		}, 200);
 		//	}
 		//});
+
+		let opacity = parseFloat(localStorage.getItem('opacity')) || 0.1;
+
+		imgshader.style.opacity = opacity;
+
+		const increaseButton = document.getElementById('plus-shader');
+		const decreaseButton = document.getElementById('minus-shader');
+
+		increaseButton.addEventListener('click', function() {
+			if (opacity < 1) {
+				opacity += 0.05;
+				localStorage.setItem('opacity', opacity);
+			}
+			imgshader.style.opacity = opacity;
+			messageDiv.textContent = 'Opacity ' + opacity.toFixed(2);
+					setTimeout(() => {
+						messageDiv.textContent = '';
+					}, 2000);
+		});
+
+		decreaseButton.addEventListener('click', function() {
+			if (opacity > 0.1) {
+				opacity -= 0.05;
+				localStorage.setItem('opacity', opacity);
+			}
+			imgshader.style.opacity = opacity;
+			messageDiv.textContent = 'Opacity ' + opacity.toFixed(2);
+					setTimeout(() => {
+						messageDiv.textContent = '';
+					}, 2000);
+		});
 
 	}
 }

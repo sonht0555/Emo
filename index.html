@@ -118,19 +118,23 @@
               <input type="range" id="range-in"/>
             </div>
             <select class="flex-1 bc1 ch cw set-slot" id="slot-state" ontouchstart="event.stopPropagation()">
-              <option value="1">Slot_1</option>
-              <option value="2">Slot_2</option>
-              <option value="3">Slot_3</option>
-              <option value="4">Slot_4</option>
-              <option value="5">Slot_5</option>
+              <option value="1">.ss1</option>
+              <option value="2">.ss2</option>
+              <option value="3">.ss3</option>
+              <option value="4">.ss4</option>
+              <option value="5">.ss5</option>
             </select>
           </div>
           <div class="flex-1 gap-15">
-            <select class="flex-1 bc1 ch cw set-shader" id="shader" ontouchstart="event.stopPropagation()">
-              <option value="option1">Lcd</option>
-              <option value="option2">Crt</option>
-              <option value="option3">Pixel</option>
-            </select>
+            <div class="flex-1 bc1">
+              <div class="minus-shader bc2 ch cw" id="minus-shader" ontouchstart="event.stopPropagation()"></div>
+                <select class="flex-1 bc1 ch cw br0 set-shader" id="shader" ontouchstart="event.stopPropagation()">
+                  <option value="option1">Lcd</option>
+                  <option value="option2">Crt</option>
+                  <option value="option3">Pix</option>
+                </select>
+              <div class="plus-shader bc2 ch cw" id="plus-shader" ontouchstart="event.stopPropagation()"></div>
+            </div>
             <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
           </div>
         </div>
