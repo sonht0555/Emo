@@ -52,6 +52,7 @@ canvas,
 span {
   border-radius: 2px;
   display: flex;
+  transition: all 0.2s ease-in-out;
 }
 .intro {
   background-color: black;

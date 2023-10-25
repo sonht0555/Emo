@@ -280,7 +280,7 @@ export default class MgbaControls extends HTMLElement {
 		const downleft = document.getElementById('down-left');
 		downleft.classList.add('down-left');
 
-		let timeoutId;
+		var messageTimeout;
 		const dropdown = document.getElementById('slot-state');
 		const saveStateButton = document.getElementById('save-state');
 		const messageDiv = document.querySelector('.message');
@@ -299,15 +299,14 @@ export default class MgbaControls extends HTMLElement {
 			window.Module._saveState(selectedValue);
 			FileLoader.writefs().then(() => {
 			saveStateButton.disabled = false;
-			clearTimeout(timeoutId);
-			if (messageDiv.classList.contains('act')) {
-				messageDiv.classList.remove('act');
-			}
+			if (messageTimeout) {
+                clearTimeout(messageTimeout);
+            }
 			messageDiv.classList.add('act');
 			messageDiv.textContent = '.ss' + selectedValue + ' state saved.';
-			setTimeout(() => {
-				messageDiv.classList.remove('act');
-			}, 1000);
+			messageTimeout = setTimeout(function () {
+                messageDiv.classList.remove('act');
+            }, 2000);
 			});
 			clickCount = 0;
 			clearTimeout(clickTimer);
@@ -324,15 +323,14 @@ export default class MgbaControls extends HTMLElement {
 			} else if (clickCount === 2) {
 				const selectedValue = dropdown.value;
 				window.Module._loadState(selectedValue);
-				clearTimeout(timeoutId);
-				if (messageDiv.classList.contains('act')) {
-					messageDiv.classList.remove('act');
+				if (messageTimeout) {
+					clearTimeout(messageTimeout);
 				}
 				messageDiv.classList.add('act');
 				messageDiv.textContent = '.ss' + selectedValue + ' loaded.';
-				setTimeout(() => {
-				messageDiv.classList.remove('act');
-				}, 1000);
+				messageTimeout = setTimeout(function () {
+					messageDiv.classList.remove('act');
+				}, 2000);
 				clickCount = 0;
 				clearTimeout(clickTimer);
 			}
@@ -477,15 +475,14 @@ export default class MgbaControls extends HTMLElement {
 				localStorage.setItem('opacity', opacity);
 			}
 			imgshader.style.opacity = opacity;
-			clearTimeout(timeoutId);
-			if (messageDiv.classList.contains('act')) {
-				messageDiv.classList.remove('act');
-			}	
+			if (messageTimeout) {
+				clearTimeout(messageTimeout);
+			}
 			messageDiv.textContent = 'Opacity ' + opacity.toFixed(2);
 			messageDiv.classList.add('act');
-					setTimeout(() => {
-						messageDiv.classList.remove('act');
-					}, 1000);
+			messageTimeout = setTimeout(function () {
+                messageDiv.classList.remove('act');
+            }, 2000);
 		});
 
 		decreaseButton.addEventListener('click', function() {
@@ -494,15 +491,14 @@ export default class MgbaControls extends HTMLElement {
 				localStorage.setItem('opacity', opacity);
 			}
 			imgshader.style.opacity = opacity;
-			clearTimeout(timeoutId);
-			if (messageDiv.classList.contains('act')) {
-				messageDiv.classList.remove('act');
-			}	
+			if (messageTimeout) {
+				clearTimeout(messageTimeout);
+			}
 			messageDiv.textContent = 'Opacity ' + opacity.toFixed(2);
 			messageDiv.classList.add('act');
-					setTimeout(() => {
-						messageDiv.classList.remove('act');
-					}, 1000);
+			messageTimeout = setTimeout(function () {
+                messageDiv.classList.remove('act');
+            }, 2000);
 		});
 
 	}
