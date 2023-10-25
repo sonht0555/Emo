@@ -307,7 +307,7 @@ export default class MgbaControls extends HTMLElement {
 			messageDiv.textContent = '.ss' + selectedValue + ' state saved.';
 			setTimeout(() => {
 				messageDiv.classList.remove('act');
-			}, 1000);
+			}, 1500);
 			});
 			clickCount = 0;
 			clearTimeout(clickTimer);
@@ -332,7 +332,7 @@ export default class MgbaControls extends HTMLElement {
 				messageDiv.textContent = '.ss' + selectedValue + ' loaded.';
 				setTimeout(() => {
 				messageDiv.classList.remove('act');
-				}, 1000);
+				}, 1500);
 				clickCount = 0;
 				clearTimeout(clickTimer);
 			}
@@ -485,7 +485,7 @@ export default class MgbaControls extends HTMLElement {
 			messageDiv.classList.add('act');
 					setTimeout(() => {
 						messageDiv.classList.remove('act');
-					}, 1000);
+					}, 1500);
 		});
 
 		decreaseButton.addEventListener('click', function() {
@@ -502,7 +502,7 @@ export default class MgbaControls extends HTMLElement {
 			messageDiv.classList.add('act');
 					setTimeout(() => {
 						messageDiv.classList.remove('act');
-					}, 1000);
+					}, 1500);
 		});
 
 	}
