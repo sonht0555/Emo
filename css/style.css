@@ -43,7 +43,7 @@ body {
   width: calc(100vw - 30px);
   height: calc(100vh - 30px);
   overflow: hidden;
-  transition: all 0.3s;
+  transition: all 0.5s;
   background-color: black;
   margin: 15px;
 }
@@ -272,12 +272,23 @@ input[type="range"]::-webkit-slider-thumb {
   height: calc((100vw - 150px) * 2 / 3);
   filter: brightness(1) contrast(1.1) saturate(1.1) hue-rotate(4deg);
 }
-.shader {
+.shader,.message-div{
   position: absolute;
   width: calc(100vw - 150px);
   height: calc((100vw - 150px) * 2 / 3);
   margin: 0 60px;
   overflow: hidden;
+}
+.message {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 4px 4px 2px 6px;
+  margin: 4px;
+  border-radius: 1px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.message.act{
+  opacity: 1;
 }
 .sd-1 {
   background-image: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='0.999927' height='0.166654' fill='black'/%3E%3Crect y='0.166504' width='0.166654' height='0.833272' fill='%23FF00FF'/%3E%3Crect x='0.166626' y='0.166504' width='0.166654' height='0.833272' fill='%2300FF00'/%3E%3Crect x='0.333252' y='0.166504' width='0.166654' height='0.833272' fill='%23FF0000'/%3E%3Crect x='0.5' y='0.166504' width='0.166654' height='0.833272' fill='%2300FFFF'/%3E%3Crect x='0.666626' y='0.166504' width='0.166654' height='0.833272' fill='%23FFFF00'/%3E%3Crect x='0.833252' y='0.166504' width='0.166654' height='0.833272' fill='%230000FF'/%3E%3C/svg%3E%0A");
@@ -311,7 +322,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 45px;
   background-repeat: no-repeat;
   background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 14H20V16H16V10H22V12H18V14Z' fill='%23D9D9D9'/%3E%3Cpath opacity='0.4' d='M28 12H26V10H30V16H24V14H28V12Z' fill='%23D9D9D9'/%3E%3C/svg%3E%0A");  
-  transition: background-image 0.3s ease-in-out;
+  transition: background-image 0.5s ease-in-out;
 }
 .dpad-select {
   max-width: 96px;
@@ -328,7 +339,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 45px;
   background-repeat: no-repeat;
   background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.5 10.2C15.5 10.0895 15.5895 10 15.7 10H17.3C17.4105 10 17.5 10.0895 17.5 10.2V15.8C17.5 15.9105 17.4105 16 17.3 16H15.7C15.5895 16 15.5 15.9105 15.5 15.8V10.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M21.5 10.2C21.5 10.0895 21.5895 10 21.7 10H23.3C23.4105 10 23.5 10.0895 23.5 10.2V15.8C23.5 15.9105 23.4105 16 23.3 16H21.7C21.5895 16 21.5 15.9105 21.5 15.8V10.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M27.7 10C27.5895 10 27.5 10.0895 27.5 10.2V15.8C27.5 15.9105 27.5895 16 27.7 16H29.3C29.4105 16 29.5 15.9105 29.5 15.8V10.2C29.5 10.0895 29.4105 10 29.3 10H27.7Z' fill='%23FFFFF5'/%3E%3C/svg%3E%0A");
-  transition: background-image 0.3s ease-in-out;
+  transition: background-image 0.5s ease-in-out;
 }
 .dpad-menu.active {
   background-image: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='45' height='26' fill='%23FFFFF5'/%3E%3Cpath d='M15.5 10.2C15.5 10.0895 15.5895 10 15.7 10H17.3C17.4105 10 17.5 10.0895 17.5 10.2V15.8C17.5 15.9105 17.4105 16 17.3 16H15.7C15.5895 16 15.5 15.9105 15.5 15.8V10.2Z' fill='%23252525'/%3E%3Cpath d='M21.5 10.2C21.5 10.0895 21.5895 10 21.7 10H23.3C23.4105 10 23.5 10.0895 23.5 10.2V15.8C23.5 15.9105 23.4105 16 23.3 16H21.7C21.5895 16 21.5 15.9105 21.5 15.8V10.2Z' fill='%23252525'/%3E%3Cpath d='M27.7 10C27.5895 10 27.5 10.0895 27.5 10.2V15.8C27.5 15.9105 27.5895 16 27.7 16H29.3C29.4105 16 29.5 15.9105 29.5 15.8V10.2C29.5 10.0895 29.4105 10 29.3 10H27.7Z' fill='%23252525'/%3E%3C/svg%3E%0A");
@@ -348,7 +359,7 @@ input[type="range"]::-webkit-slider-thumb {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url("data:image/svg+xml,%3Csvg width='45' height='70' viewBox='0 0 45 70' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M22.2 28C22.0895 28 22 28.0895 22 28.2V41.8C22 41.9105 22.0895 42 22.2 42H23.8C23.9105 42 24 41.9105 24 41.8V28.2C24 28.0895 23.9105 28 23.8 28H22.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M28.2 32C28.0895 32 28 32.0895 28 32.2V37.8C28 37.9105 28.0895 38 28.2 38H29.8C29.9105 38 30 37.9105 30 37.8V32.2C30 32.0895 29.9105 32 29.8 32H28.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M16 32.2C16 32.0895 16.0895 32 16.2 32H17.8C17.9105 32 18 32.0895 18 32.2V37.8C18 37.9105 17.9105 38 17.8 38H16.2C16.0895 38 16 37.9105 16 37.8V32.2Z' fill='%23FFFFF5'/%3E%3C/g%3E%3C/svg%3E%0A");
-  transition: background-image 0.3s ease-in-out;
+  transition: background-image 0.5s ease-in-out;
 }
 .turbo-medium {
   background-image: url("data:image/svg+xml,%3Csvg width='45' height='70' viewBox='0 0 45 70' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.2 32C16.0895 32 16 32.0895 16 32.2V37.8C16 37.9105 16.0895 38 16.2 38H17.8C17.9105 38 18 37.9105 18 37.8V32.2C18 32.0895 17.9105 32 17.8 32H16.2Z' fill='%23FFFFF5'/%3E%3Cg opacity='0.4'%3E%3Cpath d='M22 32.2C22 32.0895 22.0895 32 22.2 32H23.8C23.9105 32 24 32.0895 24 32.2V37.8C24 37.9105 23.9105 38 23.8 38H22.2C22.0895 38 22 37.9105 22 37.8V32.2Z' fill='%23FFFFF5'/%3E%3Cpath d='M22.2 28C22.0895 28 22 28.0895 22 28.2V41.8C22 41.9105 22.0895 42 22.2 42H23.8C23.9105 42 24 41.9105 24 41.8V28.2C24 28.0895 23.9105 28 23.8 28H22.2Z' fill='%23FFFFF5'/%3E%3C/g%3E%3Cpath d='M28.2 32C28.0895 32 28 32.0895 28 32.2V37.8C28 37.9105 28.0895 38 28.2 38H29.8C29.9105 38 30 37.9105 30 37.8V32.2C30 32.0895 29.9105 32 29.8 32H28.2Z' fill='%23FFFFF5'/%3E%3C/svg%3E%0A");
@@ -495,7 +506,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 0;
   visibility: hidden;
   display: none;
-  transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out display 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out, height 0.5s ease-in-out display 0.5s ease-in-out;
 }
 #menu-list-pad.active {
   opacity: 1;
@@ -536,10 +547,6 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .mib {
   opacity: 0.4;
-}
-.message {
-  margin: -2px 0px 0px 0px;
-  background-color: rgba(0, 0, 0, 0.2);
 }
 .save-game {
   width: 45px;
@@ -583,7 +590,7 @@ dialog {
   width: calc(100vw + 6px);
   height: 100vh;
   overflow: hidden;
-  transition: all 0.3s;
+  transition: all 0.5s;
   border: none;
   box-shadow: none;
   outline: none;

@@ -56,9 +56,14 @@
           <div class="load-state" id="load-state" ontouchstart="event.stopPropagation()"></div>
         </div>
         <canvas width="240" height="160" class="canvas" id="canvas"></canvas>
-        <div class="shader sd-1" id="img-shader">
-          <div class="flex-1 ch cw message"></div>
+        <div class="column message-div">
+          <div class="flex-1"></div>
+          <div>
+            <div class="ch cw message"></div>
+            <div class="flex-1"></div>
+          </div>
         </div>
+        <div class="shader sd-1" id="img-shader"></div>
         <div class="flex-1 bc dpad-r" id="r-pad">
           <div class="save-state" id="save-state" ontouchstart="event.stopPropagation()"></div>
         </div>
@@ -127,15 +132,15 @@
           </div>
           <div class="flex-1 gap-15">
             <div class="flex-1 bc1">
-              <div class="minus-shader bc2 ch cw" id="minus-shader" ontouchstart="event.stopPropagation()"></div>
-                <select class="flex-1 bc1 ch cw br0 set-shader" id="shader" ontouchstart="event.stopPropagation()">
+              <div class="minus-shader bc1 ch cw" id="minus-shader" ontouchstart="event.stopPropagation()"></div>
+                <select class="flex-1 bc2 ch cw br0 set-shader" id="shader" ontouchstart="event.stopPropagation()">
                   <option value="option1">Lcd</option>
                   <option value="option2">Crt</option>
                   <option value="option3">Pix</option>
                   <option value="option4">Lin</option>
                   <option value="option5">Gbc</option>
                 </select>
-              <div class="plus-shader bc2 ch cw" id="plus-shader" ontouchstart="event.stopPropagation()"></div>
+              <div class="plus-shader bc1 ch cw" id="plus-shader" ontouchstart="event.stopPropagation()"></div>
             </div>
             <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
           </div>
