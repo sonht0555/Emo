@@ -184,7 +184,7 @@ input[type="range"]::-webkit-slider-thumb {
   background-color: #363636 !important;
 }
 .br0{
-  border-radius: 0px;
+  border-radius: 0px !important;
 }
 /*Common-close*/
 
