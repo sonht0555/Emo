@@ -78,7 +78,7 @@
           <div class="bc dpad-menu" id="menu-pad" ontouchstart="event.stopPropagation()"></div>
         </div>
       </div>
-      <div class="gap-15 between column bc emu-control">
+      <div class="between column bc emu-control" id="emu-control">
         <div class="flex-1 gap-15">
           <div class="flex-1">
             <div class="flex-1 bc1 ch cw dpad">
@@ -117,33 +117,36 @@
             </div>
           </div>
         </div>
-        <div class="gap-15 between setting" id="menu-list-pad">
-          <div class="flex-1 gap-15">
-            <div class="flex-1 bc1 ch cw set-volume-range" id="set-volume-range" ontouchstart="event.stopPropagation()">
-              <input type="range" id="range-in"/>
+        <div class="gap-15 between setting column" id="menu-list-pad">
+          <div class="gap-15">
+            <div class="flex-1 gap-15">
+              <div class="flex-1 bc1 ch cw set-volume-range" id="set-volume-range" ontouchstart="event.stopPropagation()">
+                <input type="range" id="range-in"/>
+              </div>
+              <select class="flex-1 bc1 ch cw set-slot" id="slot-state" ontouchstart="event.stopPropagation()">
+                <option value="1">.ss1</option>
+                <option value="2">.ss2</option>
+                <option value="3">.ss3</option>
+                <option value="4">.ss4</option>
+                <option value="5">.ss5</option>
+              </select>
             </div>
-            <select class="flex-1 bc1 ch cw set-slot" id="slot-state" ontouchstart="event.stopPropagation()">
-              <option value="1">.ss1</option>
-              <option value="2">.ss2</option>
-              <option value="3">.ss3</option>
-              <option value="4">.ss4</option>
-              <option value="5">.ss5</option>
-            </select>
-          </div>
-          <div class="flex-1 gap-15">
-            <div class="flex-1 bc1">
-              <div class="minus-shader bc1 ch cw" id="minus-shader" ontouchstart="event.stopPropagation()"></div>
-                <select class="flex-1 bc2 ch cw br0 set-shader" id="shader" ontouchstart="event.stopPropagation()">
-                  <option value="option1">Lcd</option>
-                  <option value="option2">Crt</option>
-                  <option value="option3">Pix</option>
-                  <option value="option4">Lin</option>
-                  <option value="option5">Gbc</option>
-                </select>
-              <div class="plus-shader bc1 ch cw" id="plus-shader" ontouchstart="event.stopPropagation()"></div>
+            <div class="flex-1 gap-15">
+              <div class="flex-1 bc1">
+                <div class="minus-shader bc1 ch cw" id="minus-shader" ontouchstart="event.stopPropagation()"></div>
+                  <select class="flex-1 bc2 ch cw br0 set-shader" id="shader" ontouchstart="event.stopPropagation()">
+                    <option value="option1">Lcd</option>
+                    <option value="option2">Crt</option>
+                    <option value="option3">Pix</option>
+                    <option value="option4">Lin</option>
+                    <option value="option5">Gbc</option>
+                  </select>
+                <div class="plus-shader bc1 ch cw" id="plus-shader" ontouchstart="event.stopPropagation()"></div>
+              </div>
+              <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
             </div>
-            <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
           </div>
+
         </div>
       </div>
       <div class="" style="height: 200px; width: 100%; position: relative;" id="dynamic"></div>

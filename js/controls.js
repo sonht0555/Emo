@@ -281,6 +281,7 @@ export default class MgbaControls extends HTMLElement {
 		downleft.classList.add('down-left');
 
 		var messageTimeout;
+		const canvas = document.getElementById('canvas');
 		const dropdown = document.getElementById('slot-state');
 		const saveStateButton = document.getElementById('save-state');
 		const messageDiv = document.querySelector('.message');
@@ -299,9 +300,7 @@ export default class MgbaControls extends HTMLElement {
 			window.Module._saveState(selectedValue);
 			FileLoader.writefs().then(() => {
 			saveStateButton.disabled = false;
-			if (messageTimeout) {
-                clearTimeout(messageTimeout);
-            }
+			if (messageTimeout) {clearTimeout(messageTimeout);}
 			messageDiv.classList.add('act');
 			messageDiv.textContent = '.ss' + selectedValue + ' state saved.';
 			messageTimeout = setTimeout(function () {
@@ -369,8 +368,8 @@ export default class MgbaControls extends HTMLElement {
 		function reloadPage() {
 			location.reload();
 		}
-		const myButton = document.getElementById('restart-game');
-		myButton.addEventListener('click', reloadPage);
+		const restarGame = document.getElementById('restart-game');
+		restarGame.addEventListener('click', reloadPage);
 
 		document.getElementById('gamepad').ontouchstart = (e) => {
 			e.preventDefault();
@@ -413,17 +412,28 @@ export default class MgbaControls extends HTMLElement {
 			if (confirmed) {
 				saveButton.disabled = false;
 				await FileLoader.writefs();
+				if (messageTimeout) {clearTimeout(messageTimeout);}
+				messageDiv.classList.add('act');
+				messageDiv.textContent = 'saved as .sav';
+				messageTimeout = setTimeout(function () {
+					messageDiv.classList.remove('act');
+				}, 1500);
 			} else {
 				saveButton.disabled = false;
 			}
 		};
 		
-		const button = document.getElementById('menu-pad');
-		const div = document.getElementById('menu-list-pad');
-
-		button.addEventListener('click', function() {
-			button.classList.toggle('active');
-			div.classList.toggle('active');
+		const menuPad = document.getElementById('menu-pad');
+		const listPad = document.getElementById('menu-list-pad');
+		listPad.classList.add('inactive');
+		menuPad.addEventListener('click', function() {
+			menuPad.classList.toggle('active');
+			listPad.classList.toggle('active');
+			if (listPad.classList.contains('active')) {
+				listPad.classList.remove('inactive');
+			} else {
+				listPad.classList.add('inactive');
+			}
 		});
 
 		const shader = document.getElementById('shader');
