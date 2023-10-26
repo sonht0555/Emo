@@ -281,7 +281,6 @@ export default class MgbaControls extends HTMLElement {
 		downleft.classList.add('down-left');
 
 		var messageTimeout;
-		const canvas = document.getElementById('canvas');
 		const dropdown = document.getElementById('slot-state');
 		const saveStateButton = document.getElementById('save-state');
 		const messageDiv = document.querySelector('.message');
@@ -322,9 +321,7 @@ export default class MgbaControls extends HTMLElement {
 			} else if (clickCount === 2) {
 				const selectedValue = dropdown.value;
 				window.Module._loadState(selectedValue);
-				if (messageTimeout) {
-					clearTimeout(messageTimeout);
-				}
+				if (messageTimeout) {clearTimeout(messageTimeout);}
 				messageDiv.classList.add('act');
 				messageDiv.textContent = '.ss' + selectedValue + ' loaded.';
 				messageTimeout = setTimeout(function () {
@@ -366,7 +363,20 @@ export default class MgbaControls extends HTMLElement {
 		});
 
 		function reloadPage() {
-			location.reload();
+			if (messageTimeout) {clearTimeout(messageTimeout);}
+			messageDiv.classList.add('act');
+			let count = 1.5;
+			let originalCount = count;
+			messageDiv.textContent = 'restart after ' + count.toFixed(1) + 's';
+			let countdownInterval = setInterval(function() {
+				originalCount -= 0.5;
+				messageDiv.textContent = 'restart after ' + originalCount.toFixed(1) + 's';
+				if (originalCount <= 0) {
+					clearInterval(countdownInterval);
+					messageDiv.classList.remove('act');
+					location.reload();
+				}
+			}, 1500);
 		}
 		const restarGame = document.getElementById('restart-game');
 		restarGame.addEventListener('click', reloadPage);

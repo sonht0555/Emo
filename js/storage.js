@@ -50,29 +50,43 @@ export default class MgbaStorage extends HTMLElement {
       welcome.classList.remove("display-none");
     };
 
+    const divAll = document.createElement("div");
+    divAll.classList.add("column","flex-disable","mgba-storage");
+    divAll.id = 'mgba-storage';
+    this.appendChild(divAll);
+    function updateMaxHeight() {
+    const screenHeight = window.innerHeight;
+    const maxHeight = screenHeight - 88;
+    const mgbaStorage = document.getElementById('mgba-storage');
+    mgbaStorage.style.maxHeight = `${maxHeight}px`;
+    mgbaStorage.style.overflow = 'auto';
+    }
+    window.addEventListener('load', updateMaxHeight);
+    window.addEventListener('resize', updateMaxHeight);
+
     const gamesTitle = document.createElement("div");
     gamesTitle.classList.add("flex-1", "rom-item");
     gamesTitle.textContent = "ROM File.";
-    this.appendChild(gamesTitle);
+    divAll.appendChild(gamesTitle);
     this.gamesContainer = document.createElement("div");
     this.gamesContainer.classList.add("column");
-    this.appendChild(this.gamesContainer);
+    divAll.appendChild(this.gamesContainer);
 
     const savesTitle = document.createElement("div");
     savesTitle.classList.add("flex-1", "rom-item");
     savesTitle.textContent = "SAVE File.";
-    this.appendChild(savesTitle);
+    divAll.appendChild(savesTitle);
     this.savesContainer = document.createElement("div");
     this.savesContainer.classList.add("column");
-    this.appendChild(this.savesContainer);
+    divAll.appendChild(this.savesContainer);
 
     const statesTitle = document.createElement("div");
     statesTitle.classList.add("flex-1", "rom-item");
     statesTitle.textContent = "STATE File.";
-    this.appendChild(statesTitle);
+    divAll.appendChild(statesTitle);
     this.statesContainer = document.createElement("div");
     this.statesContainer.classList.add("column");
-    this.appendChild(this.statesContainer);
+    divAll.appendChild(this.statesContainer);
 
     this.refreshFiles();
   }
@@ -111,7 +125,7 @@ export default class MgbaStorage extends HTMLElement {
       const dialog = document.createElement("dialog");
 
       dialog.onclose = () => dialog.remove();
-      this.appendChild(dialog);
+      divAll.appendChild(dialog);
 
       const back = document.createElement("div");
       back.classList.add("storage");

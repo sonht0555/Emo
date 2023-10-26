@@ -525,6 +525,9 @@ input[type="range"]::-webkit-slider-thumb {
 /*in-game-close*/
 
 /*Dialog-open*/
+.mgba-storage{
+  scroll-margin-block: -9999px;
+}
 .rom {
   margin-left: 32px;
   color: #fffff5;
