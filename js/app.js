@@ -4,7 +4,7 @@
     size: "120",
   });
   document.addEventListener("DOMContentLoaded", function () {
-    const targetBoxes = document.querySelectorAll(".class");
+    const targetBoxes = document.querySelectorAll(".target-boxes");
     const opacityDivs = document.querySelectorAll(".m1, .m2, .m3");
     const changeButton = document.getElementById("changeButton");
     const classes = ["O6", "O3", "OO", "O9"];

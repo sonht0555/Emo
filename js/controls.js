@@ -344,12 +344,30 @@ export default class MgbaControls extends HTMLElement {
 			if (turboState === 1) {
 				turboElement.classList.add('turbo-medium');
 				turboState = 2; 
+				if (messageTimeout) {clearTimeout(messageTimeout);}
+				messageDiv.classList.add('act');
+				messageDiv.textContent = 'medium.';
+				messageTimeout = setTimeout(function () {
+					messageDiv.classList.remove('act');
+				}, 1500);
 			} else if (turboState === 2) {
 				turboElement.classList.add('turbo-fast');
 				turboState = 3; 
+				if (messageTimeout) {clearTimeout(messageTimeout);}
+				messageDiv.classList.add('act');
+				messageDiv.textContent = 'fast.';
+				messageTimeout = setTimeout(function () {
+					messageDiv.classList.remove('act');
+				}, 1500);
 			} else if (turboState === 3) {
 				turboElement.classList.remove('turbo-fast');
 				turboState = 1; 
+				if (messageTimeout) {clearTimeout(messageTimeout);}
+				messageDiv.classList.add('act');
+				messageDiv.textContent = 'default.';
+				messageTimeout = setTimeout(function () {
+					messageDiv.classList.remove('act');
+				}, 1500);
 			} else {
 				console.log('unrecognized turbo state: ' + turboState);
 			}
