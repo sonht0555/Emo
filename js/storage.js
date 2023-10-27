@@ -125,7 +125,7 @@ export default class MgbaStorage extends HTMLElement {
       const dialog = document.createElement("dialog");
 
       dialog.onclose = () => dialog.remove();
-      divAll.appendChild(dialog);
+      this.appendChild(dialog);
 
       const back = document.createElement("div");
       back.classList.add("storage");
