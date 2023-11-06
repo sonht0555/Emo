@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="apple-mobile-web-app-capable" content="none" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="apple-touch-icon" href="img/icon.png" />
+    <link rel="icon" href="img/favi.png" type="image/png" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <script src="js/nipplejs.js"></script>
+  </head>
+  <body>
+    <!-- Layer Intro -->
+    <div class="between column intro welcome" id="welcome">
+      <a class="emulator" href="/index.html" onclick="handheldStorage('mGBA')">
+        <div class="mgba bc"></div>
+        </a>
+      <div class="target-boxes"></div>
+      <div class="flex-1 ch column gap-8">
+        <div class="logo" id="logo"></div>
+        <div class="gap-8 file-section">
+          <div class="flex-1 bc column" id="additionalDiv">
+            <div class="flex-1 column gap-4 select-lv">
+              <div class="flex-1 bc3 m1"></div>
+              <div class="flex-1 bc3 m2"></div>
+              <div class="flex-1 bc3 m3"></div>
+            </div>
+            <div class="column select-position">
+              <div class="flex-1 pt-num" id="changeButton">O9</div>
+              <div class="flex-1 pt-tex">Pt.</div>
+            </div>
+          </div>
+          <div class="flex-1 bc select-file" onclick="$id('romFile').click()" id="btn-choose">
+          <input type="file" id="romFile" onchange="onFileSelected()" hidden="" />
+          </div>
+        </div>
+      </div>
+      <div class="ch cw wasm-loading" id="wasm-loading">Loading, please wait...</div>
+      <div id="buttonClick" class="container mb8"></div>
+    </div>
+    <!-- Layer GamePad -->
+    <div class="gap-15 column in-game disable" id="vk-layer">
+      <div class="target-boxes" id="target-boxes"></div>
+        <div class="gap-15 emu-display">
+          <div class="vk flex-1 bc dpad-l" data-k="l"id="dpad-l">
+            <div class="load-state" id="load-state" ontouchstart="event.stopPropagation()">
+              <input type="file" id="sav-file" onchange="savRestoreBtn()" hidden="" />
+            </div>
+          </div>
+          <div class="canvas" id="canvas"></div>
+          <canvas id="gba-canvas" class="vba-canvas not-scale" ontouchstart="event.stopPropagation()"></canvas>
+          <div class="column message-div" id="message-div">
+            <div><div class="ch cw set-fps" id="fpsDisplay"></div></div>
+            <div class="flex-1"></div>
+            <div><div class="ch cw message" id="message"></div></div>
+          </div>
+          <div class="shader sd-1" id="img-shader" ontouchstart="event.stopPropagation()"></div>
+          <div class="vk flex-1 bc dpad-r" data-k="r" id="dpad-r">
+            <div class="save-state" id="save-state" ontouchstart="event.stopPropagation()"></div>
+          </div>
+        </div>
+        <div class="gap-15 between emu-menu">
+          <div class="flex-1 gap-15">
+            <div class="bc dpad-save" id="set-layout" ontouchstart="event.stopPropagation()"></div>
+            <div class="vk flex-1 bc dpad-select" id="select-pad" data-k="select"></div>
+          </div>
+          <div class="flex-1 gap-15">
+            <div class="vk flex-1 bc dpad-start" id="start-pad" data-k="start"></div>
+            <div class="vk bc dpad-menu" id="menu-pad" data-k="menu"></div>
+          </div>
+        </div>
+        <div class="between column bc emu-control" id="emu-control">
+          <div class="flex-1 gap-15">
+            <div class="flex-1">
+              <div class="flex-1 bc1 ch cw dpad">
+                <div class="d-pad">
+                  <div class="ch">
+                    <div class="vk pad-ul" id="up-left" data-k="ul"></div>
+                  </div>
+                  <div class="flex-1 column">
+                    <div class="vk pad-ur" id="up-right" data-k="ur"></div>
+                    <div class="flex-1 column">
+                      <div class="flex-1">
+                        <div class="vk flex-1 ch cw pad-u" id="Up" data-k="up"></div>
+                        <div class="vk flex-1 ch cw pad-r" id="Right" data-k="right"></div>
+                      </div>
+                      <div class="flex-1">
+                        <div class="vk flex-1 ch cw pad-l" id="Left" data-k="left"></div>
+                        <div class="vk flex-1 ch cw pad-d" id="Down" data-k="down"></div>
+                      </div>
+                    </div>
+                    <div class="vk pad-dl" id="down-left" data-k="dl"></div>
+                  </div>
+                  <div class="ch">
+                    <div class="vk pad-dr" id="down-right" data-k="dr"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 column gap-15">
+              <div class="flex-1 gap-15">
+                <div class="vk flex-1 bc1 dpad-a" id="A-pad" data-k="a"></div>
+                <div class="dpad-turbo bc1" id="turbo" ontouchstart="event.stopPropagation()"> 
+                  <div class="vk" data-k="turbo"></div>
+                </div>
+              </div>
+              <div class="vk flex-1 gap-15 bc1" id="B-pad" data-k="b">
+                <div class="flex-1 dpad-b" data-k="b"></div>
+                <div class="dpad-blank" data-k="b"></div>
+              </div>
+            </div>
+          </div>
+          <div class="gap-15 between setting-vba column inactive" id="menu-list-pad">
+            <div class="gap-15">
+              <div class="flex-1 gap-15">
+                <div class="bc1 ch cw set-mute" id="set-mute" ontouchstart="event.stopPropagation()"></div>
+                <div class="flex-1 bc1 ch cw set-cheat" id="set-cheat" ontouchstart="event.stopPropagation()"></div>
+                <div class="cheat-dialog" id="cheat-dialog">
+                  <div class="flex-1" style="padding: 15px;">
+                    <div class="flex-1 gap-15" style="height: 26px;">
+                      <div class="bc back-dialog" id="back-dialog" ontouchstart="event.stopPropagation()"></div>
+                      <div class="flex-1 gap-15">
+                        <input class="flex-1 bc cheat-input" id="txt-code" rows="10" ontouchstart="event.stopPropagation()"></input>
+                        <div onclick="chtSaveBtn()" class="cheat-button bc"ontouchstart="event.stopPropagation()"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-1 gap-15">
+                <div class="flex-1 bc1">
+                  <div class="minus-shader bc1 ch cw" id="minus-shader" ontouchstart="event.stopPropagation()"></div>
+                    <select class="flex-1 bc2 ch cw br0 set-shader" id="shader" ontouchstart="event.stopPropagation()">
+                      <option value="option1">Lcd</option>
+                      <option value="option2">Crt</option>
+                      <option value="option3">Pix</option>
+                      <option value="option4">Lin</option>
+                      <option value="option5">Gbc</option>
+                    </select>
+                  <div class="plus-shader bc1 ch cw" id="plus-shader" ontouchstart="event.stopPropagation()"></div>
+                </div>
+                <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dynamic" id="dynamic">
+          <div class="disable" id="btn-dp-connect"></div>
+          <div class="disable"></div>
+          <select class="disable" id="shader-1">
+            <option value="0">Lcd</option>
+            <option value="1">Crt</option>
+            <option value="2">Pix</option>
+          </select>
+        </div>
+    </div>
+    <!-- Js File -->
+    <script src="js/pako.min.js"></script>
+    <script src="js/localforage.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/vba.js"></script>
+    <script src="build/vba.js"></script>
+  </body>
+</html>

@@ -3,14 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="apple-mobile-web-app-capable" content="none" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     <link rel="apple-touch-icon" href="img/icon.png" />
     <link rel="icon" href="img/favi.png" type="image/png" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
     <script src="js/nipplejs.js"></script>
-    <title>Kabu</title>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -28,6 +27,9 @@
   <body>
     <!-- Layer Intro -->
     <div class="between column intro" id="welcome">
+      <a class="emulator" href="/vba.html" onclick="handheldStorage('VBA')">
+      <div class="bc vba"></div>
+      </a>
       <div class="target-boxes"></div>
       <div class="flex-1 ch column gap-8">
         <div class="logo" id="logo"></div>
@@ -152,8 +154,10 @@
         <div class="dynamic" id="dynamic"></div>
     </div>
     <mgba-init />
+    <!-- Js File -->
+    <script src="js/main.js"></script>
+    <script src="build/mgba.js"></script>
+    <script type="module" src="js/init.js"></script>
   </body>
-  <script src="js/app.js"></script>
-  <script src="build/mgba.js"></script>
-  <script type="module" src="js/init.js"></script>
+  
 </html>
