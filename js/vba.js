@@ -384,11 +384,11 @@ function emuRunFrame() {
 		Module._emuRunFrame(getVKState());
 		if (fastForwardMode) {
 			Module._emuRunFrame(getVKState());
-			Module._emuRunFrame(getVKState());
-			Module._emuRunFrame(getVKState());
 		} else if (turboMode) {
 			Module._emuRunFrame(getVKState());
+			Module._emuRunFrame(getVKState());
 		} else if (turboFast) {
+			Module._emuRunFrame(getVKState());
 			Module._emuRunFrame(getVKState());
 			Module._emuRunFrame(getVKState());
 		}
@@ -698,7 +698,7 @@ function applyCheatCode() {
 	}
 }
 
-$id('txt-code').placeholder = '00xx0.cheat!';
+$id('txt-code').placeholder = '000.00';
 
 function filterCheatCode(code) {
 	var lines = code.toUpperCase().split('\n');
