@@ -23,6 +23,13 @@
         });
       }
     </script>
+    <style>
+      /* CSS để ngăn chặn cuộn khi bàn phím xuất hiện */
+      body.keyboard-open {
+          position: fixed;
+          width: 100%;
+      }
+  </style>
   </head>
   <body>
     <!-- Layer Intro -->
@@ -177,6 +184,14 @@
                 translateText();
             }
         }
+              // JavaScript để xử lý sự kiện khi bàn phím xuất hiện
+              document.getElementById('inputText').addEventListener('focus', function() {
+            document.body.classList.add('keyboard-open');
+        });
+
+        document.getElementById('inputText').addEventListener('blur', function() {
+            document.body.classList.remove('keyboard-open');
+        });
     </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>
