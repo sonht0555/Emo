@@ -23,13 +23,6 @@
         });
       }
     </script>
-    <style>
-      /* CSS để ngăn chặn cuộn khi bàn phím xuất hiện */
-      body.keyboard-open {
-          position: fixed;
-          width: 100%;
-      }
-  </style>
   </head>
   <body>
     <!-- Layer Intro -->
@@ -60,6 +53,10 @@
     <!-- Layer Ingame -->
     <div class="gap-15 column in-game" id="gamepad">
       <div class="target-boxes" id="target-boxes"></div>
+      <div class="gap-15" style="margin-top: 15px;">
+        <input class="intran ch flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>
+        <div class="dpad-menu bc1" style="height: 26px;" onclick="translateText()" ontouchstart="event.stopPropagation()"></div>
+      </div>
         <div class="gap-15 emu-display">
           <div class="flex-1 bc dpad-l" id="l-pad">
             <div class="load-state" id="load-state" ontouchstart="event.stopPropagation()"></div>
@@ -126,10 +123,7 @@
               </div>
             </div>
           </div>
-          <div class="gap-15" style="margin-top: 15px;">
-            <input class="intran ch flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>
-            <div class="dpad-menu bc1" style="height: 26px;" onclick="translateText()" ontouchstart="event.stopPropagation()"></div>
-          </div>
+
           <div class="gap-15 between setting column" id="menu-list-pad">
             <div class="gap-15">
               <div class="flex-1 gap-15">
@@ -184,14 +178,6 @@
                 translateText();
             }
         }
-              // JavaScript để xử lý sự kiện khi bàn phím xuất hiện
-              document.getElementById('inputText').addEventListener('focus', function() {
-            document.body.classList.add('keyboard-open');
-        });
-
-        document.getElementById('inputText').addEventListener('blur', function() {
-            document.body.classList.remove('keyboard-open');
-        });
     </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>
