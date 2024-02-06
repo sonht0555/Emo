@@ -844,3 +844,21 @@ dialog .rom-item {
   background-image: url("data:image/svg+xml,%3Csvg width='70' height='26' viewBox='0 0 70 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M15 14V18H13V12H23V18H21V14H19V18H17V14H15Z' fill='%23FFFFF5'/%3E%3Cpath d='M25 8H33V10H27V16H31V14H29V12H33V18H25V8Z' fill='%23FFFFF5'/%3E%3Cpath d='M43 18H35V10H37V12H43V18ZM37 14V16H41V14H37Z' fill='%23FFFFF5'/%3E%3Cpath d='M47 12H53V18H45V14H47V16H51V14H47V12Z' fill='%23FFFFF5'/%3E%3Cpath d='M55 18V16H57V18H55Z' fill='%23FFFFF5'/%3E%3C/g%3E%3C/svg%3E%0A");
 }
 /*Vba-close*/
+
+.intran{
+display:flex;
+border-radius: 2px;
+padding:0px 8px;
+height:26px;
+font-family: Tahoma, Geneva, Verdana, sans-serif;
+font-size: 12px;
+letter-spacing: 0.4px;
+text-align-last: left;
+padding-left: 8px;
+appearance: none;
+border: none;
+box-shadow: none;
+outline: none;
+text-align: left;
+color: #fffff5;
+}

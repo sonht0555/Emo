@@ -119,6 +119,10 @@
               </div>
             </div>
           </div>
+          <div class="gap-15" style="margin-top: 15px;">
+            <input class="intran ch flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>
+            <div class="dpad-menu bc1" style="height: 26px;" onclick="translateText()" ontouchstart="event.stopPropagation()"></div>
+          </div>
           <div class="gap-15 between setting column" id="menu-list-pad">
             <div class="gap-15">
               <div class="flex-1 gap-15">
@@ -148,13 +152,32 @@
                 <div class="bc1 set-restart" id="restart-game" ontouchstart="event.stopPropagation()"></div>
               </div>
             </div>
-
           </div>
         </div>
         <div class="dynamic" id="dynamic"></div>
     </div>
     <mgba-init />
     <!-- Js File -->
+    <script>
+      function translateText() {
+            var inputText = document.getElementById('inputText').value;
+            var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText);
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(result => {
+                    var translatedText = result[0][0][0];
+                    document.getElementById('inputText').value = translatedText;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                translateText();
+            }
+        }
+    </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>
     <script type="module" src="js/init.js"></script>

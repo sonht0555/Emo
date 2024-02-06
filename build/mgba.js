@@ -7380,17 +7380,17 @@ var mGBA = (() => {
 			}
 
 			function _emscripten_set_keydown_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
-				registerKeyEventCallback(target, userData, useCapture, callbackfunc, 2, "keydown", targetThread);
+				registerKeyEventCallback(target, userData, useCapture, callbackfunc, 2, "", targetThread);
 				return 0
 			}
 
 			function _emscripten_set_keypress_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
-				registerKeyEventCallback(target, userData, useCapture, callbackfunc, 1, "keypress", targetThread);
+				registerKeyEventCallback(target, userData, useCapture, callbackfunc, 1, "", targetThread);
 				return 0
 			}
 
 			function _emscripten_set_keyup_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
-				registerKeyEventCallback(target, userData, useCapture, callbackfunc, 3, "keyup", targetThread);
+				registerKeyEventCallback(target, userData, useCapture, callbackfunc, 3, "", targetThread);
 				return 0
 			}
 
