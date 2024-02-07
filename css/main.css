@@ -6,6 +6,10 @@
   font-family: "04b";
   src: url("../font/04b03b.ttf");
 }
+@font-face {
+  font-family: "fvf";
+  src: url("../font/FVF08.ttf");
+}
 body,
 html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
@@ -847,18 +851,17 @@ dialog .rom-item {
 
 .intran{
 display:flex;
-border-radius: 2px;
 padding:0px 8px;
 height:26px;
-font-family: Tahoma, Geneva, Verdana, sans-serif;
-font-size: 12px;
-letter-spacing: 0.4px;
-text-align-last: left;
-padding-left: 8px;
+font-family: "fvf";
+font-size: 8px;
+text-align-last: center;
 appearance: none;
 border: none;
 box-shadow: none;
 outline: none;
-text-align: left;
+text-align: center;
 color: #fffff5;
+background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+border-radius: 0px 0px 2px 2px;
 }

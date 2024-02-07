@@ -53,10 +53,6 @@
     <!-- Layer Ingame -->
     <div class="gap-15 column in-game" id="gamepad">
       <div class="target-boxes" id="target-boxes"></div>
-      <div class="gap-15" style="margin-top: 15px;">
-        <input class="intran ch flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>
-        <div class="dpad-menu bc1" style="height: 26px;" onclick="translateText()" ontouchstart="event.stopPropagation()"></div>
-      </div>
         <div class="gap-15 emu-display">
           <div class="flex-1 bc dpad-l" id="l-pad">
             <div class="load-state" id="load-state" ontouchstart="event.stopPropagation()"></div>
@@ -70,6 +66,12 @@
             </div>
           </div>
           <div class="shader sd-1" id="img-shader"></div>
+          <div class="column message-div">
+            <div class="flex-1"></div>
+            <div>
+              <input class="intran ch flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>
+            </div>
+          </div>
           <div class="flex-1 bc dpad-r" id="r-pad">
             <div class="save-state" id="save-state" ontouchstart="event.stopPropagation()"></div>
           </div>
