@@ -69,7 +69,11 @@
           <div class="column message-div">
             <div class="flex-1"></div>
             <div>
-              <input class="intran ch cw flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>
+              <div id="input-container" class="input-container ch cw flex-1" tabindex="0" onclick="document.getElementById('inputText').focus()" ontouchstart="event.stopPropagation()" >
+                <div id="inputText" contenteditable="true" ontouchstart="event.stopPropagation()" onkeyup="handleKeyPress(event)"></div>
+                <div id="caret-tracker">_</div>
+            </div>
+             <!--<input class="intran ch cw flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>-->
             </div>
           </div>
           <div class="flex-1 bc dpad-r" id="r-pad">
@@ -163,13 +167,13 @@
     <!-- Js File -->
     <script>
       function translateText() {
-            var inputText = document.getElementById('inputText').value;
+            var inputText = document.getElementById('inputText').textContent;
             var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText);
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(result => {
                     var translatedText = result[0][0][0];
-                    document.getElementById('inputText').value = translatedText;
+                    document.getElementById('inputText').textContent = translatedText;
                 })
                 .catch(error => console.error('Error:', error));
         }
@@ -179,7 +183,8 @@
             }
         }
       document.addEventListener('DOMContentLoaded', function() {
-        var input = document.getElementById('inputText');
+        var input = document.getElementById('input-container');
+        inputText = document.getElementById('inputText')
 
         input.addEventListener('touchstart', function(event) {
             var touch = event.touches[0];
@@ -190,7 +195,7 @@
             }
         });
         function clearInput() {
-            input.value = '';
+          inputText.textContent = '';
         }
       });
     </script>

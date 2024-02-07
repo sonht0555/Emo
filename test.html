@@ -3,32 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caret Giả</title>
+<title>Caret Tracker</title>
 <style>
     .input-container {
-        position: relative;
+        display: flex;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        width: 200px;
+    }
+    
+    #caret-tracker {
+        width: 8px;
+        height: 2px;
+        background-color: red;
+        pointer-events: none;
+        margin-top: auto;
+        animation: caret-blink 1s infinite alternate; /* Sử dụng animation để làm nhấp nháy */
     }
 
-    .custom-input {
-        font-family: monospace; /* Sử dụng font monospace để đảm bảo ký tự có cùng độ rộng */
-        position: relative;
+    @keyframes caret-blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
     }
 
-    .custom-input::after {
-        content: '_'; /* Sử dụng ký tự _ để làm caret giả */
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none; /* Ngăn caret giả bị chọn hoặc tương tác */
-        color: #000; /* Màu sắc của caret giả */
-    }
+
 </style>
 </head>
 <body>
 
-<div class="input-container">
-    <input type="text" id="myInput" class="custom-input" placeholder="Nhập văn bản vào đây">
+<div class="input-container" tabindex="0" onclick="document.getElementById('input-text').focus()">
+    <div id="input-text" contenteditable="true">Nhập văn bản vào đây</div>
+    <div id="caret-tracker"></div>
 </div>
 
 </body>

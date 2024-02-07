@@ -874,3 +874,44 @@ dialog .rom-item {
   opacity:1;
   transition: all 0.5s ease-in-out;
 }
+
+.input-container {
+  display:flex;
+  padding:0px 8px;
+  height:22px;
+  font-family: "fvf";
+  font-size: 8px;
+  text-align-last: center;
+  text-align: center;
+  color: #fffff5;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0);
+  opacity:0;
+  margin: 4px;
+  appearance: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  caret-color: rgba(255, 255, 245, 0);
+}
+.input-container:hover{
+  background: rgba(0, 0, 0, 0.4);
+  opacity:1;
+  transition: all 0.5s ease-in-out;
+}
+.input-container div {
+  appearance: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+
+#caret-tracker {
+  animation: caret-blink 1s infinite alternate; /* Sử dụng animation để làm nhấp nháy */
+}
+
+@keyframes caret-blink {
+0% { opacity: 1; }
+50% { opacity: 0; }
+100% { opacity: 1; }
+}
