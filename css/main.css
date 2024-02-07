@@ -850,21 +850,26 @@ dialog .rom-item {
 /*Vba-close*/
 
 .intran{
-display:flex;
-padding:0px 8px;
-height:26px;
-font-family: "fvf";
-font-size: 8px;
-text-align-last: center;
-appearance: none;
-border: none;
-box-shadow: none;
-outline: none;
-text-align: center;
-color: #fffff5;
-border-radius: 0px 0px 2px 2px;
-background: rgba(50, 50, 50, 0)
+  display:flex;
+  padding:0px 8px;
+  height:22px;
+  font-family: "fvf";
+  font-size: 8px;
+  text-align-last: center;
+  appearance: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  text-align: center;
+  color: #fffff5;
+  border-radius: 2px;
+  background: rgba(50, 50, 50, 0);
+  opacity:0;
+  margin: 4px;
+  transition: opacity 0.5s ease-in-out;
 }
 .intran:focus{
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
+  background: rgba(50, 50, 50, 0.4);
+  opacity:1;
+  transition: opacity 0.5s ease-in-out;
 }
