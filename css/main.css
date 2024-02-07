@@ -864,13 +864,13 @@ dialog .rom-item {
   color: #fffff5;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0);
-  opacity: 0;
+  opacity:0;
   margin: 4px;
   transition: all 0.5s ease-in-out;
-  caret-color: #252525;
+  caret-color: rgba(0, 0, 0, 0.4);
 }
 .intran:focus{
   background: rgba(0, 0, 0, 0.4);
-  opacity: 1;
+  opacity:1;
   transition: all 0.5s ease-in-out;
 }
