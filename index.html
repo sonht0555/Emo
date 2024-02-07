@@ -165,7 +165,6 @@
       function translateText() {
             var inputText = document.getElementById('inputText').value;
             var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText);
-
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(result => {
@@ -174,13 +173,11 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
-
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 translateText();
             }
         }
-
       document.addEventListener('DOMContentLoaded', function() {
         var input = document.getElementById('inputText');
 
@@ -196,9 +193,6 @@
             input.value = '';
         }
       });
-
-
-
     </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>
