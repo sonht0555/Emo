@@ -1,19 +1,35 @@
-<input type="text" id="myInput" placeholder="Nhập văn bản vào đây">
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var input = document.getElementById('myInput');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caret Giả</title>
+<style>
+    .input-container {
+        position: relative;
+    }
 
-    input.addEventListener('input', function() {
-        var value = input.value;
+    .custom-input {
+        font-family: monospace; /* Sử dụng font monospace để đảm bảo ký tự có cùng độ rộng */
+        position: relative;
+    }
 
-        // Thêm ký tự '_' vào cuối giá trị của input
-        value = value.trim() + '_';
+    .custom-input::after {
+        content: '_'; /* Sử dụng ký tự _ để làm caret giả */
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none; /* Ngăn caret giả bị chọn hoặc tương tác */
+        color: #000; /* Màu sắc của caret giả */
+    }
+</style>
+</head>
+<body>
 
-        // Cập nhật giá trị của input sau khi thêm ký tự '_'
-        input.value = value;
-    });
-});
+<div class="input-container">
+    <input type="text" id="myInput" class="custom-input" placeholder="Nhập văn bản vào đây">
+</div>
 
-
-
-</script>
+</body>
+</html>
