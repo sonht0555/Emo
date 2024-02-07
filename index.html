@@ -70,7 +70,7 @@
             <div class="flex-1"></div>
             <div>
               <div id="input-container" class="input-container ch cw flex-1" tabindex="0" onclick="document.getElementById('inputText').focus()" ontouchstart="event.stopPropagation()" >
-                <div id="inputText" class="inputText" contenteditable="true" ontouchstart="event.stopPropagation()" onkeyup="handleKeyPress(event)"></div>
+                <div id="inputText" class="inputText" contenteditable="true" onkeyup="handleKeyPress(event)"></div>
                 <div id="caret-tracker">_</div>
             </div>
              <!--<input class="intran ch cw flex-1 bc1" ontouchstart="event.stopPropagation()" type="text" id="inputText" onkeyup="handleKeyPress(event)"></input>-->
@@ -198,16 +198,16 @@
           inputText.textContent = '';
         }
       });
-const divA = document.querySelector('.inputText');
-const divB = document.querySelector('.input-container');
+      const divA = document.querySelector('.inputText');
+      const divB = document.querySelector('.input-container');
 
-divA.addEventListener('focus', function() {
-    divB.classList.add('cs22');
-});
+      divA.addEventListener('focus', function() {
+          divB.classList.add('cs22');
+      });
 
-divA.addEventListener('blur', function() {
-    divB.classList.remove('cs22');
-});
+      divA.addEventListener('blur', function() {
+          divB.classList.remove('cs22');
+      });
 
     </script>
     <script src="js/main.js"></script>
