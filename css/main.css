@@ -867,7 +867,7 @@ dialog .rom-item {
   opacity:0;
   margin: 4px;
   transition: all 0.5s ease-in-out;
-  caret-color: rgba(255, 255, 245, 0.4);
+  caret-color: rgba(255, 255, 245, 0.2);
 }
 .intran:focus{
   background: rgba(0, 0, 0, 0.4);
