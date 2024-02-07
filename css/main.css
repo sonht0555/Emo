@@ -852,7 +852,8 @@ dialog .rom-item {
 .intran{
   display:flex;
   padding:0px 8px;
-  height:22px;
+  padding-top:1px;
+  height:21px;
   font-family: "fvf";
   font-size: 8px;
   text-align-last: center;
