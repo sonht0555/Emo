@@ -1,0 +1,19 @@
+<input type="text" id="myInput" placeholder="Nhập văn bản vào đây">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var input = document.getElementById('myInput');
+
+    input.addEventListener('input', function() {
+        var value = input.value;
+
+        // Thêm ký tự '_' vào cuối giá trị của input
+        value = value.trim() + '_';
+
+        // Cập nhật giá trị của input sau khi thêm ký tự '_'
+        input.value = value;
+    });
+});
+
+
+
+</script>
