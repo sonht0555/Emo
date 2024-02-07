@@ -181,6 +181,24 @@
             }
         }
 
+      document.addEventListener('DOMContentLoaded', function() {
+        var input = document.getElementById('inputText');
+
+        input.addEventListener('touchstart', function(event) {
+            var touch = event.touches[0];
+            var rect = input.getBoundingClientRect();
+            var quarterWidth = rect.width / 10; 
+            if (touch.clientX > rect.right - quarterWidth) {
+                clearInput();
+            }
+        });
+        function clearInput() {
+            input.value = '';
+        }
+      });
+
+
+
     </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>

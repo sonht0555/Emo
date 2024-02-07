@@ -866,10 +866,10 @@ dialog .rom-item {
   background: rgba(50, 50, 50, 0);
   opacity:0;
   margin: 4px;
-  transition: opacity 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 .intran:focus{
   background: rgba(50, 50, 50, 0.4);
   opacity:1;
-  transition: opacity 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
