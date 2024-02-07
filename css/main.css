@@ -894,17 +894,18 @@ dialog .rom-item {
   outline: none;
   caret-color: rgba(255, 255, 245, 0);
 }
-.input-container:hover{
-  background: rgba(0, 0, 0, 0.4);
-  opacity:1;
-  transition: all 0.5s ease-in-out;
-}
-.input-container div {
+.inputText {
   appearance: none;
   border: none;
   box-shadow: none;
   outline: none;
 }
+.cs22{
+  background: rgba(0, 0, 0, 0.4);
+  opacity:1;
+  transition: all 0.5s ease-in-out;
+}
+
 
 #caret-tracker {
   animation: caret-blink 1s infinite alternate; /* Sử dụng animation để làm nhấp nháy */
