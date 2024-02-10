@@ -209,6 +209,17 @@
           divB.classList.remove('cs22');
       });
 
+      window.onload = function() {
+    var div = document.getElementById("inputText");
+    if (div) {
+        var text = div.textContent;
+        div.textContent = capitalizeFirstLetter(text);
+    }
+}
+
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
     </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>

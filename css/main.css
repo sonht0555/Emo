@@ -8,7 +8,7 @@
 }
 @font-face {
   font-family: "fvf";
-  src: url("../font/FVF08.ttf");
+  src: url("../font/INTEL.ttf");
 }
 body,
 html {
@@ -854,7 +854,7 @@ dialog .rom-item {
   padding:0px 8px;
   height:22px;
   font-family: "fvf";
-  font-size: 8px;
+  font-size: 10px;
   text-align-last: center;
   text-align: center;
   color: #fffff5;
@@ -866,7 +866,8 @@ dialog .rom-item {
   border: none;
   box-shadow: none;
   outline: none;
-  caret-color: rgba(255, 255, 245, 0);
+  caret-color: rgba(255, 255, 245, 0);  
+  letter-spacing: 0.6px;;
 }
 .inputText {
   appearance: none;
