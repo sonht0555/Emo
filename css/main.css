@@ -853,8 +853,11 @@ dialog .rom-item {
   display:flex;
   padding:0px 8px;
   height:22px;
-  font-family: "fvf";
-  font-size: 8px;
+  font-family: "Dosis", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: medium;
+  font-style: normal;
+  font-size: 12px;
   text-align-last: center;
   text-align: center;
   color: #fffff5;
@@ -867,7 +870,7 @@ dialog .rom-item {
   box-shadow: none;
   outline: none;
   caret-color: rgba(255, 255, 245, 0);  
-  letter-spacing: 0.1px;
+  letter-spacing: 0.6px;
 }
 .inputText {
   appearance: none;
