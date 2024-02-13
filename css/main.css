@@ -7,8 +7,8 @@
   src: url("../font/04b03b.ttf");
 }
 @font-face {
-  font-family: "fvf";
-  src: url("../font/FVF08.ttf");
+  font-family: "tuson";
+  src: url("../font/Tuson.ttf");
 }
 body,
 html {
@@ -853,7 +853,7 @@ dialog .rom-item {
   display:flex;
   padding:0px 8px;
   height:22px;
-  font-family: "fvf";
+  font-family: "tuson";
   font-size: 8px;
   text-align-last: center;
   text-align: center;
@@ -867,7 +867,6 @@ dialog .rom-item {
   box-shadow: none;
   outline: none;
   caret-color: rgba(255, 255, 245, 0);  
-  letter-spacing: 0.2px;
 }
 .inputText {
   appearance: none;
@@ -878,6 +877,7 @@ dialog .rom-item {
   overflow: auto;
   text-overflow: ellipsis;
   max-width: 210px;
+  border-radius: 0px;
 }
 .cs22{
   background: rgba(0, 0, 0, 0.4);
