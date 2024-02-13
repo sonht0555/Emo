@@ -869,6 +869,7 @@ dialog .rom-item {
   caret-color: rgba(255, 255, 245, 0);  
 }
 .inputText {
+  padding-top:1px;
   appearance: none;
   border: none;
   box-shadow: none;
@@ -882,11 +883,6 @@ dialog .rom-item {
   -webkit-font-smoothing: antialiased;
   
 }
-.logoTran{
-  width: 15px;
-  height:10px;
-  background-image: url('data:image/svg+xml,<svg transform="scale(0.5) translate(0, 10)" transform-origin="center" width="15" height="10" viewBox="0 0 15 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 0H4V1H1V0H0V3H1V5H2V7H3V9H2V10H3V9H4V7H6V9H5V10H6V9H7V7H9V9H8V10H9V9H10V7H12V9H11V10H12V9H13V7H12V6H14V5H15V3H14V2H13V3H14V5H11V4H4V3H5V0ZM4 2V3H3V2H4ZM1 3V2H2V3H1Z" fill="%23FFFFF5"/></svg>');
-}
 .cs22{
   background: rgba(0, 0, 0, 0.4);
   opacity:1;
@@ -894,6 +890,7 @@ dialog .rom-item {
 }
 #caret-tracker {
   animation: caret-blink 1s infinite alternate; 
+  padding-top:1px;
 }
 @keyframes caret-blink {
 0% { opacity: 1; }
