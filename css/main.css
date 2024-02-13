@@ -882,6 +882,8 @@ dialog .rom-item {
   border-radius: 0px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  letter-spacing:0.2px;
+  
 }
 .cs22{
   background: rgba(0, 0, 0, 0.4);
