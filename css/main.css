@@ -50,6 +50,8 @@ body {
   transition: all 0.5s;
   background-color: black;
   margin: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 div,
 canvas,
@@ -878,6 +880,8 @@ dialog .rom-item {
   text-overflow: ellipsis;
   max-width: 210px;
   border-radius: 0px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 .cs22{
   background: rgba(0, 0, 0, 0.4);
