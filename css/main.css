@@ -853,23 +853,20 @@ dialog .rom-item {
 
 .input-container {
   display:flex;
-  padding:0px 8px;
-  height:22px;
+  padding: 2px 4px;
   font-family: "tuson";
   font-size: 8px;
   color: #fffff5;
-  border-radius: 2px;
-  background: rgba(0, 0, 0, 0);
+  border-radius: 0px;
+  background: rgba(37, 37, 37, 0);
   opacity:0;
-  margin: 4px;
   appearance: none;
-  border: none;
   box-shadow: none;
   outline: none;
   caret-color: rgba(255, 255, 245, 0);  
 }
 .inputText {
-  padding-top:1px;
+  margin-left: 4px;
   appearance: none;
   border: none;
   box-shadow: none;
@@ -884,13 +881,12 @@ dialog .rom-item {
   
 }
 .cs22{
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(37, 37, 37, 0.24);
   opacity:1;
   transition: all 0.5s ease-in-out;
 }
 #caret-tracker {
   animation: caret-blink 1s infinite alternate; 
-  padding-top:1px;
 }
 @keyframes caret-blink {
 0% { opacity: 1; }
