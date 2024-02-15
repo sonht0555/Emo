@@ -887,7 +887,6 @@ dialog .rom-item {
   transition: all 0.5s ease-in-out;
 }
 #caret-tracker {
-  padding-top: 1px;
   animation: caret-blink 1s infinite alternate; 
 }
 @keyframes caret-blink {
