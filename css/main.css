@@ -853,7 +853,7 @@ dialog .rom-item {
 
 .input-container {
   display:flex;
-  padding: 1px 4px 3px 4px;
+  padding: 1px 6px 3px 6px;
   font-family: "tuson";
   font-size: 8px;
   color: rgba(255, 255, 245, 1);
@@ -867,7 +867,7 @@ dialog .rom-item {
   border-radius: 0px 0px 2px 2px;
 }
 .inputText {
-  margin-left: 4px;
+  margin-left: 6px;
   appearance: none;
   border: none;
   box-shadow: none;
@@ -875,7 +875,7 @@ dialog .rom-item {
   white-space: nowrap;
   overflow: auto;
   text-overflow: ellipsis;
-  max-width: 210px;
+  max-width: 200px;
   border-radius: 0px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
