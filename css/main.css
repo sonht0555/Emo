@@ -853,7 +853,7 @@ dialog .rom-item {
 
 .input-container {
   display:flex;
-  padding: 2px 4px;
+  padding: 1px 4px 3px 4px;
   font-family: "tuson";
   font-size: 8px;
   color: rgba(255, 255, 245, 1);
