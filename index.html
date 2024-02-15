@@ -73,9 +73,12 @@
             <div class="flex-1"></div>
             <div>
               <div id="input-container" class="input-container flex-1" tabindex="0" onclick="document.getElementById('inputText').focus()" ontouchstart="event.stopPropagation()" >
-                <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M1 1H0V2H1V3H3V4H2V6H1V13H3V14H1V15H0V16H2V15H3V16H4V15H8V13H9V16H10V14H11V16H12V14H13V16H14V14H13V13H9V12H14V9H15V8H14V9H13V11H7V10H6V9H5V8H4V6H5V7H6V8H7V9H8V10H11V9H12V6H11V9H8V8H10V7H8V5H9V4H10V5H11V4H12V5H13V1H12V2H10V1H9V2H8V1H6V2H5V1H2V2H1V1ZM4 15H3V14H4V15ZM3 3V2H4V3H3ZM7 3H6V4H7V3Z" fill="#FFFFF5"/>
-                </svg>
+                <svg style="padding-top: 2px;" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g opacity="0.9">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0H5V1H3V2H2V3H1V5H0V9H1V11H2V12H3V13H5V14H8V13H6V12H5V11H4V10H3V5H4V4H5V3H9V4H10V5H11V8H10V9H7V8H9V6H8V5H6V6H5V9H6V10H7V11H12V10H13V9H14V5H13V3H12V2H11V1H9V0ZM6 6H8V7H7V8H6V6Z" fill="#FFFFF5"/>
+                  <path d="M10 13H9V14H10V13Z" fill="#FFFFF5"/>
+                  </g>
+                  </svg>
                 <div id="inputText" class="inputText" contenteditable="true" onkeyup="handleKeyPress(event)"></div>
                 <div id="caret-tracker">_</div>
             </div>

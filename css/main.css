@@ -856,7 +856,7 @@ dialog .rom-item {
   padding: 2px 4px;
   font-family: "tuson";
   font-size: 8px;
-  color: #fffff5;
+  color: rgba(255, 255, 245, 1);
   border-radius: 0px;
   background: rgba(37, 37, 37, 0);
   opacity:0;
@@ -881,8 +881,8 @@ dialog .rom-item {
   
 }
 .cs22{
-  background: rgba(37, 37, 37, 0.24);
   opacity:1;
+  background: rgba(37, 37, 37, 0.16);
   transition: all 0.5s ease-in-out;
 }
 #caret-tracker {
