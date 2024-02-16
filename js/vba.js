@@ -596,7 +596,7 @@ document.onkeydown = function(e) {
 	if (!isRunning) {
 		return;
 	}
-	e.preventDefault();
+	//e.preventDefault();
 
 	var k = convertKeyCode(e.keyCode);
 	if (k >= 0) {

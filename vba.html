@@ -56,7 +56,27 @@
             <div class="flex-1"></div>
             <div><div class="ch cw message" id="message"></div></div>
           </div>
-          <div class="shader sd-1" id="img-shader" ontouchstart="event.stopPropagation()"></div>
+          <div class="column message-div">
+            <div class="flex-1"></div>
+            <div>
+              <div id="input-container" class="input-container flex-1" tabindex="0" onclick="document.getElementById('inputText').focus()" ontouchstart="event.stopPropagation()" >
+                <svg style="padding-top: 5px;" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M1 0H2V1H3V2H4V1H5V0H6V5H5V6H6V7H7V8H8V10H0V8H1V6H2V5H1V0ZM5 3H4V4H5V3ZM3 3V4H2V3H3Z" fill="#FFFFF5"/>
+                  <path d="M9 6H8V8H9V6Z" fill="#FFFFF5"/>
+                  <path d="M9 3V4H8V3H9Z" fill="#FFFFF5"/>
+                  <path d="M10 9H9V10H10V9Z" fill="#FFFFF5"/>
+                  <rect class="eye-1" width="1" height="1" x="4" y="2" fill="#FFFFF5"/>
+                  <rect class="eye-2" width="1" height="1" x="4" y="4" fill="#FFFFF5"/>
+                  <rect class="eye-1" width="1" height="1" x="2" y="2" fill="#FFFFF5"/>
+                  <rect class="eye-2" width="1" height="1" x="2" y="4" fill="#FFFFF5"/>
+                  <rect class="tail" x="9" y="4" width="1" height="2" fill="#FFFFF5"/>
+                  </svg>                 
+                <div id="inputText" class="inputText" contenteditable="true" onkeyup="handleKeyPress(event)"></div>
+                <div id="caret-tracker">_</div>
+            </div>
+            </div>
+          </div>
+          <div class="shader sd-1" id="img-shader" style=" pointer-events: none"></div>
           <div class="vk flex-1 bc dpad-r" data-k="r" id="dpad-r">
             <div class="save-state" id="save-state" ontouchstart="event.stopPropagation()"></div>
           </div>
@@ -157,6 +177,51 @@
         </div>
     </div>
     <!-- Js File -->
+    <script>
+      function translateText() {
+            var inputText = document.getElementById('inputText').textContent;
+            var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText);
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(result => {
+                    var translatedText = result[0][0][0];
+                    document.getElementById('inputText').textContent = translatedText;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                translateText();
+            }
+        }
+      document.addEventListener('DOMContentLoaded', function() {
+        var input = document.getElementById('input-container');
+        inputText = document.getElementById('inputText')
+
+        input.addEventListener('touchstart', function(event) {
+            var touch = event.touches[0];
+            var rect = input.getBoundingClientRect();
+            var quarterWidth = rect.width / 10; 
+            if (touch.clientX > rect.right - quarterWidth) {
+                clearInput();
+            }
+        });
+        function clearInput() {
+          inputText.textContent = '';
+        }
+      });
+      const divA = document.querySelector('.inputText');
+      const divB = document.querySelector('.input-container');
+
+      divA.addEventListener('focus', function() {
+          divB.classList.add('cs22');
+      });
+
+      divA.addEventListener('blur', function() {
+          divB.classList.remove('cs22');
+      });
+
+    </script>
     <script src="js/pako.min.js"></script>
     <script src="js/localforage.js"></script>
     <script src="js/main.js"></script>
