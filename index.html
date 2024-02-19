@@ -80,9 +80,14 @@
                   <rect class="eye-2" width="1" height="1" x="1" y="4" fill="#FFFFF5"/>
                   <rect class="tail-1" x="8" y="4" width="1" height="1" fill="#FFFFF5"/>
                   <rect class="tail-2" x="9" y="3" width="1" height="1" fill="#FFFFF5"/>
-                </svg>                
-                <div id="inputText" class="inputText" contenteditable="true" onkeyup="handleKeyPress(event)"></div>
-                <div id="caret-tracker">_</div>
+                </svg>
+                <div class="flex-1">
+                  <div id="inputText" class="inputText" contenteditable="true" onkeyup="handleKeyPress(event)"></div>
+                  <div id="caret-tracker">_</div>
+                </div>
+                <svg  style="padding-top: 4px;" width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 3H7V4H6V5H5V4H4V3H3V4H4V5H5V6H4V7H3V8H4V7H5V6H6V7H7V8H8V7H7V6H6V5H7V4H8V3Z" fill="#FFFFF5"/>
+                </svg>
             </div>
             </div>
           </div>
@@ -195,8 +200,7 @@
         }
       document.addEventListener('DOMContentLoaded', function() {
         var input = document.getElementById('input-container');
-        inputText = document.getElementById('inputText')
-
+        inputText = document.getElementById('inputText');
         input.addEventListener('touchstart', function(event) {
             var touch = event.touches[0];
             var rect = input.getBoundingClientRect();
