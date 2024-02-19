@@ -953,42 +953,120 @@ dialog .rom-item {
       y:4px
   }
 }
+
 @keyframes tail {
-  5% {
-      x:9px
-  }
-  45% {
-      x:9px
-  }
-  48%{
-      x:7px 
-  }
-  51% {
-      x:7px
-  }
-  54% {
-      x:9px
-  }
-  100%{
-      x:9px 
-  }
+    5% {
+        x:9px
+    }
+    45% {
+        x:9px
+    }
+    50%{
+        x:7px 
+    }
+    55% {
+        x:7px
+    }
+    60% {
+        x:9px
+    }
+    100%{
+        x:9px 
+    }
+}
+
+@keyframes tail-1 {
+    5% {
+        x:8px
+    }
+    45% {
+        x:8px
+    }
+    50%{
+        x:9px 
+    }
+    55% {
+        x:9px
+    }
+    60% {
+        x:8px
+    }
+    65%{
+        x:8px 
+    }
+    70%{
+        x:9px 
+    }
+    75% {
+        x:9px
+    }
+    80%{
+        x:8px 
+    }
+    100% {
+        x:8px
+    }
+}
+@keyframes tail-2 {
+    5% {
+        x:9px
+    }
+    45% {
+        x:9px
+    }
+    50%{
+        x:8px 
+    }
+    55% {
+        x:8px
+    }
+    60% {
+        x:9px
+    }
+    65%{
+        x:9px 
+    }
+    70% {
+        x:8px
+    }
+    75% {
+        x:8px
+    }
+    80% {
+        x:9px
+    }
+    100%{
+        x:9px 
+    }
 }
 .eye-1 {
-  animation-name: eye-1;
-  animation-duration: 8s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite; /* Chạy vô hạn */
-
+    animation-name: eye-1;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite; /* Chạy vô hạn */
 }
 .eye-2 {
-  animation-name: eye-2;
-  animation-duration: 8s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite; /* Chạy vô hạn */
+    animation-name: eye-2;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite; /* Chạy vô hạn */
 }
+
 .tail {
-  animation-name: tail;
-  animation-duration: 8s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite; /* Chạy vô hạn */
+    animation-name: tail;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite; /* Chạy vô hạn */
+}
+.tail-1 {
+    animation-name: tail-1;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite; /* Chạy vô hạn */
+}
+.tail-2 {
+    animation-name: tail-2;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite; /* Chạy vô hạn */
 }
