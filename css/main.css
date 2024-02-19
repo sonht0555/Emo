@@ -875,11 +875,10 @@ dialog .rom-item {
   white-space: nowrap;
   overflow: auto;
   text-overflow: ellipsis;
-  max-width: 194px;
+  max-width: 200px;
   border-radius: 0px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  
 }
 .cs22{
   opacity:1;
