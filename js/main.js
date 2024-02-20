@@ -47,7 +47,7 @@
 /*--*/
   var input = document.getElementById('input-container');
   var inputText = document.getElementById('inputText');
-  var closess = document.getElementById('closess');
+
   function translateText() {
       var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText.textContent);
       fetch(apiUrl)
@@ -55,19 +55,11 @@
           .then(result => {
               var translatedText = result[0][0][0];
               inputText.textContent = translatedText;
-              moveCursorToEnd(inputText);
           })
           .catch(error => console.error('Error:', error));
   }
 
-  function moveCursorToEnd(element) {
-      var range = document.createRange();
-      var selection = window.getSelection();
-      range.selectNodeContents(element);
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
-  }
+
 
   function handleKeyPress(event) {
     if (event.key === "Enter") {
@@ -83,23 +75,25 @@
   function clearInput() {
     inputText.textContent = '';
     inputText.classList.add('no-content');
-    closess.classList.add('opacity0');
   }
 
   function checkContent() {
       if (!inputText.innerHTML.trim()) {
           inputText.classList.add('no-content');
-          closess.classList.add('opacity0');
       } else {
           inputText.classList.remove('no-content');
-          closess.classList.remove('opacity0');
       }
   }
 
   document.addEventListener('DOMContentLoaded', function() {
   checkContent();
-  closess.addEventListener('click', function(event) {
-      clearInput();
+  input.addEventListener('touchstart', function(event) {
+      var touch = event.touches[0];
+      var rect = input.getBoundingClientRect();
+      var quarterWidth = rect.width / 10;
+      if (touch.clientX > rect.right - quarterWidth) {
+          clearInput();
+      }
   });
 
   inputText.addEventListener('input', function(event) {
