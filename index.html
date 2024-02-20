@@ -205,7 +205,6 @@
         if (!inputText.textContent.trim()) {
           clearInput();
         } else {
-            checkContent();
             translateText();
         }
     }
@@ -216,13 +215,7 @@
     inputText.classList.add('no-content');
   }
 
-  function checkContent() {
-      if (!inputText.innerHTML.trim()) {
-          inputText.classList.add('no-content');
-      } else {
-          inputText.classList.remove('no-content');
-      }
-  }
+
 
   document.addEventListener('DOMContentLoaded', function() {
   checkContent();
@@ -235,9 +228,7 @@
       }
   });
 
-  inputText.addEventListener('input', function(event) {
-      checkContent();
-  });
+
 
   inputText.addEventListener('focus', function() {
     input.classList.add('cs22');
