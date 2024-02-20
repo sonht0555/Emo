@@ -867,7 +867,6 @@ dialog .rom-item {
   border-radius: 0px 0px 2px 2px;
 }
 .inputText {
-  margin-left: 4px;
   appearance: none;
   border: none;
   box-shadow: none;
@@ -894,29 +893,29 @@ dialog .rom-item {
 100% { opacity: 1; }
 }
 @keyframes eye-1 {
-  5% {
+  2% {
       y:2px
   }
-  10% {
+  4% {
       y:2.5px
   }
-  15% {
+  6% {
       y:2.5px
   }
-  20% {
+  8% {
       y:2px
   }
 
-  30% {
+  12% {
       y:2px
   }
-  35% {
+  14% {
       y:2.5px
   }
-  40% {
+  16% {
       y:2.5px
   }
-  45% {
+  18% {
       y:2px
   }
   100% {
@@ -924,148 +923,119 @@ dialog .rom-item {
   }
 }
 @keyframes eye-2 {
-  5% {
+  2% {
       y:4px
   }
-  10% {
+  4% {
       y:3.5px
   }
-  15% {
+  6% {
       y:3.5px
   }
-  20% {
+  8% {
       y:4px
   }
-  30% {
+  12% {
       y:4px
   }
-  35% {
+  14% {
       y:3.5px
   }
-  40% {
+  16% {
       y:3.5px
   }
-  45% {
+  18% {
       y:4px
   }
   100% {
       y:4px
   }
 }
-
-@keyframes tail {
-    5% {
-        x:9px
-    }
-    45% {
-        x:9px
-    }
-    50%{
-        x:7px 
-    }
-    55% {
-        x:7px
-    }
-    60% {
-        x:9px
-    }
-    100%{
-        x:9px 
-    }
-}
-
 @keyframes tail-1 {
     5% {
-        x:8px
+        x:2px
     }
     45% {
-        x:8px
+        x:2px
     }
     50%{
-        x:9px 
+        x:2px 
     }
     55% {
-        x:9px
+        x:2px
     }
     60% {
-        x:8px
+        x:2px
     }
     65%{
-        x:8px 
+        x:2px 
     }
     70%{
-        x:9px 
+        x:1px 
     }
     75% {
-        x:9px
+        x:1px
     }
     80%{
-        x:8px 
+        x:2px 
     }
     100% {
-        x:8px
+        x:2px
     }
 }
 @keyframes tail-2 {
     5% {
-        x:9px
+        x:1px
     }
     45% {
-        x:9px
+        x:1px
     }
     50%{
-        x:8px 
+        x:3px 
     }
     55% {
-        x:8px
+        x:3px
     }
     60% {
-        x:9px
+        x:1px
     }
     65%{
-        x:9px 
+        x:1px 
     }
     70% {
-        x:8px
+        x:2px
     }
     75% {
-        x:8px
+        x:2px
     }
     80% {
-        x:9px
+        x:1px
     }
     100%{
-        x:9px 
+        x:1px 
     }
 }
 .eye-1 {
     animation-name: eye-1;
     animation-duration: 10s;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite; /* Chạy vô hạn */
-}
+    animation-iteration-count: infinite;
+  }
 .eye-2 {
     animation-name: eye-2;
     animation-duration: 10s;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite; /* Chạy vô hạn */
-}
-
-.tail {
-    animation-name: tail;
-    animation-duration: 10s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite; /* Chạy vô hạn */
+    animation-iteration-count: infinite;
 }
 .tail-1 {
     animation-name: tail-1;
-    animation-duration: 10s;
+    animation-duration: 8s;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite; /* Chạy vô hạn */
+    animation-iteration-count: infinite;
 }
 .tail-2 {
     animation-name: tail-2;
-    animation-duration: 10s;
+    animation-duration: 8s;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite; /* Chạy vô hạn */
+    animation-iteration-count: infinite;
 }
