@@ -72,8 +72,7 @@
   function handleKeyPress(event) {
     if (event.key === "Enter") {
         if (!inputText.textContent.trim()) {
-          inputText.classList.add('no-content');
-          inputText.textContent = '';
+          clearInput();
         } else {
             checkContent();
             translateText();
@@ -96,10 +95,11 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+  checkContent();
   input.addEventListener('touchstart', function(event) {
       var touch = event.touches[0];
       var rect = input.getBoundingClientRect();
-      var quarterWidth = rect.width / 10;
+      var quarterWidth = rect.width / 8;
       if (touch.clientX > rect.right - quarterWidth) {
           clearInput();
       }
@@ -107,6 +107,7 @@
 
   inputText.addEventListener('focus', function() {
     input.classList.add('cs22');
+    moveCursorToEnd(inputText);
   });
 
   inputText.addEventListener('blur', function() {
