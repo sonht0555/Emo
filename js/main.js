@@ -47,7 +47,7 @@
 /*--*/
   var input = document.getElementById('input-container');
   var inputText = document.getElementById('inputText');
-
+  var closess = document.getElementById('closess');
   function translateText() {
       var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText.textContent);
       fetch(apiUrl)
@@ -83,25 +83,23 @@
   function clearInput() {
     inputText.textContent = '';
     inputText.classList.add('no-content');
+    closess.classList.add('opacity0');
   }
 
   function checkContent() {
       if (!inputText.innerHTML.trim()) {
           inputText.classList.add('no-content');
+          closess.classList.add('opacity0');
       } else {
           inputText.classList.remove('no-content');
+          closess.classList.remove('opacity0');
       }
   }
 
   document.addEventListener('DOMContentLoaded', function() {
   checkContent();
-  input.addEventListener('touchstart', function(event) {
-      var touch = event.touches[0];
-      var rect = input.getBoundingClientRect();
-      var quarterWidth = rect.width / 10;
-      if (touch.clientX > rect.right - quarterWidth) {
-          clearInput();
-      }
+  closess.addEventListener('click', function(event) {
+      clearInput();
   });
 
   inputText.addEventListener('input', function(event) {

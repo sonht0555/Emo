@@ -53,6 +53,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
+svg{
+  transition: all 0.5s;
+}
 div,
 canvas,
 span {
@@ -74,6 +77,9 @@ span {
 .disable,
 .display-none {
   display: none;
+}
+.opacity0{
+  opacity:0;
 }
 .flex-1 {
   flex: 1;
