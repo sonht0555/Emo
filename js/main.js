@@ -73,6 +73,7 @@
     if (event.key === "Enter") {
         if (!inputText.textContent.trim()) {
           inputText.classList.add('no-content');
+          inputText.textContent = '';
         } else {
             checkContent();
             translateText();
@@ -88,14 +89,6 @@
       }
   }
 
-  inputText.addEventListener('focus', function() {
-      input.classList.add('cs22');
-  });
-
-  inputText.addEventListener('blur', function() {
-      input.classList.remove('cs22');
-  });
-
   document.addEventListener('DOMContentLoaded', function() {
   input.addEventListener('touchstart', function(event) {
       var touch = event.touches[0];
@@ -106,13 +99,20 @@
       }
       checkContent();
   });
+
+  inputText.addEventListener('focus', function() {
+    input.classList.add('cs22');
+  });
+
+  inputText.addEventListener('blur', function() {
+    input.classList.remove('cs22');
+  });
+
   inputText.addEventListener('input', function(event) {
       checkContent();
   });
-
   function clearInput() {
       inputText.textContent = '';
-      checkContent();
   }
   });
 /*--*/
