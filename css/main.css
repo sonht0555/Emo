@@ -867,6 +867,7 @@ dialog .rom-item {
   border-radius: 0px 0px 2px 2px;
 }
 .inputText {
+  padding-left: 1px;
   appearance: none;
   border: none;
   box-shadow: none;
@@ -879,12 +880,16 @@ dialog .rom-item {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
+.no-content {
+  padding: 0;
+}
 .cs22{
   opacity:1;
   background: rgba(37, 37, 37, 0.24);
   transition: all 0.5s ease-in-out;
 }
 #caret-tracker {
+  padding-left: 1px;
   animation: caret-blink 1s infinite alternate; 
 }
 @keyframes caret-blink {

@@ -73,7 +73,7 @@
             <div class="flex-1"></div>
             <div>
               <div id="input-container" class="input-container flex-1" tabindex="0" onclick="document.getElementById('inputText').focus()" ontouchstart="event.stopPropagation()" >
-                <svg style="padding-top: 4px; padding-right:2px;" width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg style="padding-top: 4px; padding-right:1px;" width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7 0H6V5H5V6H4V7H3V9H2V8H1V6H2V5H1V6H0V9H1V10H2V11H9V10H10V11H11V0H10V1H9V2H8V1H7V0ZM9 3H10V4H9V3ZM8 3V4H7V3H8Z" fill="#FFFFF5"/>
                   <path d="M13 10V11H17V10H13Z" fill="#FFFFF5"/>
                   <rect class="eye-1" width="1" height="1" x="7" y="2" fill="#FFFFF5"/>
@@ -183,50 +183,6 @@
     </div>
     <mgba-init />
     <!-- Js File -->
-    <script>
-      function translateText() {
-            var inputText = document.getElementById('inputText').textContent;
-            var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText);
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(result => {
-                    var translatedText = result[0][0][0];
-                    document.getElementById('inputText').textContent = translatedText;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-        function handleKeyPress(event) {
-            if (event.key === "Enter") {
-                translateText();
-            }
-        }
-      document.addEventListener('DOMContentLoaded', function() {
-        var input = document.getElementById('input-container');
-        inputText = document.getElementById('inputText');
-        input.addEventListener('touchstart', function(event) {
-            var touch = event.touches[0];
-            var rect = input.getBoundingClientRect();
-            var quarterWidth = rect.width / 10; 
-            if (touch.clientX > rect.right - quarterWidth) {
-                clearInput();
-            }
-        });
-        function clearInput() {
-          inputText.textContent = '';
-        }
-      });
-      const divA = document.querySelector('.inputText');
-      const divB = document.querySelector('.input-container');
-
-      divA.addEventListener('focus', function() {
-          divB.classList.add('cs22');
-      });
-
-      divA.addEventListener('blur', function() {
-          divB.classList.remove('cs22');
-      });
-
-    </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>
     <script type="module" src="js/init.js"></script>
