@@ -72,14 +72,18 @@
   function handleKeyPress(event) {
     if (event.key === "Enter") {
         if (!inputText.textContent.trim()) {
-          inputText.classList.add('no-content');
-          inputText.textContent = '';
+          clearInput();
         } else {
             checkContent();
             translateText();
         }
     }
-}
+  }
+
+  function clearInput() {
+    inputText.textContent = '';
+    inputText.classList.add('no-content');
+  }
 
   function checkContent() {
       if (!inputText.innerHTML.trim()) {
@@ -90,6 +94,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+  checkContent();
   input.addEventListener('touchstart', function(event) {
       var touch = event.touches[0];
       var rect = input.getBoundingClientRect();
@@ -97,6 +102,9 @@
       if (touch.clientX > rect.right - quarterWidth) {
           clearInput();
       }
+  });
+
+  inputText.addEventListener('input', function(event) {
       checkContent();
   });
 
@@ -107,13 +115,6 @@
   inputText.addEventListener('blur', function() {
     input.classList.remove('cs22');
   });
-
-  inputText.addEventListener('input', function(event) {
-      checkContent();
-  });
-  function clearInput() {
-      inputText.textContent = '';
-  }
   });
 /*--*/
 /*--*/
