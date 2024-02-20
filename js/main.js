@@ -45,5 +45,78 @@
     localStorage.setItem('selectedConsole', value);
   }
 /*--*/
+  var input = document.getElementById('input-container');
+  var inputText = document.getElementById('inputText');
+
+  function translateText() {
+      var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText.textContent);
+      fetch(apiUrl)
+          .then(response => response.json())
+          .then(result => {
+              var translatedText = result[0][0][0];
+              inputText.textContent = translatedText;
+              moveCursorToEnd(inputText);
+          })
+          .catch(error => console.error('Error:', error));
+  }
+
+  function moveCursorToEnd(element) {
+      var range = document.createRange();
+      var selection = window.getSelection();
+      range.selectNodeContents(element);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+  }
+
+  function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        if (!inputText.textContent.trim()) {
+          inputText.classList.add('no-content');
+          inputText.textContent = '';
+        } else {
+            checkContent();
+            translateText();
+        }
+    }
+  }
+
+  function clearInput() {
+    inputText.textContent = '';
+    inputText.classList.add('no-content');
+
+  }
+
+  function checkContent() {
+      if (!inputText.innerHTML.trim()) {
+          inputText.classList.add('no-content');
+      } else {
+          inputText.classList.remove('no-content');
+      }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+  input.addEventListener('touchstart', function(event) {
+      var touch = event.touches[0];
+      var rect = input.getBoundingClientRect();
+      var quarterWidth = rect.width / 10;
+      if (touch.clientX > rect.right - quarterWidth) {
+          clearInput();
+      }
+  });
+
+  inputText.addEventListener('focus', function() {
+    input.classList.add('cs22');
+  });
+
+  inputText.addEventListener('blur', function() {
+    input.classList.remove('cs22');
+  });
+
+  inputText.addEventListener('input', function(event) {
+      checkContent();
+  });
+
+  });
 /*--*/
 /*--*/

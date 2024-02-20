@@ -183,50 +183,6 @@
     </div>
     <mgba-init />
     <!-- Js File -->
-    <script>
-   function translateText() {
-            var inputText = document.getElementById('inputText').textContent;
-            var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText);
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(result => {
-                    var translatedText = result[0][0][0];
-                    document.getElementById('inputText').textContent = translatedText;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-        function handleKeyPress(event) {
-            if (event.key === "Enter") {
-                translateText();
-            }
-        }
-      document.addEventListener('DOMContentLoaded', function() {
-        var input = document.getElementById('input-container');
-        inputText = document.getElementById('inputText');
-        input.addEventListener('touchstart', function(event) {
-            var touch = event.touches[0];
-            var rect = input.getBoundingClientRect();
-            var quarterWidth = rect.width / 10; 
-            if (touch.clientX > rect.right - quarterWidth) {
-                clearInput();
-            }
-        });
-        function clearInput() {
-          inputText.textContent = '';
-        }
-      });
-      const divA = document.querySelector('.inputText');
-      const divB = document.querySelector('.input-container');
-
-      divA.addEventListener('focus', function() {
-          divB.classList.add('cs22');
-      });
-
-      divA.addEventListener('blur', function() {
-          divB.classList.remove('cs22');
-      });
-
-   </script>
     <script src="js/main.js"></script>
     <script src="build/mgba.js"></script>
     <script type="module" src="js/init.js"></script>
