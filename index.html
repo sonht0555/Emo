@@ -185,7 +185,7 @@
     <!-- Js File -->
     <script>
        var input = document.getElementById('input-container');
-  var inputText = document.getElementById('inputText');
+       var inputText = document.getElementById('inputText');
 
   function translateText() {
       var apiUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(inputText.textContent);
@@ -210,10 +210,7 @@
     }
   }
 
-  function clearInput() {
-    inputText.textContent = '';
-    inputText.classList.add('no-content');
-  }
+
 
 
 
@@ -227,7 +224,10 @@
       }
   });
 
-
+  function clearInput() {
+    inputText.textContent = '';
+    inputText.classList.add('no-content');
+  }
 
   inputText.addEventListener('focus', function() {
     input.classList.add('cs22');
