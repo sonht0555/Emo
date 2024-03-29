@@ -25,6 +25,8 @@ const statePageButton = document.getElementById("statePageButton");
 const romInput = document.getElementById("fileInput");
 const turbo = document.getElementById("turbo");
 const savedTurboState = localStorage.getItem("turboState");
+const SDL2ID = ['A','B','R','L','Up','Down','Left','Right']
+const touchedID = ['saveStateButton', 'loadStateButton','restart-game','minus-shader','plus-shader','fileInputLable','openLocalStorage','upLoadFile','backToHome'];
 const ids = ['minus-shader', 'loadStateButton', 'input-container', 'saveStateButton', 'statePageButton', 'menu-pad', 'turbo', 'set-volume-range', 'minus-shader', 'shader', 'plus-shader', 'restart-game', 'slot-state', 'localStorages', 'state00', 'state01', 'state02', 'state03', 'dynamic', 'switch', 'cheatsTextArea', 'cleanCheat', 'saveCheat'];
 const setAdjustment = document.getElementById("setAdjustment");
 const savedStateAdj = localStorage.getItem("stateAdj");
@@ -51,8 +53,37 @@ ids.forEach(function(id) {
         element.setAttribute("ontouchstart", "event.stopPropagation()");
     }
 });
-
-
+/*Enable global audio*/
+SDL2ID.forEach(function(id) {
+    const button = document.getElementById(id);
+    if(button) {
+        button.addEventListener("touchstart", function() {
+            Module.SDL2();
+            const stateList = document.getElementById("stateList");
+            if (listPad.classList.contains("active")) {
+                listPad.classList.remove("active");
+                listPad.classList.add("inactive");
+                menuPad.classList.remove("active");
+            }
+            if (stateList.classList.contains("disable")){
+            } else {
+                statePageButton.classList.remove("active");
+                stateList.classList.add("disable");
+            }
+        });
+    }
+});
+touchedID.forEach(function(id) {
+    const button = document.getElementById(id);
+    if(button) {
+        button.addEventListener("touchstart", function() {
+            button.classList.add("touched");
+        });
+        button.addEventListener("touchend", function() {
+            button.classList.remove("touched");
+        });
+    }
+});
 /*Start GBA*/
 function startGBA(Module) {
     mGBA(Module).then(function(Module) {
@@ -206,7 +237,7 @@ function buttonPress(buttonName, isPress) {
         isPress ? Module.buttonPress(buttonName.toLowerCase()) : Module.buttonUnpress(buttonName.toLowerCase());
     }
 }
-["A", "B", "Start", "Select", "L", "R", "Up", "Down", "Left", "Right", "Up-left", "Up-right", "Down-left", "Down-right","loadStateButton","saveStateButton","minus-shader","plus-shader","restart-game" ].forEach((buttonId) => {
+["A", "B", "Start", "Select", "L", "R", "Up", "Down", "Left", "Right", "Up-left", "Up-right", "Down-left", "Down-right"].forEach((buttonId) => {
     const element = document.getElementById(buttonId);
     let currentButton = null;
     ["mousedown", "touchstart"].forEach((startEventName) => {
@@ -707,10 +738,6 @@ romInput.addEventListener("change", function() {
     notiMessage();
     loadGame(romInput);
 });
-/*Enable global audio*/
-document.body.addEventListener("click", function() {
-    Module.SDL2();
-});
 /*Button Turbo*/
 turbo.addEventListener("click", function() {
     turboState = (turboState % 3) + 1;
@@ -846,4 +873,5 @@ saveCheatsButton.addEventListener("click", () => {
         });
     }
 });
+
 
