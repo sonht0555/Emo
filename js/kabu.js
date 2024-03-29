@@ -44,10 +44,10 @@ const Module = {
 startGBA(Module);
 setTimeout(() => {
     romList();
-},600);
+},1000);
 setTimeout(() => {
     localStorageFile();
-},800);
+},2000);
 document.getElementById('in-game').ontouchstart = (e) => {
     e.preventDefault();
 };
