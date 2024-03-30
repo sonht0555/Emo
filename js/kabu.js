@@ -42,52 +42,6 @@ const Module = {
 };
 /*----------------BackEnd----------------*/
 startGBA(Module);
-setTimeout(() => {
-    romList();
-},1000);
-setTimeout(() => {
-    localStorageFile();
-},2000);
-document.getElementById('in-game').ontouchstart = (e) => {
-    e.preventDefault();
-};
-ids.forEach(function(id) {
-    var element = document.getElementById(id);
-    if (element) {
-        element.setAttribute("ontouchstart", "event.stopPropagation()");
-    }
-});
-/*Enable global audio*/
-SDL2ID.forEach(function(id) {
-    const button = document.getElementById(id);
-    if(button) {
-        button.addEventListener("touchstart", function() {
-            Module.SDL2();
-            const stateList = document.getElementById("stateList");
-            if (listPad.classList.contains("active")) {
-                listPad.classList.remove("active");
-                listPad.classList.add("inactive");
-                menuPad.classList.remove("active");
-            }
-            if (stateList.classList.contains("disable")){
-            } else {
-                statePageButton.classList.remove("active");
-                stateList.classList.add("disable");
-            }
-        });
-    }
-});
-touchedID.forEach(function(id) {
-    const button = document.getElementById(id);
-    if(button) {
-        button.addEventListener("touchstart", function() {
-            button.classList.add("touched");
-        });
-        button.addEventListener("touchend", function() {
-            button.classList.remove("touched");
-        });
-    }
-});
 /*Start GBA*/
 function startGBA(Module) {
     mGBA(Module).then(function(Module) {
@@ -592,6 +546,12 @@ function checkContent() {
     }
 }
 document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(() => {
+        romList();
+    },500);
+    setTimeout(() => {
+        localStorageFile();
+    },1000);
     checkContent();
     input.addEventListener("touchstart", function(event) {
         var touch = event.touches[0];
@@ -612,7 +572,60 @@ document.addEventListener("DOMContentLoaded", function() {
         checkContent();
     });
     led(parseInt(localStorage.getItem("slotStateSaved")))
+
+    SDL2ID.forEach(function(id) {
+        const button = document.getElementById(id);
+        if(button) {
+            button.addEventListener("touchstart", function() {
+                Module.SDL2();
+                const stateList = document.getElementById("stateList");
+                if (listPad.classList.contains("active")) {
+                    listPad.classList.remove("active");
+                    listPad.classList.add("inactive");
+                    menuPad.classList.remove("active");
+                }
+                if (stateList.classList.contains("disable")){
+                } else {
+                    statePageButton.classList.remove("active");
+                    stateList.classList.add("disable");
+                }
+            });
+        }
+    });
+
+    touchedID.forEach(function(id) {
+        const button = document.getElementById(id);
+        if(button) {
+            button.addEventListener("touchstart", function() {
+                button.classList.add("touched");
+            });
+            button.addEventListener("touchend", function() {
+                button.classList.remove("touched");
+            });
+        }
+    });
+
+    document.getElementById('in-game').ontouchstart = (e) => {
+        e.preventDefault();
+    };
+
+    ids.forEach(function(id) {
+        var element = document.getElementById(id);
+        if (element) {
+            element.setAttribute("ontouchstart", "event.stopPropagation()");
+        }
+    });
+
+
+
+
+
+
+
 });
+
+
+/*Enable global audio*/
 function led(slotStateNumbers) {
     if (slotStateNumbers===1) {
         document.getElementById("led01").style.fill = "#78C850";
