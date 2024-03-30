@@ -548,7 +548,7 @@ function checkContent() {
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(() => {
         romList();
-    },500);
+    },1000);
     setTimeout(() => {
         localStorageFile();
     },1000);
@@ -623,8 +623,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 });
-
-
 /*Enable global audio*/
 function led(slotStateNumbers) {
     if (slotStateNumbers===1) {
